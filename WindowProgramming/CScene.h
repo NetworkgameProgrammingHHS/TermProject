@@ -8,7 +8,9 @@ public:
 	CScene();
 	virtual ~CScene();
 
-	void Update();
+	virtual void Update();
+	virtual void Render(sf::RenderWindow& RW);
+
 	void KeyBoardInput(sf::Keyboard::Key key);
 
 private:

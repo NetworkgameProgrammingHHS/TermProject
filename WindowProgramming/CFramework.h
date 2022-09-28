@@ -12,6 +12,11 @@ public:
 	void KeyBoardInput(sf::Keyboard::Key key);
 
 private:
+	void Update();
+	void Render(sf::RenderWindow& RW);
+
+private:
 	CScene* m_pScene;
+	sf::RenderWindow m_sfWindow;
 };
 

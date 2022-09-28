@@ -17,6 +17,11 @@ void CScene::Update()
 	m_pPlayer->Update();
 }
 
+void CScene::Render(sf::RenderWindow& RW)
+{
+	m_pPlayer->Render(RW);
+}
+
 void CScene::KeyBoardInput(sf::Keyboard::Key key)
 {
 	m_pPlayer->KeyBoardInput(key);

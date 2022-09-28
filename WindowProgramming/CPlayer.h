@@ -6,6 +6,8 @@ public:
 	virtual ~CPlayer();
 
 	void Update();
+	void Render(sf::RenderWindow& RW);
+
 	void KeyBoardInput(sf::Keyboard::Key key);
 
 private:
