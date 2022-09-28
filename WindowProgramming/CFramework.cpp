@@ -23,6 +23,8 @@ void CFramework::Process()
 				m_sfWindow.close();
 			if (event.type == sf::Event::KeyPressed)
 				KeyBoardInput(event.key.code);
+			if (event.type == sf::Event::KeyReleased)
+				KeyBoardRelease(event.key.code);
 		}
 		
 		Update();
@@ -35,9 +37,14 @@ void CFramework::Process()
 	}
 }
 
-void CFramework::KeyBoardInput(sf::Keyboard::Key key)
+void CFramework::KeyBoardInput(const sf::Keyboard::Key& key)
 {
 	m_pScene->KeyBoardInput(key);
+}
+
+void CFramework::KeyBoardRelease(const sf::Keyboard::Key& key)
+{
+	m_pScene->KeyBoardRelease(key);
 }
 
 void CFramework::Update()

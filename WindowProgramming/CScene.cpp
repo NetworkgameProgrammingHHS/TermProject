@@ -12,7 +12,7 @@ CScene::~CScene()
 	delete m_pPlayer;
 }
 
-void CScene::Update()
+void CScene::Update(const float ElpasedTime)
 {
 	m_pPlayer->Update();
 }
@@ -22,7 +22,12 @@ void CScene::Render(sf::RenderWindow& RW)
 	m_pPlayer->Render(RW);
 }
 
-void CScene::KeyBoardInput(sf::Keyboard::Key key)
+void CScene::KeyBoardInput(const sf::Keyboard::Key& key)
 {
 	m_pPlayer->KeyBoardInput(key);
+}
+
+void CScene::KeyBoardRelease(const sf::Keyboard::Key& key)
+{
+	m_pPlayer->KeyBoardRelease(key);
 }

@@ -9,7 +9,8 @@ public:
 	virtual ~CFramework();
 
 	void Process();
-	void KeyBoardInput(sf::Keyboard::Key key);
+	void KeyBoardInput(const sf::Keyboard::Key& key);
+	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 private:
 	void Update();
