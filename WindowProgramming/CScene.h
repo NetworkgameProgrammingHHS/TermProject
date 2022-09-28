@@ -16,5 +16,8 @@ public:
 
 private:
 	CPlayer* m_pPlayer;
+
+protected:
+	sf::Texture m_sfBackground;
 };
 

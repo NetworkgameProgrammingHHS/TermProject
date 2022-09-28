@@ -5,6 +5,8 @@
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
 	m_pScene = new CScene;
+
+	m_sfWindow.setFramerateLimit(60);
 }
 
 CFramework::~CFramework()
@@ -49,7 +51,10 @@ void CFramework::KeyBoardRelease(const sf::Keyboard::Key& key)
 
 void CFramework::Update()
 {
-	m_pScene->Update();
+	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
+	m_pScene->Update(ElapsedTime);
+
+	m_sfFrame.restart();
 }
 
 void CFramework::Render(sf::RenderWindow& RW)

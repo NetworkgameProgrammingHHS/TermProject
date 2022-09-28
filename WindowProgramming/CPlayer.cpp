@@ -17,9 +17,9 @@ CPlayer::~CPlayer()
 {
 }
 
-void CPlayer::Update(const float ElpasedTime)
+void CPlayer::Update(const float ElapsedTime)
 {
-	m_vec2fPos.x += m_iDir * 0.1f;
+	m_vec2fPos.x += m_iDir * PLAYER_SPEED * ElapsedTime;
 
 	m_sfSprite.setPosition(m_vec2fPos);
 }
@@ -42,6 +42,9 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		break;
 	case sf::Keyboard::Space:
 		cout << "space" << endl;
+		break;
+	case sf::Keyboard::Escape:
+		exit(1);
 		break;
 	default:
 		break;

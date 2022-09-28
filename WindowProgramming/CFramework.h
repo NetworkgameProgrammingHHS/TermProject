@@ -19,5 +19,6 @@ private:
 private:
 	CScene* m_pScene;
 	sf::RenderWindow m_sfWindow;
+	sf::Clock m_sfFrame;
 };
 

@@ -1,12 +1,14 @@
 #pragma once
 
+constexpr float PLAYER_SPEED = 100.0f;
+
 class CPlayer
 {
 public:
 	CPlayer();
 	virtual ~CPlayer();
 
-	void Update(const float ElpasedTime);
+	void Update(const float ElapsedTime);
 	void Render(sf::RenderWindow& RW);
 
 	void KeyBoardInput(const sf::Keyboard::Key& key);

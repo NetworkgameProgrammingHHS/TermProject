@@ -5,6 +5,9 @@
 CScene::CScene()
 {
 	m_pPlayer = new CPlayer;
+	if (!m_sfBackground.loadFromFile("Resource\\Character\\Scientist.png")) {
+		exit(1);
+	}
 }
 
 CScene::~CScene()
@@ -12,9 +15,9 @@ CScene::~CScene()
 	delete m_pPlayer;
 }
 
-void CScene::Update(const float ElpasedTime)
+void CScene::Update(const float ElapsedTime)
 {
-	m_pPlayer->Update();
+	m_pPlayer->Update(ElapsedTime);
 }
 
 void CScene::Render(sf::RenderWindow& RW)
