@@ -1,27 +1,35 @@
 #include "pch.h"
 #include "CScene.h"
 #include "CPlayer.h"
+#include "CStage1.h"
 
 CScene::CScene()
 {
-	m_pPlayer = new CPlayer;
-	if (!m_sfBackground.loadFromFile("Resource\\Character\\Scientist.png")) {
-		exit(1);
-	}
+	
 }
 
 CScene::~CScene()
 {
 	delete m_pPlayer;
+	delete m_pStage;
+}
+
+void CScene::Initialize()
+{
+	m_pPlayer = new CPlayer;
+	m_pStage = dynamic_cast<CScene*>(new CStage1);
 }
 
 void CScene::Update(const float ElapsedTime)
 {
+	m_pStage->Update(ElapsedTime);
+
 	m_pPlayer->Update(ElapsedTime);
 }
 
 void CScene::Render(sf::RenderWindow& RW)
 {
+	m_pStage->Render(RW);
 	m_pPlayer->Render(RW);
 }
 

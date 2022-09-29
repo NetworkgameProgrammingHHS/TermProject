@@ -5,6 +5,7 @@
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
 	m_pScene = new CScene;
+	m_pScene->Initialize();
 
 	m_sfWindow.setFramerateLimit(60);
 }
