@@ -1,8 +1,8 @@
 #pragma once
+#include "CObject.h"
 
 constexpr float PLAYER_SPEED = 100.0f;
 
-class CObject;
 class CPlayer : public CObject
 {
 public:

@@ -1,9 +1,10 @@
 #pragma once
+
 class CObject
 {
 public:
-	CObject() {};
-	~CObject() {};
+	CObject();
+	virtual ~CObject();
 
 protected:
 	sf::Texture m_sfTexture = {};
