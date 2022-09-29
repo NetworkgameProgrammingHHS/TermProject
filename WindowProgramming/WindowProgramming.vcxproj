@@ -143,16 +143,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CFramework.cpp" />
+    <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CStage1.cpp" />
+    <ClCompile Include="CTileMap.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CFramework.h" />
+    <ClInclude Include="CObject.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CStage1.h" />
+    <ClInclude Include="CTileMap.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

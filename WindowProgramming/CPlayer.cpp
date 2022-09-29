@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "CObject.h"
 #include "CPlayer.h"
 
 CPlayer::CPlayer()

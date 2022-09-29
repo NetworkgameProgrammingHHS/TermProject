@@ -3,6 +3,9 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 using namespace std;
 
 #ifdef _DEBUG
@@ -23,3 +26,8 @@ using namespace std;
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
+
+constexpr int TILE_NUM_W = 25;
+constexpr int TILE_NUM_H = 19;
+
+constexpr int TILE_SIZE = 32;

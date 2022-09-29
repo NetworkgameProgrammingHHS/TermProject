@@ -2,7 +2,8 @@
 
 constexpr float PLAYER_SPEED = 100.0f;
 
-class CPlayer
+class CObject;
+class CPlayer : public CObject
 {
 public:
 	CPlayer();
@@ -15,10 +16,6 @@ public:
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 private:
-	sf::Texture m_sfTexture;
-	sf::Sprite m_sfSprite;
-
-	sf::Vector2f m_vec2fPos;
 	int m_iDir = 0;
 };
 

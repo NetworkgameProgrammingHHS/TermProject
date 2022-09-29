@@ -1,6 +1,7 @@
 #pragma once
 
 class CPlayer;
+class CTileMap;
 
 class CScene
 {
@@ -16,8 +17,9 @@ public:
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 protected:
-	CPlayer* m_pPlayer;
-	CScene* m_pStage;
+	CPlayer* m_pPlayer = nullptr;
+	CScene* m_pStage = nullptr;
+	CTileMap* m_pTileMap = nullptr;
 
 	sf::Texture m_sfTexture;
 	sf::Sprite m_sfBackground;

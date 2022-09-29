@@ -2,6 +2,7 @@
 #include "CScene.h"
 #include "CPlayer.h"
 #include "CStage1.h"
+#include "CTileMap.h"
 
 CScene::CScene()
 {
@@ -12,6 +13,7 @@ CScene::~CScene()
 {
 	delete m_pPlayer;
 	delete m_pStage;
+	delete m_pTileMap;
 }
 
 void CScene::Initialize()

@@ -30,6 +30,12 @@
     <ClCompile Include="CStage1.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CTileMap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -45,6 +51,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CStage1.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileMap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
