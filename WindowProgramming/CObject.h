@@ -6,6 +6,8 @@ public:
 	CObject();
 	virtual ~CObject();
 
+	virtual void SetPosition(const sf::Vector2f& vec) { m_sfSprite.setPosition(vec); }
+
 protected:
 	sf::Texture m_sfTexture = {};
 	sf::Sprite m_sfSprite = {};

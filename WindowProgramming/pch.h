@@ -6,6 +6,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <array>
+#include <unordered_map>
 using namespace std;
 
 #ifdef _DEBUG
@@ -25,7 +27,7 @@ using namespace std;
 #pragma comment (lib, "winmm.lib")
 
 constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 600;
+constexpr int WINDOW_HEIGHT = 608;
 
 constexpr int TILE_NUM_W = 25;
 constexpr int TILE_NUM_H = 19;

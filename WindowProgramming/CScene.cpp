@@ -11,15 +11,17 @@ CScene::CScene()
 
 CScene::~CScene()
 {
-	delete m_pPlayer;
-	delete m_pStage;
-	delete m_pTileMap;
+	if(m_pStage)
+		delete m_pStage;
+	if(m_pTileMap)
+		delete m_pTileMap;
 }
 
 void CScene::Initialize()
 {
 	m_pPlayer = new CPlayer;
-	m_pStage = dynamic_cast<CScene*>(new CStage1);
+
+	m_pStage = dynamic_cast<CScene*>(new CStage1(m_pPlayer));
 }
 
 void CScene::Update(const float ElapsedTime)

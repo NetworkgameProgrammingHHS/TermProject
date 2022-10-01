@@ -15,6 +15,8 @@ public:
 	void KeyBoardInput(const sf::Keyboard::Key& key);
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
+	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
+
 private:
 	int m_iDir = 0;
 };

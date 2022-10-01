@@ -1,10 +1,12 @@
 #pragma once
 
 class CScene;
+class CPlayer;
+
 class CStage1 : public CScene
 {
 public:
-	CStage1();
+	CStage1(CPlayer* player);
 	virtual ~CStage1();
 
 	virtual void Update(const float ElpasedTime);

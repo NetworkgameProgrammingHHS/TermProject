@@ -3,13 +3,15 @@
 
 CPlayer::CPlayer()
 {
+	
 	if (!m_sfTexture.loadFromFile("Resource\\Character\\Scientist.png")) {
 		exit(1);
 	}
+	
 	m_sfSprite.setTexture(m_sfTexture);
 	m_sfSprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 
-	m_vec2fPos = { 0.0f, 0.0f };
+	m_vec2fPos = { 0.0f, WINDOW_HEIGHT - TILE_SIZE };
 
 }
 
