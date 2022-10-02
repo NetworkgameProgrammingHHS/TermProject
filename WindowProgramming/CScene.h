@@ -17,8 +17,16 @@ public:
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 protected:
-	void Collide();
+	void Collide_Wall();
+	void Collide_OBJ();
+	void Collide_Potion();
+	void Collide_Gate();
+	void Collide_Turret();
+	void Collide_Jump();
+	void JumpProcess();
 
+
+protected:
 	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	shared_ptr<CScene> m_pStage = nullptr;
 	unique_ptr<CTileMap> m_pTileMap = nullptr;

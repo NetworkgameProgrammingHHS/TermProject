@@ -15,12 +15,15 @@ public:
 	void SetTexture(const sf::Texture& tex) { m_sfTexture = tex; }
 	void SetSpriteTex() { m_sfSprite.setTexture(m_sfTexture); }
 	void SetType(const TILE_TYPE& type) { m_eType = type; }
+	void SetEnable(const bool enable) { m_bEnable = enable; }
 
-	const sf::Texture GetTexture() const { return m_sfTexture; }
-	const TILE_TYPE GetType() const { return m_eType; }
+	const sf::Texture& GetTexture() const { return m_sfTexture; }
+	const TILE_TYPE& GetType() const { return m_eType; }
+	const bool GetEnable() const { return m_bEnable; }
 
 private:
 	TILE_TYPE m_eType = TILE_TYPE::NONE;
+	bool m_bEnable = true;
 };
 
 class CTileMap

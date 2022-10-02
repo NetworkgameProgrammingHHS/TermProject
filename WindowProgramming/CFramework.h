@@ -20,5 +20,9 @@ private:
 	unique_ptr<CScene> m_pScene;
 	sf::RenderWindow m_sfWindow;
 	sf::Clock m_sfFrame;
+
+	int m_iFrame = 0;
+	float m_fTime = 0.f;
+	float m_fBaseTime = 0.f;
 };
 

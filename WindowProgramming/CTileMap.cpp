@@ -90,6 +90,7 @@ void CTileMap::Initialize()
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
 			sprite.SetSpriteTex();
+			sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 2.f));
 		}
 	}
 }
@@ -97,8 +98,9 @@ void CTileMap::Initialize()
 void CTileMap::Render(sf::RenderWindow& RW)
 {
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
-		for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {			
-			RW.draw(sprite.GetSprite());
+		for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+			if(sprite.GetEnable())
+				RW.draw(sprite.GetSprite());
 		}
 	}
 }

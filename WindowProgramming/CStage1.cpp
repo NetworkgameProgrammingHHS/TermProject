@@ -25,7 +25,11 @@ CStage1::~CStage1()
 
 void CStage1::Update(const float ElapsedTime)
 {	
-	CScene::Collide();
+	CScene::Collide_OBJ();
+
+	if(m_pPlayer->GetJump())
+		if (m_pPlayer->GetJump())
+			JumpProcess();
 }
 
 void CStage1::Render(sf::RenderWindow& RW)

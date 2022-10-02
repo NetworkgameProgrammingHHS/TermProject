@@ -43,3 +43,7 @@ enum class TILE_TYPE {NONE, WALL,
 					  RED_G, GREEN_G, BLUE_G, YELLOW_G, PURPLE_G, GB_G,
 					  END
 };
+
+enum class PLAYER_COLOR {
+	NORMAL, RED, GREEN, BLUE, YELLOW, PURPLE, GB, END
+};

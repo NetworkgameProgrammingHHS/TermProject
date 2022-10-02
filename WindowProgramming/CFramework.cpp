@@ -54,6 +54,16 @@ void CFramework::Update()
 {
 	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
 	m_pScene->Update(ElapsedTime);
+	
+	// FPS
+	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
+	++m_iFrame;
+	if (m_fTime - m_fBaseTime > 1000) {
+		cout << "FPS : " << m_iFrame << endl;
+		m_iFrame = m_iFrame * 1000.0 / (m_fTime - m_fBaseTime);
+		m_fBaseTime = m_fTime;
+		m_iFrame = 0;
+	}
 
 	m_sfFrame.restart();
 }
