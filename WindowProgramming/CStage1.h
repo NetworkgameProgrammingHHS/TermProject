@@ -6,7 +6,7 @@ class CPlayer;
 class CStage1 : public CScene
 {
 public:
-	CStage1(CPlayer* player);
+	CStage1(shared_ptr<CPlayer> player);
 	virtual ~CStage1();
 
 	virtual void Update(const float ElpasedTime);

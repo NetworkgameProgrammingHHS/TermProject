@@ -17,9 +17,9 @@ public:
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 protected:
-	CPlayer* m_pPlayer = nullptr;
-	CScene* m_pStage = nullptr;
-	CTileMap* m_pTileMap = nullptr;
+	shared_ptr<CPlayer> m_pPlayer = nullptr;
+	shared_ptr<CScene> m_pStage = nullptr;
+	unique_ptr<CTileMap> m_pTileMap = nullptr;
 
 	sf::Texture m_sfTexture;
 	sf::Sprite m_sfBackground;

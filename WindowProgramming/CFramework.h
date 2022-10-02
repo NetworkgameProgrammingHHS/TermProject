@@ -17,7 +17,7 @@ private:
 	void Render(sf::RenderWindow& RW);
 
 private:
-	CScene* m_pScene;
+	unique_ptr<CScene> m_pScene;
 	sf::RenderWindow m_sfWindow;
 	sf::Clock m_sfFrame;
 };

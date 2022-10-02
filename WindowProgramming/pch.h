@@ -6,8 +6,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <array>
 #include <unordered_map>
+#include <memory>
 using namespace std;
 
 #ifdef _DEBUG
@@ -33,3 +33,13 @@ constexpr int TILE_NUM_W = 25;
 constexpr int TILE_NUM_H = 19;
 
 constexpr int TILE_SIZE = 32;
+
+enum class PLAYER_STATE { IDLE, MOVE_L, MOVE_R, JUMP };
+
+enum class TILE_TYPE {NONE, WALL, 
+					  RED_P, GREEN_P, BLUE_P, BLACK_P,
+					  RED_T, GREEN_T, BLUE_T, YELLOW_T, PURPLE_T, GB_T, IDLE_T,
+					  RED_J, GREEN_J, BLUE_J, YELLOW_J, PURPLE_J, GB_J,
+					  RED_G, GREEN_G, BLUE_G, YELLOW_G, PURPLE_G, GB_G,
+					  END
+};

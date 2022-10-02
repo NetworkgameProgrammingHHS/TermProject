@@ -4,7 +4,7 @@
 
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
-	m_pScene = new CScene;
+	m_pScene = make_unique<CScene>();
 	m_pScene->Initialize();
 
 	m_sfWindow.setFramerateLimit(60);
@@ -12,7 +12,7 @@ CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT)
 
 CFramework::~CFramework()
 {
-	delete m_pScene;
+
 }
 
 void CFramework::Process()
