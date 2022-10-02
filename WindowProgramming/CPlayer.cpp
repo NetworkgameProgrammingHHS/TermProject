@@ -47,10 +47,6 @@ void CPlayer::Animation(const float ElapsedTime)
 	m_sfSprite.setTextureRect(sf::IntRect(FrameStart * 32, m_iSpriteTop, TILE_SIZE, TILE_SIZE));
 }
 
-void CPlayer::Collide()
-{
-}
-
 void CPlayer::Update(const float ElapsedTime)
 {
 	Animation(ElapsedTime);

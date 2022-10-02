@@ -24,7 +24,8 @@ CStage1::~CStage1()
 }
 
 void CStage1::Update(const float ElapsedTime)
-{
+{	
+	CScene::Collide();
 }
 
 void CStage1::Render(sf::RenderWindow& RW)

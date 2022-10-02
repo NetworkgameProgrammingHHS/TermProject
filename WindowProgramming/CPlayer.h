@@ -23,7 +23,6 @@ public:
 
 private:
 	void Animation(const float ElapsedTime);
-	void Collide();
 
 private:
 	sf::Vector2f m_vec2fPrevPos = {};

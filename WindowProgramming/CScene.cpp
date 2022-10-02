@@ -18,8 +18,6 @@ void CScene::Initialize()
 	m_pPlayer = make_shared<CPlayer>();
 
 	m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pPlayer));
-
-	//m_pStage = dynamic_cast<CScene*>(new CStage1(m_pPlayer));
 }
 
 void CScene::Update(const float ElapsedTime)
@@ -43,4 +41,13 @@ void CScene::KeyBoardInput(const sf::Keyboard::Key& key)
 void CScene::KeyBoardRelease(const sf::Keyboard::Key& key)
 {
 	m_pPlayer->KeyBoardRelease(key);
+}
+
+void CScene::Collide()
+{
+	for (const auto& tile : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_P)->second) {
+		if (m_pPlayer->GetSprite().getGlobalBounds().intersects(tile.GetSprite().getGlobalBounds())) {
+			cout << "Red Potion" << endl;
+		}
+	}
 }

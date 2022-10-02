@@ -17,7 +17,6 @@ public:
 	void SetType(const TILE_TYPE& type) { m_eType = type; }
 
 	const sf::Texture GetTexture() const { return m_sfTexture; }
-	const sf::Sprite GetSprite() const { return m_sfSprite; }
 	const TILE_TYPE GetType() const { return m_eType; }
 
 private:

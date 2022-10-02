@@ -17,6 +17,8 @@ public:
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 protected:
+	void Collide();
+
 	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	shared_ptr<CScene> m_pStage = nullptr;
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
