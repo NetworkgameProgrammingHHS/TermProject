@@ -23,8 +23,6 @@ protected:
 	void Collide_Gate();
 	void Collide_Turret();
 	void Collide_Jump();
-	void JumpProcess();
-
 
 protected:
 	shared_ptr<CPlayer> m_pPlayer = nullptr;

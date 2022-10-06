@@ -46,10 +46,22 @@ void CScene::KeyBoardRelease(const sf::Keyboard::Key& key)
 
 void CScene::Collide_Wall()
 {
-	if (m_pTileMap && !m_pPlayer->GetJump()) {
+	if (m_pTileMap) {
 		for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
-			if (m_pPlayer->GetAABB().intersects(wall.GetSprite().getGlobalBounds())) {
+			//발아래 블록이 없을 때
+			if (m_pPlayer->GetAABB().intersects(wall.GetAABB())) {
 				m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+
+				//jump 충돌처리
+				if (m_pPlayer->GetJump()) {
+					if (m_pPlayer->GetJumpDir()) {
+						m_pPlayer->SetJumpCnt(m_pPlayer->GetJumpChange());
+					}
+					else {
+						m_pPlayer->SetJump(false);
+						m_pPlayer->SetPosition(sf::Vector2f(m_pPlayer->GetSprite().getPosition().x, wall.GetSprite().getPosition().y - m_pPlayer->GetSprite().getGlobalBounds().height));
+					}
+				}
 				break;
 			}
 		}
@@ -223,21 +235,4 @@ void CScene::Collide_Jump()
 	}
 
 	m_pPlayer->SetSuperJump(false);
-}
-
-void CScene::JumpProcess()
-{
-	// 스크린 화면 y좌표는 위에가 0, 아래로 갈수록 증가
-	for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
-		if (wall.GetSprite().getPosition().y - m_pPlayer->GetSprite().getPosition().y < TILE_SIZE / 2)
-			continue;
-		if (abs(m_pPlayer->GetSprite().getPosition().x - wall.GetSprite().getPosition().x) > TILE_SIZE * 2)
-			continue;
-		if (m_pPlayer->GetAABB().intersects(wall.GetSprite().getGlobalBounds())) {
-			m_pPlayer->SetJump(false);
-			m_pPlayer->SetPosition(sf::Vector2f(m_pPlayer->GetSprite().getPosition().x, wall.GetSprite().getPosition().y - m_pPlayer->GetSprite().getGlobalBounds().height));
-			cout << "Jump False" << endl;
-			break;
-		}
-	}
 }

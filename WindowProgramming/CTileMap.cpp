@@ -90,7 +90,12 @@ void CTileMap::Initialize()
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
 			sprite.SetSpriteTex();
-			sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 2.f));
+			if (i == static_cast<int>(TILE_TYPE::WALL)) {
+				sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 1.2f, static_cast<float>(TILE_SIZE) / 1.2f));
+			}
+			else {
+				sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 1.0f));
+			}
 		}
 	}
 }

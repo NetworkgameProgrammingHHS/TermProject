@@ -32,6 +32,12 @@ CPlayer::CPlayer()
 
 	m_vec2fPos = { 0.0f, WINDOW_HEIGHT - TILE_SIZE };
 	m_vec2fPrevPos = sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) };
+
+	m_rtFallBB.left = 0;
+	m_rtFallBB.top = 0;
+	m_rtFallBB.width - 0;
+	m_rtFallBB.height = 0;
+	//sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 1.0f));
 }
 
 CPlayer::~CPlayer()
