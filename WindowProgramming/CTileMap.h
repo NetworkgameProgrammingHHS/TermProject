@@ -35,9 +35,15 @@ public:
 	void Initialize();
 	void Render(sf::RenderWindow& RW);
 
+	const int GetPotionNum() const { return m_iPotionNum; }
+	int SetPotionNum(int num) { return m_iPotionNum = num; }
+
 	vector<char> m_vMap;					// Map Info
 	unordered_map<char, CTile> m_umTileInfo;	// Tile Info
 	unordered_map<TILE_TYPE, vector<CTile>> m_umTiles; // Tile Obj
+
+private:
+	int m_iPotionNum = 0;
 };
 
 // 0: Nothing,      D: wall

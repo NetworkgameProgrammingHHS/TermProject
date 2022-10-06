@@ -76,6 +76,9 @@ CTileMap::CTileMap(const string& Filename)
 				m_umTiles.find(TILE_TYPE::NONE)->second.emplace_back(CTile(sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
 			else {
 				m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(CTile(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+				if (m_vMap[i * TILE_NUM_W + j] == 'R' || m_vMap[i * TILE_NUM_W + j] == 'G' || m_vMap[i * TILE_NUM_W + j] == 'B' || m_vMap[i * TILE_NUM_W + j] == 'N') {
+					++m_iPotionNum;
+				}
 			}
 		}
 	}

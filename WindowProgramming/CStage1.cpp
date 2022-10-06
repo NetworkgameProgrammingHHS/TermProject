@@ -23,8 +23,25 @@ CStage1::~CStage1()
 {
 }
 
+void CStage1::Next_Stage()
+{
+	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+		if (m_pTileMap->GetPotionNum() == 0)
+			cout << "next stage" << endl;
+		else
+			Reset();
+	}
+}
+
+void CStage1::Reset()
+{
+	cout << "Reset" << endl;
+}
+
 void CStage1::Update(const float ElapsedTime)
 {	
+	Next_Stage();
+
 	CScene::Collide_OBJ();
 }
 

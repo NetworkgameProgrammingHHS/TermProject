@@ -24,6 +24,9 @@ protected:
 	void Collide_Turret();
 	void Collide_Jump();
 
+	virtual void Next_Stage();
+	virtual void Reset();
+
 protected:
 	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	shared_ptr<CScene> m_pStage = nullptr;

@@ -25,7 +25,6 @@ void CScene::Update(const float ElapsedTime)
 	m_pStage->Update(ElapsedTime);
 
 	m_pPlayer->Update(ElapsedTime);
-
 }
 
 void CScene::Render(sf::RenderWindow& RW)
@@ -83,12 +82,14 @@ void CScene::Collide_Potion()
 	for (auto& potion : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_P)->second) {
 		if (potion.GetEnable() && m_pPlayer->GetAABB().intersects(potion.GetAABB())) {
 			potion.SetEnable(false);
+			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			if (PLAYER_COLOR::GREEN == m_pPlayer->GetColor())
 				m_pPlayer->SetColor(PLAYER_COLOR::YELLOW);
 			else if (PLAYER_COLOR::BLUE == m_pPlayer->GetColor())
 				m_pPlayer->SetColor(PLAYER_COLOR::PURPLE);
 			else
 				m_pPlayer->SetColor(PLAYER_COLOR::RED);
+			break;
 		}
 	}
 
@@ -96,6 +97,7 @@ void CScene::Collide_Potion()
 	for (auto& potion : m_pTileMap->m_umTiles.find(TILE_TYPE::GREEN_P)->second) {
 		if (potion.GetEnable() && m_pPlayer->GetAABB().intersects(potion.GetAABB())) {
 			potion.SetEnable(false);
+			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			if (PLAYER_COLOR::RED == m_pPlayer->GetColor())
 				m_pPlayer->SetColor(PLAYER_COLOR::YELLOW);
 			else if (PLAYER_COLOR::BLUE == m_pPlayer->GetColor())
@@ -110,12 +112,14 @@ void CScene::Collide_Potion()
 	for (auto& potion : m_pTileMap->m_umTiles.find(TILE_TYPE::BLUE_P)->second) {
 		if (potion.GetEnable() && m_pPlayer->GetAABB().intersects(potion.GetAABB())) {
 			potion.SetEnable(false);
+			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			if (PLAYER_COLOR::RED == m_pPlayer->GetColor())
 				m_pPlayer->SetColor(PLAYER_COLOR::PURPLE);
 			else if (PLAYER_COLOR::GREEN == m_pPlayer->GetColor())
 				m_pPlayer->SetColor(PLAYER_COLOR::GB);
 			else
 				m_pPlayer->SetColor(PLAYER_COLOR::BLUE);
+			break;
 		}
 	}
 
@@ -124,6 +128,7 @@ void CScene::Collide_Potion()
 		if (potion.GetEnable() && m_pPlayer->GetAABB().intersects(potion.GetAABB())) {
 			potion.SetEnable(false);
 			m_pPlayer->SetColor(PLAYER_COLOR::NORMAL);
+			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			break;
 		}
 	}
@@ -235,4 +240,13 @@ void CScene::Collide_Jump()
 	}
 
 	m_pPlayer->SetSuperJump(false);
+}
+
+void CScene::Next_Stage()
+{
+
+}
+
+void CScene::Reset()
+{
 }
