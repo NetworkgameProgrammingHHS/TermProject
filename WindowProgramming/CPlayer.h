@@ -25,6 +25,7 @@ public:
 
 	const PLAYER_COLOR& GetColor() const { return m_eColor; }
 	const sf::Vector2f& GetPrevPos() const { return m_vec2fPrevPos; }
+	const bool GetFall() const { return m_bFall; }
 	const bool GetJump() const { return m_bJump; }
 	const bool GetSuperJump() const { return m_bSuperJump; }
 	const bool GetJumpDir() const { return m_iJumpCnt < m_iJumpChange; }	// true는 위로, false는 아래로
@@ -33,9 +34,11 @@ public:
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
 	void SetColor(const PLAYER_COLOR color) { m_eColor = color; m_sfSprite.setTexture(m_umTextures.find(color)->second); }
+	void SetFall(const bool fall) { m_bFall = fall; }
 	void SetJump(const bool jump) { m_bJump = jump;}
 	void SetSuperJump(const bool jump) { m_bSuperJump = jump; }
 	void SetJumpCnt(const int cnt) { m_iJumpCnt = cnt; }
+	void SetJumpVelocity(const float speed) { m_fJumpVelocity = speed; }
 
 private:
 	void Animation(const float ElapsedTime);
@@ -44,6 +47,7 @@ private:
 	// Pos, Move
 	sf::Vector2f m_vec2fPrevPos = {};
 	int m_iDir = 0;
+	bool m_bFall = false;
 	bool m_bJump = false;
 	bool m_bSuperJump = false;
 	int m_iJumpCnt = 0;

@@ -4,9 +4,11 @@
 
 int main()
 {
-	CFramework Framework;
+	CFramework* Framework = new CFramework();
 	
-	Framework.Process();
+	Framework->Process();
+
+	delete Framework;
 
 	return 0;
 }

@@ -34,5 +34,7 @@ protected:
 
 	sf::Texture m_sfTexture;
 	sf::Sprite m_sfBackground;
+
+	SCENE_NUM m_eCurScene;
 };
 

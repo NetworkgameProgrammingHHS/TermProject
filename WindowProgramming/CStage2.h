@@ -3,11 +3,11 @@
 class CScene;
 class CPlayer;
 
-class CStage1 : public CScene
+class CStage2 : public CScene
 {
 public:
-	CStage1(shared_ptr<CPlayer> player);
-	virtual ~CStage1();
+	CStage2(shared_ptr<CPlayer> player);
+	virtual ~CStage2();
 
 	virtual void Reset();
 	virtual void Update(const float ElpasedTime);

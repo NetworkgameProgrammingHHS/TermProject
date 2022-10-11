@@ -1,7 +1,7 @@
 #pragma once
 #include "CObject.h"
 
-constexpr int TILE_CNT = 20;	// 타일 종류
+constexpr int TILE_CNT = 25;	// 타일 종류
 
 class CTile : public CObject
 {
@@ -34,6 +34,7 @@ public:
 
 	void Initialize();
 	void Render(sf::RenderWindow& RW);
+	void Reset();
 
 	const int GetPotionNum() const { return m_iPotionNum; }
 	int SetPotionNum(int num) { return m_iPotionNum = num; }
@@ -51,3 +52,4 @@ private:
 // 1: Red Turret	2: Green Turret    3: Blue Turret    4: Yellow 	     5: Purple Turret	6: GB Turret	7: Idle Turret
 // Z: Red Jump,     Y: Green Jump,     X: Blue Jump,     W: Yellow Jump  V: Purple Jump		U: GB Jump
 // !: Red Gate		@: Green Gate,     #: Blue Gate,	 $: Yellow Gate  %: Purple Gate		^: GB Gate
+// P: Spoid

@@ -2,11 +2,12 @@
 #include "CScene.h"
 #include "CPlayer.h"
 #include "CStage1.h"
+#include "CStage2.h"
 #include "CTileMap.h"
 
 CScene::CScene()
 {
-	
+	m_eCurScene = SCENE_NUM::STAGE1;
 }
 
 CScene::~CScene()
@@ -18,6 +19,7 @@ void CScene::Initialize()
 	m_pPlayer = make_shared<CPlayer>();
 
 	m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pPlayer));
+	m_eCurScene = SCENE_NUM::STAGE1;
 }
 
 void CScene::Update(const float ElapsedTime)
@@ -46,6 +48,21 @@ void CScene::KeyBoardRelease(const sf::Keyboard::Key& key)
 void CScene::Collide_Wall()
 {
 	if (m_pTileMap) {
+		// 점프중이 아닐 때 아래에 바닥이 있는지 체크
+		if (!m_pPlayer->GetJump()) {
+			m_pPlayer->SetFall(true);
+			for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
+				if (m_pPlayer->GetFallBB().intersects(wall.GetAABB())) {
+					m_pPlayer->SetFall(false);
+					break;
+				}
+			}
+			if (m_pPlayer->GetFall()) {
+				m_pPlayer->SetJump(true);
+				m_pPlayer->SetJumpVelocity(JUMP_SPEED);
+				m_pPlayer->SetJumpCnt(m_pPlayer->GetJumpChange());
+			}
+		}
 		for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
 			//발아래 블록이 없을 때
 			if (m_pPlayer->GetAABB().intersects(wall.GetAABB())) {
@@ -244,9 +261,29 @@ void CScene::Collide_Jump()
 
 void CScene::Next_Stage()
 {
-
+	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
+			CScene::Reset();
+			switch (m_eCurScene) {
+			case SCENE_NUM::STAGE1:
+				cout << "next stage" << endl;
+				m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pPlayer));
+				m_eCurScene = SCENE_NUM::STAGE2;
+				break;
+			case SCENE_NUM::STAGE2:
+				break;
+			case SCENE_NUM::STAGE3:
+				break;
+			default:
+				break;
+			}
+		}
+		else
+			Reset();
+	}	
 }
 
-void CScene::Reset()
+void CScene::Reset() 
 {
+	m_pTileMap->Reset();
 }

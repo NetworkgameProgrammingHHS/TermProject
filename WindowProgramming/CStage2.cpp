@@ -1,41 +1,41 @@
 #include "pch.h"
 #include "CScene.h"
-#include "CStage1.h"
+#include "CStage2.h"
 #include "CTileMap.h"
 #include "CObject.h"
 #include "CPlayer.h"
 
-CStage1::CStage1(shared_ptr<CPlayer> player)
+CStage2::CStage2(shared_ptr<CPlayer> player)
 {
-	if(!m_sfTexture.loadFromFile("Resource\\BackGround\\Information_Room.png"))
+	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Scientist_Room.png"))
 		exit(1);
 	m_sfBackground.setTexture(m_sfTexture);
 	m_sfBackground.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage1.txt");
+	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage2.txt");
 	m_pTileMap->Initialize();
 
 	m_pPlayer = player;
 	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 }
 
-CStage1::~CStage1()
+CStage2::~CStage2()
 {
 }
 
-void CStage1::Reset()
+void CStage2::Reset()
 {
 	cout << "Reset" << endl;
 }
 
-void CStage1::Update(const float ElapsedTime)
-{	
+void CStage2::Update(const float ElapsedTime)
+{
 	Next_Stage();
 
 	CScene::Collide_OBJ();
 }
 
-void CStage1::Render(sf::RenderWindow& RW)
+void CStage2::Render(sf::RenderWindow& RW)
 {
 	// Background Render
 	RW.draw(m_sfBackground);

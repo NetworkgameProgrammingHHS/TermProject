@@ -147,6 +147,7 @@
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CStage1.cpp" />
+    <ClCompile Include="CStage2.cpp" />
     <ClCompile Include="CTileMap.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CStage1.h" />
+    <ClInclude Include="CStage2.h" />
     <ClInclude Include="CTileMap.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

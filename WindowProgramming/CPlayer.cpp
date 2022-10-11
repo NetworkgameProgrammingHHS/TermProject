@@ -33,11 +33,10 @@ CPlayer::CPlayer()
 	m_vec2fPos = { 0.0f, WINDOW_HEIGHT - TILE_SIZE };
 	m_vec2fPrevPos = sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) };
 
-	m_rtFallBB.left = 0;
-	m_rtFallBB.top = 0;
-	m_rtFallBB.width = 0;
-	m_rtFallBB.height = 0;
-	//sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 1.0f));
+	m_rtFallBB.left = m_sfSprite.getPosition().x + static_cast<float>(TILE_SIZE) / 4.f;
+	m_rtFallBB.top = m_sfSprite.getPosition().y + static_cast<float>(TILE_SIZE);
+	m_rtFallBB.width = static_cast<float>(TILE_SIZE) / 2.f;
+	m_rtFallBB.height = static_cast<float>(TILE_SIZE) / 4.0f;
 }
 
 CPlayer::~CPlayer()
@@ -106,6 +105,9 @@ void CPlayer::UpdateAABB()
 	m_rtAABB.width = TILE_SIZE / 2;
 	m_rtAABB.left = m_vec2fPos.x;
 	m_rtAABB.top = m_vec2fPos.y;
+
+	m_rtFallBB.left = m_vec2fPos.x + static_cast<float>(TILE_SIZE) / 4.f;
+	m_rtFallBB.top = m_vec2fPos.y + static_cast<float>(TILE_SIZE);
 }
 
 void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
