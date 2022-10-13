@@ -50,5 +50,5 @@ enum class PLAYER_COLOR {
 };
 
 enum class SCENE_NUM {
-	STAGE1, STAGE2, STAGE3
+	NONE, STAGE1, STAGE2, STAGE3
 };

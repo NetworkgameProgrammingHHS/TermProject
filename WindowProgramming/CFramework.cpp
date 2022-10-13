@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "CFramework.h"
 #include "CScene.h"
+#include "CSceneMgr.h"
 
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
-	m_pScene = make_unique<CScene>();
-	m_pScene->Initialize();
+	m_pSceneMgr = make_unique<CSceneMgr>();
+	m_pSceneMgr->Initialize();
 
 	m_sfWindow.setFramerateLimit(60);
 }
@@ -42,18 +43,18 @@ void CFramework::Process()
 
 void CFramework::KeyBoardInput(const sf::Keyboard::Key& key)
 {
-	m_pScene->KeyBoardInput(key);
+	m_pSceneMgr->KeyBoardInput(key);
 }
 
 void CFramework::KeyBoardRelease(const sf::Keyboard::Key& key)
 {
-	m_pScene->KeyBoardRelease(key);
+	m_pSceneMgr->KeyBoardRelease(key);
 }
 
 void CFramework::Update()
 {
 	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
-	m_pScene->Update(ElapsedTime);
+	m_pSceneMgr->Update(ElapsedTime);
 	
 	// FPS
 	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
@@ -70,5 +71,5 @@ void CFramework::Update()
 
 void CFramework::Render(sf::RenderWindow& RW)
 {
-	m_pScene->Render(RW);
+	m_pSceneMgr->Render(RW);
 }

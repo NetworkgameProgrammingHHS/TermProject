@@ -1,6 +1,6 @@
 #pragma once
 
-class CScene;
+class CSceneMgr;
 
 class CFramework
 {
@@ -17,7 +17,7 @@ private:
 	void Render(sf::RenderWindow& RW);
 
 private:
-	unique_ptr<CScene> m_pScene;
+	unique_ptr<CSceneMgr> m_pSceneMgr;
 	sf::RenderWindow m_sfWindow;
 	sf::Clock m_sfFrame;
 
