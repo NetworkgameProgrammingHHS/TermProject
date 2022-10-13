@@ -7,7 +7,6 @@
 
 CScene::CScene()
 {
-	m_eCurScene = SCENE_NUM::STAGE1;
 }
 
 CScene::~CScene()
@@ -19,6 +18,8 @@ void CScene::Initialize()
 	m_pPlayer = make_shared<CPlayer>();
 
 	m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pPlayer));
+
+	cout << "2. " << m_pStage << endl;
 	m_eCurScene = SCENE_NUM::STAGE1;
 }
 
@@ -259,7 +260,7 @@ void CScene::Collide_Jump()
 	m_pPlayer->SetSuperJump(false);
 }
 
-void CScene::Next_Stage()
+bool CScene::Next_Stage()
 {
 	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
@@ -267,7 +268,7 @@ void CScene::Next_Stage()
 			switch (m_eCurScene) {
 			case SCENE_NUM::STAGE1:
 				cout << "next stage" << endl;
-				m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pPlayer));
+				m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pPlayer));	//stage2로 바뀌지 않는다
 				m_eCurScene = SCENE_NUM::STAGE2;
 				break;
 			case SCENE_NUM::STAGE2:
@@ -277,13 +278,26 @@ void CScene::Next_Stage()
 			default:
 				break;
 			}
+			// 다음 스테이지로 넘어가는 것이 성공하면 true를 반환
+			if (m_pStage)
+				return true;
+			else
+				return false;
 		}
-		else
+		else {
 			Reset();
+			if(!m_pStage)
+				cout << m_pStage << endl;
+			m_pStage = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pPlayer));	//stage2로 바뀌지 않는다
+			cout << m_pStage << endl;
+			m_eCurScene = SCENE_NUM::STAGE2;
+			return true;
+		}
 	}	
+
+	return false;
 }
 
 void CScene::Reset() 
 {
-	m_pTileMap->Reset();
 }

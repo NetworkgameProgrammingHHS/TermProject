@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CScene.h"
 #include "CStage1.h"
+#include "CStage2.h"
 #include "CTileMap.h"
 #include "CObject.h"
 #include "CPlayer.h"
@@ -26,11 +27,14 @@ CStage1::~CStage1()
 void CStage1::Reset()
 {
 	cout << "Reset" << endl;
+	m_pTileMap->Reset();
 }
 
 void CStage1::Update(const float ElapsedTime)
 {	
-	Next_Stage();
+	if (CScene::Next_Stage()) {
+		return;
+	}
 
 	CScene::Collide_OBJ();
 }

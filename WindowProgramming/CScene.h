@@ -24,12 +24,13 @@ protected:
 	void Collide_Turret();
 	void Collide_Jump();
 
-	virtual void Next_Stage();
+	bool Next_Stage();
 	virtual void Reset();
 
 protected:
-	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	shared_ptr<CScene> m_pStage = nullptr;
+	shared_ptr<CPlayer> m_pPlayer = nullptr;
+	
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
 
 	sf::Texture m_sfTexture;

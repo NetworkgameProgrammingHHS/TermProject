@@ -107,6 +107,9 @@ void CTileMap::Initialize()
 
 void CTileMap::Render(sf::RenderWindow& RW)
 {
+	if (m_umTiles.empty())
+		return;
+
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
 			if(sprite.GetEnable())
