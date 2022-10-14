@@ -66,9 +66,17 @@ CTileMap::CTileMap(const string& Filename)
 	m_umTileInfo.try_emplace('^', CTile("Resource\\Object\\Gate_Green+Blue.png", TILE_TYPE::GB_G));
 
 	m_umTileInfo.try_emplace('P', CTile("Resource\\Object\\Pipette.png", TILE_TYPE::SPOID));
+}
 
+CTileMap::~CTileMap()
+{
+}
+
+void CTileMap::Initialize()
+{
+	m_iPotionNum = 0;
 	m_umTiles.reserve(TILE_CNT);
-	 
+
 	for (int i = static_cast<int>(TILE_TYPE::NONE); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		m_umTiles.try_emplace(static_cast<TILE_TYPE>(i), vector<CTile>());
 	}
@@ -84,14 +92,7 @@ CTileMap::CTileMap(const string& Filename)
 			}
 		}
 	}
-}
 
-CTileMap::~CTileMap()
-{
-}
-
-void CTileMap::Initialize()
-{
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
 			sprite.SetSpriteTex();
@@ -120,6 +121,5 @@ void CTileMap::Render(sf::RenderWindow& RW)
 
 void CTileMap::Reset()
 {
-	m_vMap.clear();
 	m_umTiles.clear();
 }

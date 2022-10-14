@@ -16,6 +16,7 @@ public:
 	CPlayer();
 	virtual ~CPlayer();
 
+	void Reset();
 	void Update(const float ElapsedTime);
 	void Render(sf::RenderWindow& RW);
 	virtual void UpdateAABB();

@@ -17,22 +17,42 @@ CStage2::CStage2(shared_ptr<CPlayer> player)
 
 	m_pPlayer = player;
 	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+
+	m_eCurScene = SCENE_NUM::STAGE2;
 }
 
 CStage2::~CStage2()
 {
 }
 
+void CStage2::Next_Stage()
+{
+	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
+			cout << "Next" << endl;
+			m_bNext = true;
+		}
+		else {
+			Reset();
+		}
+	}
+}
+
 void CStage2::Reset()
 {
-	cout << "Reset" << endl;
+	m_pTileMap->Reset();
+	m_pTileMap->Initialize();
+	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+	m_pPlayer->Reset();
 }
 
 void CStage2::Update(const float ElapsedTime)
 {
-	Next_Stage();
+	m_pPlayer->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
+
+	Next_Stage();
 }
 
 void CStage2::Render(sf::RenderWindow& RW)
@@ -42,4 +62,7 @@ void CStage2::Render(sf::RenderWindow& RW)
 
 	// Map Render
 	m_pTileMap->Render(RW);
+
+	// Player Render
+	m_pPlayer->Render(RW);
 }

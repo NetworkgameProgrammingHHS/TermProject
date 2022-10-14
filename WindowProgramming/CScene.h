@@ -16,6 +16,8 @@ public:
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
 	const bool GetNext() const { return m_bNext; }
 
+	void SetNext(bool next) { m_bNext = next; }
+
 protected:
 	void Collide_Wall();
 	void Collide_OBJ();

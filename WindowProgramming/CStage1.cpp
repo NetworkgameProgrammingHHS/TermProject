@@ -30,6 +30,7 @@ void CStage1::Next_Stage()
 {
 	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
+			cout << "Next" << endl;
 			m_bNext = true;
 		}
 		else {
@@ -41,6 +42,9 @@ void CStage1::Next_Stage()
 void CStage1::Reset()
 {
 	m_pTileMap->Reset();
+	m_pTileMap->Initialize();
+	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+	m_pPlayer->Reset();
 }
 
 void CStage1::Update(const float ElapsedTime)

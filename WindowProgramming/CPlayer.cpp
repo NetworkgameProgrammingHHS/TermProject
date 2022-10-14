@@ -70,6 +70,23 @@ void CPlayer::Animation(const float ElapsedTime)
 	m_sfSprite.setTextureRect(sf::IntRect(FrameStart * 32, m_iSpriteTop, TILE_SIZE, TILE_SIZE));
 }
 
+void CPlayer::Reset()
+{
+	m_vec2fPrevPos = {};
+	m_iDir = 0;
+	m_bFall = false;
+	m_bJump = false;
+	m_bSuperJump = false;
+	m_iJumpCnt = 0;
+	m_iJumpChange = 0;
+	m_fJumpVelocity = 0.0f;
+
+	m_fSpriteLeft = 0;
+	m_iSpriteTop = 32;
+	m_eState = PLAYER_STATE::IDLE;
+	m_eColor = PLAYER_COLOR::NORMAL;
+}
+
 void CPlayer::Update(const float ElapsedTime)
 {
 	Animation(ElapsedTime);

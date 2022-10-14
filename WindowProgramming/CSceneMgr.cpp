@@ -28,7 +28,8 @@ void CSceneMgr::Update(const float ElpasedTime)
 {
 	m_pScene->Update(ElpasedTime);
 
-	if (m_pScene->Next_Stage()) {
+	if (m_pScene->GetNext()) {
+		m_pScene->SetNext(false);
 		Next_Stage();
 	}
 }
@@ -50,5 +51,16 @@ void CSceneMgr::KeyBoardRelease(const sf::Keyboard::Key& key)
 
 void CSceneMgr::Next_Stage()
 {
-	
+	switch (m_pScene->GetSceneNum()) {
+	case SCENE_NUM::STAGE1:
+		m_pScene.reset();
+		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pPlayer));
+		break;
+	case SCENE_NUM::STAGE2:
+		break;
+	case SCENE_NUM::STAGE3:
+		break;
+	default:
+		break;
+	}
 }
