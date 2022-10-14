@@ -11,9 +11,10 @@ public:
 
 	virtual void Update(const float ElpasedTime);
 	virtual void Render(sf::RenderWindow& RW);
-	virtual bool Next_Stage();
+	virtual void Next_Stage();
 
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
+	const bool GetNext() const { return m_bNext; }
 
 protected:
 	void Collide_Wall();
@@ -34,5 +35,6 @@ protected:
 	sf::Sprite m_sfBackground;
 
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
+	bool m_bNext = false;	// 다음 스테이지 확인
 };
 

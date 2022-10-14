@@ -238,10 +238,9 @@ void CScene::Collide_Jump()
 	m_pPlayer->SetSuperJump(false);
 }
 
-bool CScene::Next_Stage()
+void CScene::Next_Stage()
 {
 
-	return false;
 }
 
 void CScene::Reset() 

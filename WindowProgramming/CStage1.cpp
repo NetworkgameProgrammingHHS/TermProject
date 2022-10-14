@@ -26,33 +26,30 @@ CStage1::~CStage1()
 {
 }
 
-bool CStage1::Next_Stage()
+void CStage1::Next_Stage()
 {
 	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
-			return true;
+			m_bNext = true;
 		}
 		else {
 			Reset();
 		}
 	}
-
-	return false;
 }
 
 void CStage1::Reset()
 {
-	cout << "Reset" << endl;
 	m_pTileMap->Reset();
 }
 
 void CStage1::Update(const float ElapsedTime)
 {	
-	if (CScene::Next_Stage()) {
-		return;
-	}
+	m_pPlayer->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
+
+	Next_Stage();
 }
 
 void CStage1::Render(sf::RenderWindow& RW)
@@ -62,4 +59,7 @@ void CStage1::Render(sf::RenderWindow& RW)
 
 	// Map Render
 	m_pTileMap->Render(RW);
+
+	// Player Render
+	m_pPlayer->Render(RW);
 }

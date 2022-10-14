@@ -25,6 +25,7 @@ public:
 
 	const PLAYER_COLOR& GetColor() const { return m_eColor; }
 	const sf::Vector2f& GetPrevPos() const { return m_vec2fPrevPos; }
+	const sf::Vector2f& GetPos() const { return m_vec2fPos; }
 	const bool GetFall() const { return m_bFall; }
 	const bool GetJump() const { return m_bJump; }
 	const bool GetSuperJump() const { return m_bSuperJump; }
