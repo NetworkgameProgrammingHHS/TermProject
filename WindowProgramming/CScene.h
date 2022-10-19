@@ -9,7 +9,7 @@ public:
 	CScene();
 	virtual ~CScene();
 
-	void KeyBoardInput(const sf::Keyboard::Key& key);
+	virtual void KeyBoardInput(const sf::Keyboard::Key& key);
 
 	virtual void Update(const float ElpasedTime);
 	virtual void Render(sf::RenderWindow& RW);
