@@ -14,6 +14,10 @@ CScene::~CScene()
 {
 }
 
+void CScene::KeyBoardInput(const sf::Keyboard::Key& key)
+{
+}
+
 void CScene::Update(const float ElapsedTime)
 {
 	m_pPlayer->Update(ElapsedTime);

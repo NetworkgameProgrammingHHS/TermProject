@@ -30,7 +30,6 @@ void CStage1::Next_Stage()
 {
 	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
-			cout << "Next" << endl;
 			m_bNext = true;
 		}
 		else {
