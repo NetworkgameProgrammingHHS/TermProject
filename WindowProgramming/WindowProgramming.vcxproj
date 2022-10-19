@@ -150,6 +150,7 @@
     <ClCompile Include="CStage1.cpp" />
     <ClCompile Include="CStage2.cpp" />
     <ClCompile Include="CTileMap.cpp" />
+    <ClCompile Include="CTitle.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClInclude Include="CStage1.h" />
     <ClInclude Include="CStage2.h" />
     <ClInclude Include="CTileMap.h" />
+    <ClInclude Include="CTitle.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
