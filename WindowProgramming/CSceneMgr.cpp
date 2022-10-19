@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CSceneMgr.h"
 #include "CScene.h"
-#include "CTitle.h"
 #include "CStage1.h"
 #include "CStage2.h"
 #include "CPlayer.h"
@@ -20,9 +19,9 @@ void CSceneMgr::Initialize()
 {
 	m_pPlayer = make_shared<CPlayer>();
 
-	m_pScene = dynamic_pointer_cast<CScene>(make_shared<CTitle>());
+	m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pPlayer));
 
-	m_eCurScene = SCENE_NUM::TITLE;
+	m_eCurScene = SCENE_NUM::STAGE1;
 }
 
 void CSceneMgr::Update(const float ElpasedTime)
