@@ -187,6 +187,53 @@ void CScene::Collide_Gate()
 
 void CScene::Collide_Turret()
 {
+	// Red Gate
+	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_G)->second) {
+		if (PLAYER_COLOR::RED != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
+			m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+			break;
+		}
+	}
+
+	// Green Gate
+	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::GREEN_G)->second) {
+		if (PLAYER_COLOR::GREEN != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
+			m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+			break;
+		}
+	}
+
+	// Blue Gate
+	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::BLUE_G)->second) {
+		if (PLAYER_COLOR::BLUE != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
+			m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+			break;
+		}
+	}
+
+	// Yellow Gate
+	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::YELLOW_G)->second) {
+		if (PLAYER_COLOR::YELLOW != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
+			m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+			break;
+		}
+	}
+
+	// Purple Gate
+	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::PURPLE_G)->second) {
+		if (PLAYER_COLOR::PURPLE != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
+			m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+			break;
+		}
+	}
+
+	// GB Gate
+	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::GB_G)->second) {
+		if (PLAYER_COLOR::GB != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
+			m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+			break;
+		}
+	}
 }
 
 void CScene::Collide_Jump()

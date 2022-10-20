@@ -24,6 +24,19 @@ CTile::~CTile()
 {
 }
 
+void CTile::SetTurretAABB(sf::Vector2f pos)
+{
+	// Turret Collision box pos
+	m_rtTurretAABB[0].left = pos.x - TILE_SIZE;
+	m_rtTurretAABB[0].height = pos.y;
+	m_rtTurretAABB[1].left = pos.x + TILE_SIZE;
+	m_rtTurretAABB[1].height = pos.y;
+
+	// Turret Collision Box size
+	for(int i = 0; i < 2; ++i) 
+		m_rtTurretAABB[0].width = m_rtTurretAABB[0].height = TILE_SIZE;
+}
+
 CTileMap::CTileMap(const string& Filename)
 {
 	m_vMap.reserve(TILE_NUM_H * TILE_NUM_W);
@@ -77,9 +90,12 @@ void CTileMap::Initialize()
 	m_iPotionNum = 0;
 	m_umTiles.reserve(TILE_CNT);
 
+	//making (Tile_Type, vector<CTile>) buckets
 	for (int i = static_cast<int>(TILE_TYPE::NONE); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		m_umTiles.try_emplace(static_cast<TILE_TYPE>(i), vector<CTile>());
 	}
+
+	//making tiles from file(m_vMap)
 	for (int i = 0; i < TILE_NUM_H; ++i) {
 		for (int j = 0; j < TILE_NUM_W; ++j) {
 			if (m_vMap[i * TILE_NUM_W + j] == '0')
@@ -93,6 +109,7 @@ void CTileMap::Initialize()
 		}
 	}
 
+	// Setting Tile Position and Collide Box size
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
 			sprite.SetSpriteTex();
@@ -104,6 +121,13 @@ void CTileMap::Initialize()
 			}
 		}
 	}
+
+	//Making Collision box for turret
+	for (int i = static_cast<int>(TILE_TYPE::RED_T); i < static_cast<int>(TILE_TYPE::GB_T); ++i) {
+		for (auto& turret : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+			turret.SetTurretAABB(turret.GetSprite().getPosition());
+		}
+	}
 }
 
 void CTileMap::Render(sf::RenderWindow& RW)
@@ -112,9 +136,21 @@ void CTileMap::Render(sf::RenderWindow& RW)
 		return;
 
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
-		for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-			if(sprite.GetEnable())
-				RW.draw(sprite.GetSprite());
+		// Render for Turret
+		if (i >= static_cast<int>(TILE_TYPE::RED_T) && i <= static_cast<int>(TILE_TYPE::GB_T)) {
+			for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+				if (sprite.GetEnable())
+					RW.draw(sprite.GetSprite());
+				else
+					RW.draw(m_umTiles.find(TILE_TYPE::IDLE_T)->second[0].GetSprite());
+			}
+		}
+		else {
+		// Render for other tiles
+			for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+				if (sprite.GetEnable())
+					RW.draw(sprite.GetSprite());
+			}
 		}
 	}
 }

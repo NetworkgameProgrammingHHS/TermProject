@@ -64,5 +64,7 @@ private:
 	unordered_map<PLAYER_COLOR, sf::Texture> m_umTextures = {};
 
 	sf::Rect<float> m_rtFallBB = {};
+
+	bool m_bDebug = false;
 };
 

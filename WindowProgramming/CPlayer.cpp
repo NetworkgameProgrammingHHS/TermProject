@@ -113,14 +113,23 @@ void CPlayer::Update(const float ElapsedTime)
 
 void CPlayer::Render(sf::RenderWindow& RW)
 {
+	if (m_bDebug) {
+		sf::RectangleShape rt;
+		rt.setPosition(m_rtAABB.left, m_rtAABB.top);
+		rt.setSize(sf::Vector2f(m_rtAABB.width, m_rtAABB.height));
+		rt.setOutlineColor(sf::Color::Red);
+		rt.setOutlineThickness(1.f);
+		RW.draw(rt);
+	}
 	RW.draw(m_sfSprite);
+
 }
 
 void CPlayer::UpdateAABB()
 {
 	m_rtAABB.height = TILE_SIZE;
 	m_rtAABB.width = TILE_SIZE / 2;
-	m_rtAABB.left = m_vec2fPos.x;
+	m_rtAABB.left = m_vec2fPos.x + TILE_SIZE / 4;
 	m_rtAABB.top = m_vec2fPos.y;
 
 	m_rtFallBB.left = m_vec2fPos.x + static_cast<float>(TILE_SIZE) / 4.f;
@@ -153,6 +162,9 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		break;
 	case sf::Keyboard::Escape:
 		exit(1);
+		break;
+	case sf::Keyboard::F5:
+		m_bDebug = !m_bDebug;
 		break;
 	default:
 		break;

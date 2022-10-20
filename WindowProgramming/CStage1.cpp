@@ -8,6 +8,8 @@
 
 CStage1::CStage1(shared_ptr<CPlayer> player)
 {
+	CTile::m_sfTurretIdleTex.loadFromFile("Resource\\Object\\Turret_Wait.png");
+
 	if(!m_sfTexture.loadFromFile("Resource\\BackGround\\Information_Room.png"))
 		exit(1);
 	m_sfBackground.setTexture(m_sfTexture);
