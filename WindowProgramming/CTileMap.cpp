@@ -24,21 +24,29 @@ CTile::~CTile()
 {
 }
 
-void CTile::SetTurretAABB(sf::Vector2f pos)
-{
-	// Turret Collision box pos
-	m_rtTurretAABB[0].left = pos.x - TILE_SIZE;
-	m_rtTurretAABB[0].height = pos.y;
-	m_rtTurretAABB[1].left = pos.x + TILE_SIZE;
-	m_rtTurretAABB[1].height = pos.y;
+//void CTile::SetTurretAABB(sf::Vector2f pos)
+//{
+//	// Turret Collision box pos
+//	m_rtTurretAABB[0].left = pos.x - TILE_SIZE;
+//	m_rtTurretAABB[0].height = pos.y;
+//	m_rtTurretAABB[1].left = pos.x + TILE_SIZE;
+//	m_rtTurretAABB[1].height = pos.y;
+//
+//	// Turret Collision Box size
+//	for(int i = 0; i < 2; ++i) 
+//		m_rtTurretAABB[0].width = m_rtTurretAABB[0].height = TILE_SIZE;
+//}
 
-	// Turret Collision Box size
-	for(int i = 0; i < 2; ++i) 
-		m_rtTurretAABB[0].width = m_rtTurretAABB[0].height = TILE_SIZE;
+CTurret::CTurret(const sf::Texture& idle, const sf::Texture& tex, const sf::Vector2f& pos)
+{
+	m_sfTexture = idle;
+	m_sfTurretTex = tex;
+	SetPosition(pos);
 }
 
 CTileMap::CTileMap(const string& Filename)
 {
+	// Upload data from file
 	m_vMap.reserve(TILE_NUM_H * TILE_NUM_W);
 	ifstream in(Filename);
 	while (!in.eof()) {
@@ -48,6 +56,7 @@ CTileMap::CTileMap(const string& Filename)
 			m_vMap.emplace_back(tile);	
 	}
 
+	// From uploaded file make tile info(char - CTile)
 	m_umTileInfo.reserve(TILE_CNT);
 	m_umTileInfo.try_emplace('D', CTile("Resource\\TileSet\\Lab_Tile.png", TILE_TYPE::WALL));
 
@@ -99,10 +108,18 @@ void CTileMap::Initialize()
 	for (int i = 0; i < TILE_NUM_H; ++i) {
 		for (int j = 0; j < TILE_NUM_W; ++j) {
 			if (m_vMap[i * TILE_NUM_W + j] == '0')
-				m_umTiles.find(TILE_TYPE::NONE)->second.emplace_back(CTile(sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+				m_umTiles.find(TILE_TYPE::NONE)->second.emplace_back(&CTile(sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
 			else {
-				m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(CTile(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+				if (m_vMap[i * TILE_NUM_W + j] == '1' || m_vMap[i * TILE_NUM_W + j] == '2' || m_vMap[i * TILE_NUM_W + j] == '3' || m_vMap[i * TILE_NUM_W + j] == '4' || m_vMap[i * TILE_NUM_W + j] == '5' || m_vMap[i * TILE_NUM_W + j] == '6') {
+					// Turret
+					m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(&CTurret(m_umTileInfo.find('7')->second.GetTexture(), m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+				}
+				else {
+					m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(&CTile(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+				}
+
 				if (m_vMap[i * TILE_NUM_W + j] == 'R' || m_vMap[i * TILE_NUM_W + j] == 'G' || m_vMap[i * TILE_NUM_W + j] == 'B' || m_vMap[i * TILE_NUM_W + j] == 'N') {
+					// Potion
 					++m_iPotionNum;
 				}
 			}
@@ -112,20 +129,20 @@ void CTileMap::Initialize()
 	// Setting Tile Position and Collide Box size
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-			sprite.SetSpriteTex();
+			sprite->SetSpriteTex();
 			if (i == static_cast<int>(TILE_TYPE::WALL)) {
-				sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 1.2f, static_cast<float>(TILE_SIZE) / 1.2f));
+				sprite->SetAABB(sprite->GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 1.2f, static_cast<float>(TILE_SIZE) / 1.2f));
 			}
 			else {
-				sprite.SetAABB(sprite.GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 1.0f));
+				sprite->SetAABB(sprite->GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 2.f, static_cast<float>(TILE_SIZE) / 1.0f));
 			}
 		}
 	}
 
 	//Making Collision box for turret
 	for (int i = static_cast<int>(TILE_TYPE::RED_T); i < static_cast<int>(TILE_TYPE::GB_T); ++i) {
-		for (auto& turret : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-			turret.SetTurretAABB(turret.GetSprite().getPosition());
+		for (auto& turret : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {			
+			//dynamic_cast<CTurret*>(&turret)->SetTurretAABB(turret.GetSprite().getPosition())			
 		}
 	}
 }
@@ -139,17 +156,17 @@ void CTileMap::Render(sf::RenderWindow& RW)
 		// Render for Turret
 		if (i >= static_cast<int>(TILE_TYPE::RED_T) && i <= static_cast<int>(TILE_TYPE::GB_T)) {
 			for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-				if (sprite.GetEnable())
-					RW.draw(sprite.GetSprite());
+				if (sprite->GetEnable())
+					RW.draw(sprite->GetSprite());
 				else
-					RW.draw(m_umTiles.find(TILE_TYPE::IDLE_T)->second[0].GetSprite());
+					RW.draw(m_umTiles.find(TILE_TYPE::IDLE_T)->second[0]->GetSprite());
 			}
 		}
 		else {
 		// Render for other tiles
 			for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-				if (sprite.GetEnable())
-					RW.draw(sprite.GetSprite());
+				if (sprite->GetEnable())
+					RW.draw(sprite->GetSprite());
 			}
 		}
 	}

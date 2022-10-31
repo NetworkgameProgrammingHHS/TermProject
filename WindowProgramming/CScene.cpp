@@ -187,6 +187,8 @@ void CScene::Collide_Gate()
 
 void CScene::Collide_Turret()
 {
+
+
 	// Red Gate
 	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_G)->second) {
 		if (PLAYER_COLOR::RED != m_pPlayer->GetColor() && m_pPlayer->GetAABB().intersects(gate.GetSprite().getGlobalBounds())) {
