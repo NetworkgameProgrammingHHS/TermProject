@@ -27,6 +27,7 @@ protected:
 	void Collide_Gate();
 	void Collide_Turret();
 	void Collide_Jump();
+	void Collide_Spoid();
 
 	virtual void Reset();
 

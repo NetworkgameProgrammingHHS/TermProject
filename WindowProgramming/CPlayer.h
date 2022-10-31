@@ -33,6 +33,8 @@ public:
 	const bool GetJumpDir() const { return m_iJumpCnt < m_iJumpChange; }	// true는 위로, false는 아래로
 	const int GetJumpChange() const { return m_iJumpChange; }
 	const sf::Rect<float> GetFallBB() const { return m_rtFallBB; }
+	const bool GetSpoid() const { return m_bSpoid; }
+	const PLAYER_COLOR& GetSavedColor() const { return m_eSavedColor; }
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
 	void SetColor(const PLAYER_COLOR color) { m_eColor = color; m_sfSprite.setTexture(m_umTextures.find(color)->second); }
@@ -41,6 +43,8 @@ public:
 	void SetSuperJump(const bool jump) { m_bSuperJump = jump; }
 	void SetJumpCnt(const int cnt) { m_iJumpCnt = cnt; }
 	void SetJumpVelocity(const float speed) { m_fJumpVelocity = speed; }
+	void SetSpoid(const bool spoid) { m_bSpoid = spoid; }
+	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 
 private:
 	void Animation(const float ElapsedTime);
@@ -61,10 +65,12 @@ private:
 	int m_iSpriteTop = 32;
 	PLAYER_STATE m_eState = PLAYER_STATE::IDLE;
 	PLAYER_COLOR m_eColor = PLAYER_COLOR::NORMAL;
+	PLAYER_COLOR m_eSavedColor = PLAYER_COLOR::NORMAL;
 	unordered_map<PLAYER_COLOR, sf::Texture> m_umTextures = {};
 
 	sf::Rect<float> m_rtFallBB = {};
 
+	bool m_bSpoid = false;
 	bool m_bDebug = false;
 };
 

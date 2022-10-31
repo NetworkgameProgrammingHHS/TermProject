@@ -29,11 +29,22 @@ private:
 class CTurret : public CTile
 {
 public:
-	CTurret(const sf::Texture& idle, const sf::Texture& tex, const sf::Vector2f& pos);
+	CTurret(const sf::Texture& idle, const sf::Texture& tex, const sf::Vector2f& pos, const TILE_TYPE& type);
 	~CTurret() {};
+
+	const sf::Rect<float>& GetTurretAABB(int index) { return m_rtTurretAABB[index]; }
+	const sf::Texture& GetTurretTex() { return m_sfTurretTex; }
+	const bool GetActivate() { return m_bActivate; }
+
+	void SetTurretAABB(sf::Vector2f pos);
+	void SetTurretTex(sf::Texture tex) { m_sfTurretTex = tex; }
+	void SetActivate(bool activate) { m_bActivate = activate; }
 
 private:
 	sf::Texture m_sfTurretTex;
+	sf::Rect<float> m_rtTurretAABB[2];
+	PLAYER_COLOR m_eTurretColor;
+	bool m_bActivate = false;
 };
 
 class CTileMap

@@ -24,24 +24,48 @@ CTile::~CTile()
 {
 }
 
-//void CTile::SetTurretAABB(sf::Vector2f pos)
-//{
-//	// Turret Collision box pos
-//	m_rtTurretAABB[0].left = pos.x - TILE_SIZE;
-//	m_rtTurretAABB[0].height = pos.y;
-//	m_rtTurretAABB[1].left = pos.x + TILE_SIZE;
-//	m_rtTurretAABB[1].height = pos.y;
-//
-//	// Turret Collision Box size
-//	for(int i = 0; i < 2; ++i) 
-//		m_rtTurretAABB[0].width = m_rtTurretAABB[0].height = TILE_SIZE;
-//}
-
-CTurret::CTurret(const sf::Texture& idle, const sf::Texture& tex, const sf::Vector2f& pos)
+CTurret::CTurret(const sf::Texture& idle, const sf::Texture& tex, const sf::Vector2f& pos, const TILE_TYPE& type)
 {
 	m_sfTexture = idle;
 	m_sfTurretTex = tex;
+
+	switch (type) {
+	case TILE_TYPE::RED_T:
+		m_eTurretColor = PLAYER_COLOR::RED;
+		break;
+	case TILE_TYPE::GREEN_T:
+		m_eTurretColor = PLAYER_COLOR::GREEN;
+		break;
+	case TILE_TYPE::BLUE_T:
+		m_eTurretColor = PLAYER_COLOR::BLUE;
+		break;
+	case TILE_TYPE::YELLOW_T:
+		m_eTurretColor = PLAYER_COLOR::YELLOW;
+		break;
+	case TILE_TYPE::PURPLE_T:
+		m_eTurretColor = PLAYER_COLOR::PURPLE;
+		break;
+	case TILE_TYPE::GB_T:
+		m_eTurretColor = PLAYER_COLOR::GB;
+		break;
+	default:		
+		break;
+	}
+	
 	SetPosition(pos);
+}
+
+void CTurret::SetTurretAABB(sf::Vector2f pos)
+{
+	// Turret Collision box pos
+	m_rtTurretAABB[0].left = pos.x - TILE_SIZE;
+	m_rtTurretAABB[0].top = pos.y;
+	m_rtTurretAABB[1].left = pos.x + TILE_SIZE;
+	m_rtTurretAABB[1].top = pos.y;
+
+	// Turret Collision Box size
+	for (int i = 0; i < 2; ++i)
+		m_rtTurretAABB[i].width = m_rtTurretAABB[i].height = TILE_SIZE;
 }
 
 CTileMap::CTileMap(const string& Filename)
@@ -92,6 +116,11 @@ CTileMap::CTileMap(const string& Filename)
 
 CTileMap::~CTileMap()
 {
+	for (int i = 0; i < static_cast<int>(TILE_TYPE::END); ++i) {
+		for (auto& tile : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+			delete tile;
+		}
+	}
 }
 
 void CTileMap::Initialize()
@@ -101,21 +130,25 @@ void CTileMap::Initialize()
 
 	//making (Tile_Type, vector<CTile>) buckets
 	for (int i = static_cast<int>(TILE_TYPE::NONE); i < static_cast<int>(TILE_TYPE::END); ++i) {
-		m_umTiles.try_emplace(static_cast<TILE_TYPE>(i), vector<CTile>());
+		m_umTiles.try_emplace(static_cast<TILE_TYPE>(i), vector<CTile*>());
 	}
 
 	//making tiles from file(m_vMap)
 	for (int i = 0; i < TILE_NUM_H; ++i) {
 		for (int j = 0; j < TILE_NUM_W; ++j) {
-			if (m_vMap[i * TILE_NUM_W + j] == '0')
-				m_umTiles.find(TILE_TYPE::NONE)->second.emplace_back(&CTile(sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+			if (m_vMap[i * TILE_NUM_W + j] == '0') {
+				CTile* tile = new CTile(sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE)));
+				m_umTiles.find(TILE_TYPE::NONE)->second.emplace_back(tile);
+			}
 			else {
 				if (m_vMap[i * TILE_NUM_W + j] == '1' || m_vMap[i * TILE_NUM_W + j] == '2' || m_vMap[i * TILE_NUM_W + j] == '3' || m_vMap[i * TILE_NUM_W + j] == '4' || m_vMap[i * TILE_NUM_W + j] == '5' || m_vMap[i * TILE_NUM_W + j] == '6') {
 					// Turret
-					m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(&CTurret(m_umTileInfo.find('7')->second.GetTexture(), m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+					CTile* tile = new CTurret(m_umTileInfo.find('7')->second.GetTexture(), m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE)), m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType());
+					m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(tile);
 				}
 				else {
-					m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(&CTile(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE))));
+					CTile* tile = new CTile(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetTexture(), sf::Vector2f(static_cast<float>(j * TILE_SIZE), static_cast<float>(i * TILE_SIZE)));
+					m_umTiles.find(m_umTileInfo.find(m_vMap[i * TILE_NUM_W + j])->second.GetType())->second.emplace_back(tile);
 				}
 
 				if (m_vMap[i * TILE_NUM_W + j] == 'R' || m_vMap[i * TILE_NUM_W + j] == 'G' || m_vMap[i * TILE_NUM_W + j] == 'B' || m_vMap[i * TILE_NUM_W + j] == 'N') {
@@ -142,7 +175,7 @@ void CTileMap::Initialize()
 	//Making Collision box for turret
 	for (int i = static_cast<int>(TILE_TYPE::RED_T); i < static_cast<int>(TILE_TYPE::GB_T); ++i) {
 		for (auto& turret : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {			
-			//dynamic_cast<CTurret*>(&turret)->SetTurretAABB(turret.GetSprite().getPosition())			
+			dynamic_cast<CTurret*>(turret)->SetTurretAABB(turret->GetSprite().getPosition());
 		}
 	}
 }

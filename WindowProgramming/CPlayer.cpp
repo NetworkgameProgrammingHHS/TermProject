@@ -121,8 +121,38 @@ void CPlayer::Render(sf::RenderWindow& RW)
 		rt.setOutlineThickness(1.f);
 		RW.draw(rt);
 	}
-	RW.draw(m_sfSprite);
 
+	if (m_bSpoid) {
+		sf::RectangleShape rt;
+		switch (m_eSavedColor) {
+		case PLAYER_COLOR::RED:
+			rt.setFillColor(sf::Color::Red);
+			break;
+		case PLAYER_COLOR::GREEN:
+			rt.setFillColor(sf::Color::Green);
+			break;
+		case PLAYER_COLOR::BLUE:
+			rt.setFillColor(sf::Color::Blue);
+			break;
+		case PLAYER_COLOR::YELLOW:
+			rt.setFillColor(sf::Color::Yellow);
+			break;
+		case PLAYER_COLOR::PURPLE:
+			rt.setFillColor(sf::Color::Magenta);
+			break;
+		case PLAYER_COLOR::GB:
+			rt.setFillColor(sf::Color::Cyan);
+			break;
+		default:
+			break;
+		}
+		
+		rt.setPosition(m_vec2fPos.x - 1.0f, m_vec2fPos.y + 1.0f);
+		rt.setSize(sf::Vector2f(5.0f, 5.0f));
+		RW.draw(rt);
+	}
+
+	RW.draw(m_sfSprite);
 }
 
 void CPlayer::UpdateAABB()
@@ -165,6 +195,12 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		break;
 	case sf::Keyboard::F5:
 		m_bDebug = !m_bDebug;
+		break;
+	case sf::Keyboard::F:
+		if (m_bSpoid) {
+			m_bSpoid = false;
+			SetColor(m_eSavedColor);
+		}
 		break;
 	default:
 		break;
