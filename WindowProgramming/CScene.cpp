@@ -189,30 +189,28 @@ void CScene::Collide_Gate()
 void CScene::Collide_Turret()
 {
 	// Red Turret
-	if (PLAYER_COLOR::RED == m_pPlayer->GetColor()) {		
-		for (auto& turret : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_T)->second) {			
+	if (PLAYER_COLOR::RED == m_pPlayer->GetColor()) {
+		for (auto& turret : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_T)->second) {
 			if (!dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
-				//Turret Activate
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(true);
-				break;
+
 			}
-			if (dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
+			if (m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
 				//Collide Turret
 				Reset();
 				break;
 			}
-			else if (dynamic_cast<CTurret*>(turret)->GetActivate()) {
+			else if (dynamic_cast<CTurret*>(turret)->GetActivate() && (!m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) && !m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1)))) {
 				//No Collide
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(false);
-				break;
 			}
 		}
 	}
@@ -220,20 +218,20 @@ void CScene::Collide_Turret()
 	// Green Turret
 	if (PLAYER_COLOR::GREEN == m_pPlayer->GetColor()) {
 		for (auto& turret : m_pTileMap->m_umTiles.find(TILE_TYPE::GREEN_T)->second) {
-			if (dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
-				//Turret Activate
+			if (!dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(true);
+
 			}
 			if (m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
 				//Collide Turret
 				Reset();
 				break;
 			}
-			else {
+			else if (dynamic_cast<CTurret*>(turret)->GetActivate() && (!m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) && !m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1)))) {
 				//No Collide
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
@@ -253,7 +251,6 @@ void CScene::Collide_Turret()
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(true);
-				cout << "Activate" << endl;
 
 			}
 			if (m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
@@ -268,8 +265,6 @@ void CScene::Collide_Turret()
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(false);
-				cout << "Deactivate" << endl;
-
 			}
 		}
 	}
@@ -277,20 +272,20 @@ void CScene::Collide_Turret()
 	// Yellow Turret
 	if (PLAYER_COLOR::YELLOW == m_pPlayer->GetColor()) {
 		for (auto& turret : m_pTileMap->m_umTiles.find(TILE_TYPE::YELLOW_T)->second) {
-			if (dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
-				//Turret Activate
+			if (!dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(true);
+
 			}
 			if (m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
 				//Collide Turret
 				Reset();
 				break;
 			}
-			else {
+			else if (dynamic_cast<CTurret*>(turret)->GetActivate() && (!m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) && !m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1)))) {
 				//No Collide
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
@@ -304,20 +299,20 @@ void CScene::Collide_Turret()
 	// Purple Turret
 	if (PLAYER_COLOR::PURPLE == m_pPlayer->GetColor()) {
 		for (auto& turret : m_pTileMap->m_umTiles.find(TILE_TYPE::PURPLE_T)->second) {
-			if (dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
-				//Turret Activate
+			if (!dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(true);
+
 			}
 			if (m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
 				//Collide Turret
 				Reset();
 				break;
 			}
-			else {
+			else if (dynamic_cast<CTurret*>(turret)->GetActivate() && (!m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) && !m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1)))) {
 				//No Collide
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
@@ -331,20 +326,20 @@ void CScene::Collide_Turret()
 	// GB Turret
 	if (PLAYER_COLOR::GB == m_pPlayer->GetColor()) {
 		for (auto& turret : m_pTileMap->m_umTiles.find(TILE_TYPE::GB_T)->second) {
-			if (dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
-				//Turret Activate
+			if (!dynamic_cast<CTurret*>(turret)->GetActivate() && m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) || m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1))) {
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());
 				turret->SetSpriteTex();
 				dynamic_cast<CTurret*>(turret)->SetTurretTex(temp);
 				dynamic_cast<CTurret*>(turret)->SetActivate(true);
+
 			}
 			if (m_pPlayer->GetAABB().intersects(turret->GetSprite().getGlobalBounds())) {
 				//Collide Turret
 				Reset();
 				break;
 			}
-			else {
+			else if (dynamic_cast<CTurret*>(turret)->GetActivate() && (!m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(0)) && !m_pPlayer->GetAABB().intersects(dynamic_cast<CTurret*>(turret)->GetTurretAABB(1)))) {
 				//No Collide
 				sf::Texture temp = turret->GetTexture();
 				turret->SetTexture(dynamic_cast<CTurret*>(turret)->GetTurretTex());

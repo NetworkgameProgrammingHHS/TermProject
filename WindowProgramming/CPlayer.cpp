@@ -84,7 +84,8 @@ void CPlayer::Reset()
 	m_fSpriteLeft = 0;
 	m_iSpriteTop = 32;
 	m_eState = PLAYER_STATE::IDLE;
-	m_eColor = PLAYER_COLOR::NORMAL;
+	SetColor(PLAYER_COLOR::NORMAL);
+
 }
 
 void CPlayer::Update(const float ElapsedTime)

@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CScene.h"
 #include "CStage1.h"
-#include "CStage2.h"
 #include "CTileMap.h"
 #include "CObject.h"
 #include "CPlayer.h"

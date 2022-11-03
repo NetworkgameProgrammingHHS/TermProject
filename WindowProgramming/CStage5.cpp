@@ -1,31 +1,31 @@
 #include "pch.h"
 #include "CScene.h"
-#include "CStage2.h"
+#include "CStage5.h"
 #include "CTileMap.h"
 #include "CObject.h"
 #include "CPlayer.h"
 
-CStage2::CStage2(shared_ptr<CPlayer> player)
+CStage5::CStage5(shared_ptr<CPlayer> player)
 {
-	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Scientist_Room.png"))
+	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Time_And_Mind_Room.png"))
 		exit(1);
 	m_sfBackground.setTexture(m_sfTexture);
 	m_sfBackground.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage2.txt");
+	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage5.txt");
 	m_pTileMap->Initialize();
 
 	m_pPlayer = player;
 	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 
-	m_eCurScene = SCENE_NUM::STAGE2;
+	m_eCurScene = SCENE_NUM::STAGE5;
 }
 
-CStage2::~CStage2()
+CStage5::~CStage5()
 {
 }
 
-void CStage2::Next_Stage()
+void CStage5::Next_Stage()
 {
 	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
@@ -37,7 +37,7 @@ void CStage2::Next_Stage()
 	}
 }
 
-void CStage2::Reset()
+void CStage5::Reset()
 {
 	m_pTileMap->Reset();
 	m_pTileMap->Initialize();
@@ -45,7 +45,7 @@ void CStage2::Reset()
 	m_pPlayer->Reset();
 }
 
-void CStage2::Update(const float ElapsedTime)
+void CStage5::Update(const float ElapsedTime)
 {
 	m_pPlayer->Update(ElapsedTime);
 
@@ -54,7 +54,7 @@ void CStage2::Update(const float ElapsedTime)
 	Next_Stage();
 }
 
-void CStage2::Render(sf::RenderWindow& RW)
+void CStage5::Render(sf::RenderWindow& RW)
 {
 	// Background Render
 	RW.draw(m_sfBackground);

@@ -149,6 +149,9 @@
     <ClCompile Include="CSceneMgr.cpp" />
     <ClCompile Include="CStage1.cpp" />
     <ClCompile Include="CStage2.cpp" />
+    <ClCompile Include="CStage3.cpp" />
+    <ClCompile Include="CStage4.cpp" />
+    <ClCompile Include="CStage5.cpp" />
     <ClCompile Include="CTileMap.cpp" />
     <ClCompile Include="CTitle.cpp" />
     <ClCompile Include="main.cpp" />
@@ -161,6 +164,9 @@
     <ClInclude Include="CSceneMgr.h" />
     <ClInclude Include="CStage1.h" />
     <ClInclude Include="CStage2.h" />
+    <ClInclude Include="CStage3.h" />
+    <ClInclude Include="CStage4.h" />
+    <ClInclude Include="CStage5.h" />
     <ClInclude Include="CTileMap.h" />
     <ClInclude Include="CTitle.h" />
     <ClInclude Include="pch.h" />
