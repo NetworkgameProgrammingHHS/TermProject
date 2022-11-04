@@ -22,7 +22,7 @@ public:
 	void SetGun(const bool gun) { m_bGun = gun; }
 
 	void Update(const float ElapsedTime);
-	void CollideCheck(int tileW, int tileH);
+	void CollideCheck(int tileW, int tileH, Vec2 bulletPos);
 
 private:
 	Vec2 m_Pos;
