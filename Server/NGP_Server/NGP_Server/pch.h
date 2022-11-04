@@ -22,3 +22,7 @@ struct Vec2 {
 	float x = 0.f;
 	float y = 0.f;
 };
+
+enum class PLAYER_COLOR {
+	NORMAL, RED, GREEN, BLUE, YELLOW, PURPLE, GB, END
+};
