@@ -1,4 +1,5 @@
 #pragma once
+//#include "../../Common.h" //temporary include
 
 class CSceneMgr;
 
@@ -15,6 +16,7 @@ public:
 private:
 	void Update();
 	void Render(sf::RenderWindow& RW);
+	//DWORD WINAPI RecvProcess(LPVOID arg);
 
 private:
 	unique_ptr<CSceneMgr> m_pSceneMgr;

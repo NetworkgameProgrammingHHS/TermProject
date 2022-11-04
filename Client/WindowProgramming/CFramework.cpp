@@ -18,6 +18,18 @@ CFramework::~CFramework()
 
 void CFramework::Process()
 {
+	//Thread 생성
+	//HANDLE hThread = CreateThread(NULL, 0, RecvProcess,
+	//	(LPVOID)m_pNetWorkMgr->client_sock, 0, NULL);
+	//if (hThread == NULL)
+	//{
+	//	closesocket(m_pNetWorkMgr->client_sock);
+	//}
+	//else
+	//{
+	//	CloseHandle(hThread);
+	//}
+
 	while (m_sfWindow.isOpen())
 	{
 		sf::Event event;
@@ -30,7 +42,7 @@ void CFramework::Process()
 			if (event.type == sf::Event::KeyReleased)
 				KeyBoardRelease(event.key.code);
 		}
-		
+		//수정
 		Update();
 
 		m_sfWindow.clear();
@@ -55,7 +67,7 @@ void CFramework::Update()
 {
 	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
 	m_pSceneMgr->Update(ElapsedTime);
-	
+
 	// FPS
 	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
 	++m_iFrame;
@@ -73,3 +85,15 @@ void CFramework::Render(sf::RenderWindow& RW)
 {
 	m_pSceneMgr->Render(RW);
 }
+
+//DWORD __stdcall CFramework::RecvProcess(LPVOID arg)
+//{
+//	while (m_sfWindow.isOpen())
+//	{
+//		//packet Recv
+//
+//		//Update
+//		Update();
+//	}
+//	return 0;
+//}
