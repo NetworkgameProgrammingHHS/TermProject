@@ -31,38 +31,35 @@ void CScene::Render(sf::RenderWindow& RW)
 void CScene::Collide_Wall()
 {
 	if (m_pTileMap) {
-		// 점프중이 아닐 때 아래에 바닥이 있는지 체크
-		if (!m_pPlayer->GetJump()) {
-			m_pPlayer->SetFall(true);
-			for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
-				if (m_pPlayer->GetFallBB().intersects(wall->GetAABB())) {
-					m_pPlayer->SetFall(false);
-					break;
-				}
-			}
-			if (m_pPlayer->GetFall()) {
-				m_pPlayer->SetJump(true);
-				m_pPlayer->SetJumpVelocity(JUMP_SPEED);
-				m_pPlayer->SetJumpCnt(m_pPlayer->GetJumpChange());
-			}
-		}
 		for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
-			//발아래 블록이 없을 때
 			if (m_pPlayer->GetAABB().intersects(wall->GetAABB())) {
-				m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
-
-				//jump 충돌처리
 				if (m_pPlayer->GetJump()) {
-					if (m_pPlayer->GetJumpDir()) {
+					m_pPlayer->SetPosition(sf::Vector2f(m_pPlayer->GetPrevPos().x, m_pPlayer->GetPos().y));					
+					if (m_pPlayer->GetJumpDir()) { // 머리 충돌 시 플레이어 점프 방향 변경
 						m_pPlayer->SetJumpCnt(m_pPlayer->GetJumpChange());
 					}
 					else {
 						m_pPlayer->SetJump(false);
+						// 문제가 되는 부분1 : 통과하여 충돌하면 좌표가 블록위로 순간이동
 						m_pPlayer->SetPosition(sf::Vector2f(m_pPlayer->GetSprite().getPosition().x, wall->GetSprite().getPosition().y - m_pPlayer->GetSprite().getGlobalBounds().height));
 					}
 				}
-				break;
+				else {
+					m_pPlayer->SetPosition(m_pPlayer->GetPrevPos());
+				}
+				break;				
 			}
+		}
+
+		if (!m_pPlayer->GetJump()) {
+			for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
+				if (m_pPlayer->GetFallBB().intersects(wall->GetAABB())) {
+					m_pPlayer->SetFall(false);	// 문제가 되는 부분2 : Fall값이 false가 되면서 공중에서 멈춘다
+					m_pPlayer->SetPosition(sf::Vector2f(m_pPlayer->GetSprite().getPosition().x, wall->GetSprite().getPosition().y - m_pPlayer->GetSprite().getGlobalBounds().height));
+					return;
+				}
+			}
+			m_pPlayer->SetFall(true);
 		}
 	}
 }

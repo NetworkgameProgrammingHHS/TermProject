@@ -85,7 +85,6 @@ void CPlayer::Reset()
 	m_iSpriteTop = 32;
 	m_eState = PLAYER_STATE::IDLE;
 	SetColor(PLAYER_COLOR::NORMAL);
-
 }
 
 void CPlayer::Update(const float ElapsedTime)
@@ -96,6 +95,7 @@ void CPlayer::Update(const float ElapsedTime)
 
 	m_vec2fPos.x += m_iDir * PLAYER_SPEED * ElapsedTime;
 
+	// Jump Process
 	if (m_bJump) {
 		if (m_iJumpCnt < m_iJumpChange) {
 			m_vec2fPos.y -= m_fJumpVelocity * ElapsedTime;
@@ -107,6 +107,10 @@ void CPlayer::Update(const float ElapsedTime)
 	}
 	else
 		m_iJumpCnt = 0;
+
+	if (m_bFall) {
+		m_vec2fPos.y += JUMP_SPEED * ElapsedTime;
+	}
 
 	m_sfSprite.setPosition(m_vec2fPos);
 	UpdateAABB();
@@ -120,7 +124,15 @@ void CPlayer::Render(sf::RenderWindow& RW)
 		rt.setSize(sf::Vector2f(m_rtAABB.width, m_rtAABB.height));
 		rt.setOutlineColor(sf::Color::Red);
 		rt.setOutlineThickness(1.f);
+
+		sf::RectangleShape rt2;
+		rt2.setPosition(m_rtFallBB.left, m_rtFallBB.top);
+		rt2.setSize(sf::Vector2f(m_rtFallBB.width, m_rtFallBB.height));
+		rt2.setOutlineColor(sf::Color::Blue);
+		rt2.setOutlineThickness(1.f);
+
 		RW.draw(rt);
+		RW.draw(rt2);
 	}
 
 	if (m_bSpoid) {
