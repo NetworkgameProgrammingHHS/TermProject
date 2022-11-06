@@ -1,4 +1,5 @@
 #pragma once
+#include "CGun.h"
 
 class CPlayer;
 class CTileMap;
@@ -35,6 +36,8 @@ protected:
 	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
+
+	unique_ptr<CGun> m_pGun = nullptr;
 
 	sf::Texture m_sfTexture;
 	sf::Sprite m_sfBackground;

@@ -34,6 +34,7 @@ public:
 	const int GetJumpChange() const { return m_iJumpChange; }
 	const sf::Rect<float> GetFallBB() const { return m_rtFallBB; }
 	const bool GetSpoid() const { return m_bSpoid; }
+	const bool GetGun() const { return m_bGun; }
 	const PLAYER_COLOR& GetSavedColor() const { return m_eSavedColor; }
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
@@ -44,6 +45,7 @@ public:
 	void SetJumpCnt(const int cnt) { m_iJumpCnt = cnt; }
 	void SetJumpVelocity(const float speed) { m_fJumpVelocity = speed; }
 	void SetSpoid(const bool spoid) { m_bSpoid = spoid; }
+	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 
 private:
@@ -72,5 +74,8 @@ private:
 
 	bool m_bSpoid = false;
 	bool m_bDebug = false;
+
+	// Gun
+	bool m_bGun = false;
 };
 

@@ -82,9 +82,9 @@ struct SC_WORLD_UPDATE_PACKET {
 	short x_p2, y_p2;
 	char dir_p2;
 
-	char color_p2;
-	short x_p2, y_p2;
-	char dir_p2;
+	char color_p3;
+	short x_p3, y_p3;
+	char dir_p3;
 
 	char bullet_enable;
 	short x_bullet, y_bullet;
