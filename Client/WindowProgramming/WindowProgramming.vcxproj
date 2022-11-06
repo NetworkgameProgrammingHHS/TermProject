@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CFramework.cpp" />
+    <ClCompile Include="CNetworkMgr.cpp" />
     <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CScene.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CFramework.h" />
+    <ClInclude Include="CNetworkMgr.h" />
     <ClInclude Include="CObject.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CScene.h" />
@@ -170,6 +172,7 @@
     <ClInclude Include="CTileMap.h" />
     <ClInclude Include="CTitle.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="protocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

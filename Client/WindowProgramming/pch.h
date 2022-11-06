@@ -9,6 +9,10 @@
 #include <unordered_map>
 #include <memory>
 
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
+#include "protocol.h"
 
 using namespace std;
 
@@ -27,14 +31,6 @@ using namespace std;
 #endif
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "winmm.lib")
-
-constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 608;
-
-constexpr int TILE_NUM_W = 25;
-constexpr int TILE_NUM_H = 19;
-
-constexpr int TILE_SIZE = 32;
 
 enum class PLAYER_STATE { IDLE, MOVE_L, MOVE_R, JUMP };
 

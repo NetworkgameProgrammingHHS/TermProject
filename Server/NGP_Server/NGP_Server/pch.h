@@ -4,6 +4,9 @@
 #include <array>
 #include <fstream>
 #include <memory>
+
+#include "protocol.h"
+
 using namespace std;
 
 #define TILE_NUM_W 25
