@@ -16,6 +16,9 @@ public:
 	void KeyBoardInput(const sf::Keyboard::Key& key);
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
+	const shared_ptr<CScene> GetpScene() const { return m_pScene; }
+	const shared_ptr<CPlayer> GetpPlayer() const { return m_pPlayer; }
+
 private:
 	void Next_Stage();
 

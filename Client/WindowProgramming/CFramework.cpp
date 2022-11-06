@@ -2,11 +2,19 @@
 #include "CFramework.h"
 #include "CScene.h"
 #include "CSceneMgr.h"
+#include "CNetworkMgr.h"
 
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
-	m_pSceneMgr = make_unique<CSceneMgr>();
+	m_pSceneMgr = make_shared<CSceneMgr>();
 	m_pSceneMgr->Initialize();
+	m_pNetworkMgr = make_shared<CNetworkMgr>();
+	m_pNetworkMgr->InitializeSocket();
+
+	m_pRTParameter->p = this;
+	m_pRTParameter->pNetMgr = m_pNetworkMgr;
+	m_pRTParameter->pSceneMgr = m_pSceneMgr;
+	
 
 	m_sfWindow.setFramerateLimit(60);
 }
@@ -19,16 +27,16 @@ CFramework::~CFramework()
 void CFramework::Process()
 {
 	//Thread 생성
-	//HANDLE hThread = CreateThread(NULL, 0, RecvProcess,
-	//	(LPVOID)m_pNetWorkMgr->client_sock, 0, NULL);
-	//if (hThread == NULL)
-	//{
-	//	closesocket(m_pNetWorkMgr->client_sock);
-	//}
-	//else
-	//{
-	//	CloseHandle(hThread);
-	//}
+	HANDLE hThread = CreateThread(NULL, 0, RecvProcess,
+		(LPVOID)m_pRTParameter, 0, NULL);
+	if (hThread == NULL)
+	{
+		closesocket(m_pNetworkMgr->GetSocket());
+	}
+	else
+	{
+		CloseHandle(hThread);
+	}
 
 	while (m_sfWindow.isOpen())
 	{
@@ -42,8 +50,6 @@ void CFramework::Process()
 			if (event.type == sf::Event::KeyReleased)
 				KeyBoardRelease(event.key.code);
 		}
-		//수정
-		Update();
 
 		m_sfWindow.clear();
 
@@ -86,14 +92,15 @@ void CFramework::Render(sf::RenderWindow& RW)
 	m_pSceneMgr->Render(RW);
 }
 
-//DWORD __stdcall CFramework::RecvProcess(LPVOID arg)
-//{
-//	while (m_sfWindow.isOpen())
-//	{
-//		//packet Recv
-//
-//		//Update
-//		Update();
-//	}
-//	return 0;
-//}
+DWORD WINAPI CFramework::RecvProcess(LPVOID arg)
+{
+	RecVThreadParameter* pParameter = reinterpret_cast<RecVThreadParameter*> (arg);
+	while (pParameter->p->GetRenderWindow()->isOpen())
+	{
+		//packet Recv
+		pParameter->pNetMgr.get()->RecvPacket(pParameter->pSceneMgr.get()->GetpScene().get(), pParameter->pSceneMgr.get()->GetpPlayer().get());
+		//Update
+		pParameter->p->Update();
+	}
+	return 0;
+}
