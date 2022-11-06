@@ -48,6 +48,7 @@ void CStage5::Reset()
 void CStage5::Update(const float ElapsedTime)
 {
 	m_pPlayer->Update(ElapsedTime);
+	if (m_pGun)m_pGun->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
 
@@ -64,4 +65,7 @@ void CStage5::Render(sf::RenderWindow& RW)
 
 	// Player Render
 	m_pPlayer->Render(RW);
+
+	// Gun, Bullet Render
+	if (m_pGun)m_pGun->Render(RW);
 }

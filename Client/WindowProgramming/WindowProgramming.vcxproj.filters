@@ -54,7 +54,10 @@
     <ClCompile Include="CStage5.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CNetworkMgr.cpp">
+    <ClCompile Include="CGun.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CBullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,10 +101,10 @@
     <ClInclude Include="CStage5.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CNetworkMgr.h">
+    <ClInclude Include="CGun.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="protocol.h">
+    <ClInclude Include="CBullet.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
