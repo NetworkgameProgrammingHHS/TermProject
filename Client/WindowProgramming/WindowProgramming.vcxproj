@@ -163,7 +163,9 @@
     <ClInclude Include="CBullet.h" />
     <ClInclude Include="CFramework.h" />
     <ClInclude Include="CGun.h" />
-    <ClInclude Include="CNetworkMgr.h" />
+    <ClInclude Include="CNetworkMgr.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="CObject.h" />
     <ClInclude Include="CPlayer.h" />
     <ClInclude Include="CScene.h" />

@@ -31,6 +31,7 @@ using namespace std;
 #endif
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "winmm.lib")
+#pragma comment(lib, "ws2_32")
 
 enum class PLAYER_STATE { IDLE, MOVE_L, MOVE_R, JUMP };
 
