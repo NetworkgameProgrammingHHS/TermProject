@@ -11,6 +11,7 @@ CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT)
 	m_pNetworkMgr = make_shared<CNetworkMgr>();
 	m_pNetworkMgr->InitializeSocket();
 
+	m_pRTParameter = new RecVThreadParameter;
 	m_pRTParameter->p = this;
 	m_pRTParameter->pNetMgr = m_pNetworkMgr;
 	m_pRTParameter->pSceneMgr = m_pSceneMgr;
@@ -27,8 +28,7 @@ CFramework::~CFramework()
 void CFramework::Process()
 {
 	//Thread »ý¼º
-	HANDLE hThread = CreateThread(NULL, 0, RecvProcess,
-		(LPVOID)m_pRTParameter, 0, NULL);
+	HANDLE hThread = CreateThread(NULL, 0, RecvProcess, reinterpret_cast<LPVOID>(m_pRTParameter), 0, NULL);
 	if (hThread == NULL)
 	{
 		closesocket(m_pNetworkMgr->GetSocket());
@@ -50,6 +50,7 @@ void CFramework::Process()
 			if (event.type == sf::Event::KeyReleased)
 				KeyBoardRelease(event.key.code);
 		}
+		Update();
 
 		m_sfWindow.clear();
 
@@ -99,8 +100,6 @@ DWORD WINAPI CFramework::RecvProcess(LPVOID arg)
 	{
 		//packet Recv
 		pParameter->pNetMgr->RecvPacket(pParameter->pSceneMgr->GetpScene().get(), pParameter->pSceneMgr->GetpPlayer().get());
-		//Update
-		pParameter->p->Update();
 	}
 
 	return 0;
