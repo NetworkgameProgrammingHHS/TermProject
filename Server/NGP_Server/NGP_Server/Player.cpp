@@ -15,7 +15,7 @@ void Player::Update(const float ElapsedTime)
 	m_Pos.y += m_Velocity.y * ElapsedTime;
 }
 
-void Player::CollideCheck(int tileW, int tileH, Vec2 bulletPos)
+void Player::CollideCheck(int x, int y, Vec2 bulletPos)
 {
 	//받아온 타일 인덱스로 충돌 상자를 만든다.
 	//플레이어의 충돌 상자를 만든다.

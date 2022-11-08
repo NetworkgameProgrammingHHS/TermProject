@@ -14,7 +14,7 @@ public:
 	const bool GetEnable() const { return m_bEnable; }
 
 private:
-	CBullet			*m_pBullet = NULL;
+	CBullet*		m_pBullet = NULL;
 	bool			m_bEnable;
 };
 
