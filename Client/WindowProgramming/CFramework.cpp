@@ -98,9 +98,10 @@ DWORD WINAPI CFramework::RecvProcess(LPVOID arg)
 	while (pParameter->p->GetRenderWindow()->isOpen())
 	{
 		//packet Recv
-		pParameter->pNetMgr.get()->RecvPacket(pParameter->pSceneMgr.get()->GetpScene().get(), pParameter->pSceneMgr.get()->GetpPlayer().get());
+		pParameter->pNetMgr->RecvPacket(pParameter->pSceneMgr->GetpScene().get(), pParameter->pSceneMgr->GetpPlayer().get());
 		//Update
 		pParameter->p->Update();
 	}
+
 	return 0;
 }

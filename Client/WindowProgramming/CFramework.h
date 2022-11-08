@@ -1,14 +1,8 @@
 #pragma once
 
-struct RecVThreadParameter
-{
-	CFramework* p;
-	shared_ptr<CNetworkMgr> pNetMgr;
-	shared_ptr<CSceneMgr> pSceneMgr;
-};
-
 class CSceneMgr;
 class CNetworkMgr;
+struct RecVThreadParameter;
 
 class CFramework
 {
@@ -40,3 +34,9 @@ private:
 	RecVThreadParameter* m_pRTParameter;
 };
 
+struct RecVThreadParameter
+{
+	CFramework* p;
+	shared_ptr<CNetworkMgr> pNetMgr;
+	shared_ptr<CSceneMgr> pSceneMgr;
+};

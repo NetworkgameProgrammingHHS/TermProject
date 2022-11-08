@@ -45,20 +45,25 @@ void CNetworkMgr::RecvPacket(CScene* scene, CPlayer* player)
 	recv(m_sock, buf, len, MSG_WAITALL);
 
 	switch (buf[0]) {
-	case SC_LOGIN_INFO:
+	case SC_LOGIN_INFO: {
 		SC_LOGIN_INFO_PACKET* packet = reinterpret_cast<SC_LOGIN_INFO_PACKET*>(buf);
 		break;
-	case SC_READY:
+	}
+	case SC_READY: {
 		SC_READY_PACKET* packet = reinterpret_cast<SC_READY_PACKET*>(buf);
 		break;
-	case SC_GAMESTART:
+	}
+	case SC_GAMESTART: {
 		SC_GAMESTART_PACKET* packet = reinterpret_cast<SC_GAMESTART_PACKET*>(buf);
 		break;
-	case SC_WORLD_UPDATE:
+	}
+	case SC_WORLD_UPDATE: {
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
 		break;
-	case SC_RANK:
+	}
+	case SC_RANK: {
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
 		break;
+	}
 	}
 }
