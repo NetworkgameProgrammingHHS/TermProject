@@ -1,5 +1,9 @@
 #pragma once
 #include "CGun.h"
+#include "CPlayer.h"
+#include <array>
+
+#define PLAYERNUM 3
 
 class CPlayer;
 class CTileMap;
@@ -19,8 +23,10 @@ public:
 
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
 	const bool GetNext() const { return m_bNext; }
+	const int GetPlayerIndex() const { return m_nPlayerIndex; }
 
 	void SetNext(bool next) { m_bNext = next; }
+	void SetPlayerIndex(int index) { m_nPlayerIndex = index; }
 
 protected:
 	void Collide_Wall();
@@ -35,7 +41,7 @@ protected:
 
 protected:
 	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
-	shared_ptr<CPlayer> m_pPlayer = nullptr;
+	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers;
 	
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
 
@@ -46,5 +52,7 @@ protected:
 
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
 	bool m_bNext = false;	// 다음 스테이지 확인
+
+	int m_nPlayerIndex = 0;
 };
 

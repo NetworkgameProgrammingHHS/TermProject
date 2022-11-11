@@ -62,6 +62,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, CPlayer* player)
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
 		}
 		std::cout << packet->id << "접속" << std::endl;
+		scene->SetPlayerIndex(packet->id);
 		break;
 	}
 	case SC_READY: {
@@ -78,6 +79,8 @@ void CNetworkMgr::RecvPacket(CScene* scene, CPlayer* player)
 	}
 	case SC_WORLD_UPDATE: {
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
+		
+		
 
 		break;
 	}

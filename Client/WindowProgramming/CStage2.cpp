@@ -16,8 +16,8 @@ CStage2::CStage2(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
 	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage2.txt");
 	m_pTileMap->Initialize();
 
-	m_pPlayer = player;
-	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+	m_ppPlayers[m_nPlayerIndex] = player;
+	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 
 	m_pNetworkMgr = networkmgr;
 	m_eCurScene = SCENE_NUM::STAGE2;
@@ -29,8 +29,8 @@ CStage2::~CStage2()
 
 void CStage2::Next_Stage()
 {
-	if (m_pPlayer->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_pPlayer->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
-		if (m_pTileMap->GetPotionNum() == 0 && m_pPlayer->GetColor() == PLAYER_COLOR::NORMAL) {
+	if (m_ppPlayers[m_nPlayerIndex]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_nPlayerIndex]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+		if (m_pTileMap->GetPotionNum() == 0 && m_ppPlayers[m_nPlayerIndex]->GetColor() == PLAYER_COLOR::NORMAL) {
 			m_bNext = true;
 		}
 		else {
@@ -43,13 +43,13 @@ void CStage2::Reset()
 {
 	m_pTileMap->Reset();
 	m_pTileMap->Initialize();
-	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-	m_pPlayer->Reset();
+	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+	m_ppPlayers[m_nPlayerIndex]->Reset();
 }
 
 void CStage2::Update(const float ElapsedTime)
 {
-	m_pPlayer->Update(ElapsedTime);
+	m_ppPlayers[m_nPlayerIndex]->Update(ElapsedTime);
 	if (m_pGun)m_pGun->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
@@ -66,7 +66,7 @@ void CStage2::Render(sf::RenderWindow& RW)
 	m_pTileMap->Render(RW);
 
 	// Player Render
-	m_pPlayer->Render(RW);
+	m_ppPlayers[m_nPlayerIndex]->Render(RW);
 	
 	// Gun, Bullet Render
 	if (m_pGun)m_pGun->Render(RW);
