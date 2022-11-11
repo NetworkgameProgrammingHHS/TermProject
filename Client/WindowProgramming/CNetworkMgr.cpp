@@ -34,6 +34,7 @@ void CNetworkMgr::InitializeSocket()
 void CNetworkMgr::SendPacket(char* packet, int size)
 {
 	send(m_sock, packet, size, 0);
+	delete packet;
 }
 
 void CNetworkMgr::RecvPacket(CScene* scene, CPlayer* player)

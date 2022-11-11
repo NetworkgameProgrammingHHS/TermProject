@@ -10,10 +10,12 @@ constexpr float GRAVITY = 15.0f;
 #define ACTION_PER_TIME 1.0f / TIME_PER_ACTION
 #define FRAMES_PER_ACTION 3
 
+class CNetworkMgr;
+
 class CPlayer : public CObject
 {
 public:
-	CPlayer();
+	CPlayer(shared_ptr<CNetworkMgr> networkmgr);
 	virtual ~CPlayer();
 
 	void Reset();
@@ -52,6 +54,8 @@ private:
 	void Animation(const float ElapsedTime);
 
 private:
+	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
+
 	// Pos, Move
 	sf::Vector2f m_vec2fPrevPos = {};
 	int m_iDir = 0;

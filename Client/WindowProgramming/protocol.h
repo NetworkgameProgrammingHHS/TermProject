@@ -22,6 +22,7 @@ struct CS_LOGIN_PACKET {
 struct CS_INPUT_PACKET {
 	char type;
 	char key;
+	char state;
 };
 
 struct CS_PLAYER_READY_PACKET {
@@ -31,7 +32,7 @@ struct CS_PLAYER_READY_PACKET {
 
 struct CS_PLAYER_COLOR_PACKET {
 	char type;
-	char color;
+	short color;
 	char collide;
 };
 
@@ -130,3 +131,6 @@ constexpr char POTION_COLLIDE_OFF = 2;
 
 constexpr char CLIENT_ONLINE = 1;
 constexpr char CLIENT_OFFLINE = 2;
+
+constexpr char KEY_PRESS = 1;
+constexpr char KEY_RELEASE = 2;

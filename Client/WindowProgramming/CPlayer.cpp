@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "CPlayer.h"
+#include "CNetworkMgr.h"
 
-CPlayer::CPlayer()
+CPlayer::CPlayer(shared_ptr<CNetworkMgr> networkmgr)
 {
+	m_pNetworkMgr = networkmgr;
+
 	m_umTextures.reserve(static_cast<size_t>(PLAYER_COLOR::END));
 
 	sf::Texture temp; 
@@ -135,6 +138,7 @@ void CPlayer::Render(sf::RenderWindow& RW)
 		RW.draw(rt2);
 	}
 
+	// Render Spoid Color Rect
 	if (m_bSpoid) {
 		sf::RectangleShape rt;
 		switch (m_eSavedColor) {
@@ -181,18 +185,29 @@ void CPlayer::UpdateAABB()
 
 void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 {
+	bool input = false;
+	char dir = NULL;
+
 	switch (key) {
 	case sf::Keyboard::Left:
-		if (m_iDir > -1)
+		if (m_iDir > -1) {
 			m_iDir -= 1;
+			input = true;
+			dir = DIR_LEFT;
+		}
 		break;
 	case sf::Keyboard::Right:
-		if (m_iDir < 1)
+		if (m_iDir < 1) {
 			m_iDir += 1;
+			input = true;
+			dir = DIR_RIGHT;
+		}
 		break;
 	case sf::Keyboard::Space:
 		if (!m_bJump) {
 			m_bJump = true;
+			input = true;
+			dir = DIR_UP;
 			if (m_bSuperJump) {
 				m_fJumpVelocity = SUPERJUMP_SPEED;
 				m_iJumpChange = 30;
@@ -217,7 +232,21 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		break;
 	default:
 		break;
-	}	
+	}
+
+	if (input && dir != NULL) {
+		CS_INPUT_PACKET* packet = new CS_INPUT_PACKET;
+		packet->type = CS_INPUT;
+		packet->key = dir;
+		packet->state = KEY_PRESS;
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_INPUT_PACKET));
+	}
+	else if (input && dir == NULL) {
+		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
+		packet->type = CS_COLOR;
+		packet->color = static_cast<short>(m_eSavedColor);
+		packet->collide = POTION_COLLIDE_OFF;
+	}
 }
 
 void CPlayer::KeyBoardRelease(const sf::Keyboard::Key& key)

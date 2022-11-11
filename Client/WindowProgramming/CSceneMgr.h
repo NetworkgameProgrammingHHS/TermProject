@@ -2,11 +2,12 @@
 
 class CScene;
 class CPlayer;
+class CNetworkMgr;
 
 class CSceneMgr
 {
 public:
-	CSceneMgr();
+	CSceneMgr(shared_ptr<CNetworkMgr> networkmgr);
 	virtual ~CSceneMgr();
 
 	void Initialize();
@@ -23,6 +24,7 @@ private:
 	void Next_Stage();
 
 private:
+	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
 	shared_ptr<CScene> m_pScene = nullptr;
 	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	SCENE_NUM m_eCurScene;

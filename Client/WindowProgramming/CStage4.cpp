@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "CScene.h"
 #include "CStage4.h"
+#include "CNetworkMgr.h"
 #include "CTileMap.h"
 #include "CObject.h"
 #include "CPlayer.h"
 
-CStage4::CStage4(shared_ptr<CPlayer> player)
+CStage4::CStage4(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
 {
 	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Control_Room.png"))
 		exit(1);
@@ -18,6 +19,7 @@ CStage4::CStage4(shared_ptr<CPlayer> player)
 	m_pPlayer = player;
 	m_pPlayer->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 
+	m_pNetworkMgr = networkmgr;
 	m_eCurScene = SCENE_NUM::STAGE4;
 }
 

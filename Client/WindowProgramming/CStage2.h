@@ -2,11 +2,12 @@
 
 class CScene;
 class CPlayer;
+class CNetworkMgr;
 
 class CStage2 : public CScene
 {
 public:
-	CStage2(shared_ptr<CPlayer> player);
+	CStage2(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player);
 	virtual ~CStage2();
 
 	virtual void Next_Stage();

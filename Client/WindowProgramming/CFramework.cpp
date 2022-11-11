@@ -6,10 +6,12 @@
 
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
-	m_pSceneMgr = make_shared<CSceneMgr>();
-	m_pSceneMgr->Initialize();
 	m_pNetworkMgr = make_shared<CNetworkMgr>();
 	m_pNetworkMgr->InitializeSocket();
+
+	m_pSceneMgr = make_shared<CSceneMgr>(m_pNetworkMgr);
+	m_pSceneMgr->Initialize();
+	
 
 	m_pRTParameter = new RecVThreadParameter;
 	m_pRTParameter->p = this;

@@ -3,6 +3,7 @@
 
 class CPlayer;
 class CTileMap;
+class CNetworkMgr;
 
 class CScene
 {
@@ -33,6 +34,7 @@ protected:
 	virtual void Reset();
 
 protected:
+	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
 	shared_ptr<CPlayer> m_pPlayer = nullptr;
 	
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
