@@ -107,6 +107,7 @@ constexpr char SC_READY = 2;
 constexpr char SC_GAMESTART = 3;
 constexpr char SC_WORLD_UPDATE = 4;
 constexpr char SC_RANK = 5;
+constexpr char SC_REMOVE = 6;
 
 
 //Packet Value
