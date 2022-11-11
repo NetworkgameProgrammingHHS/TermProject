@@ -36,6 +36,10 @@ struct CS_PLAYER_COLOR_PACKET {
 	char collide;
 };
 
+
+//struct CS_NEXT_STAGE_PACKET {
+//	char type;
+//};
 struct CS_PLAYER_RESET_PACKET {
 	char type;
 	char reset;

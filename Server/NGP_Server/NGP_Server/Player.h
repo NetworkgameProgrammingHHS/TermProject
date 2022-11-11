@@ -14,14 +14,16 @@ public:
 	const bool GetOnline() const { return m_bOnline; }
 	const bool GetGun() const { return m_bGun; }
 	const char* GetName() const { return m_Client_Name; };
+	const bool GetReady() const { return m_bReady; }
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
 	void SetVelocity(const Vec2& velocity) { m_Velocity = velocity; }
 	void SetDirection(const char dir) { m_Direction = dir; }
 	void SetColor(const PLAYER_COLOR& color) { m_Color = color; }
-	void SetPos(const bool online) { m_bOnline = online; }
+	void SetOnline(const bool online) { m_bOnline = online; }
 	void SetGun(const bool gun) { m_bGun = gun; }
-	void SetName(const char* name) { strcpy_s(m_Client_Name, name); };
+	void SetName(const char* name) { memcpy(m_Client_Name, name, NAME_SIZE); };
+	void SetReady(const bool ready) { m_bReady = ready; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);
@@ -34,5 +36,6 @@ private:
 	bool m_bOnline;
 	bool m_bGun;
 	char m_Client_Name[NAME_SIZE];
+	bool m_bReady; 
 };
 

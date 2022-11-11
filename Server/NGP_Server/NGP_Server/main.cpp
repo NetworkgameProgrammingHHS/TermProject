@@ -89,6 +89,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 	SOCKET client_sock = session->client_sock;
 	int len;
 	char buf[BUF_SIZE];
+	PLAYER_COLOR* packet_color = new PLAYER_COLOR;
 	cout << "id: " << session->id << endl;
 	while (1)
 	{
@@ -122,26 +123,52 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		case CS_PLAYER_READY:
 		{
 			CS_PLAYER_READY_PACKET* packet = reinterpret_cast<CS_PLAYER_READY_PACKET*>(buf);
+			if (packet->ready == READY_ON)
+				g_Clients[session->id].SetReady(true);
+			else if(packet->ready == READY_OFF)
+				g_Clients[session->id].SetReady(false);
 			break;
 		}
 		case CS_INPUT:
 		{
 			CS_INPUT_PACKET* packet = reinterpret_cast<CS_INPUT_PACKET*>(buf);
+			//input key
+			if (packet->state == KEY_PRESS)
+			{
+				g_Clients[session->id].SetDirection(packet->key);
+			}
+			else if (packet->state == KEY_RELEASE)
+			{
+				g_Clients[session->id].SetDirection(0);
+			}
+
 			break;
 		}
 		case CS_COLOR:
 		{
 			CS_PLAYER_COLOR_PACKET* packet = reinterpret_cast<CS_PLAYER_COLOR_PACKET*>(buf);
+			packet_color = reinterpret_cast<PLAYER_COLOR*>(packet->color);
+			//input color
+			g_Clients[session->id].SetColor(*packet_color);
+			//collide로 스테이지 클리어 체크 or 스포이드 해야함
 			break;
 		}
 		case CS_PLAYER_RESET:
 		{
 			CS_PLAYER_RESET_PACKET* packet = reinterpret_cast<CS_PLAYER_RESET_PACKET*>(buf);
+			if (packet->reset == RESET_ON)
+			{
+				//player go back to original position
+				//g_Clients[session->id].SetPos(0);
+				//set original color
+				g_Clients[session->id].SetColor(PLAYER_COLOR::NORMAL);
+				g_Clients[session->id].SetDirection(0);
+			}
 			break;
 		}
 		case CS_GAMECLEAR:
 		{
-			CS_GAMECLEAR_PACKET* packet = reinterpret_cast<CS_GAMECLEAR_PACKET*>(buf);
+			//send rank all player
 			break;
 		}
 		}
