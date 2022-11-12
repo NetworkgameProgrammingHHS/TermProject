@@ -32,6 +32,9 @@ void CStage5::Next_Stage()
 	if (m_ppPlayers[m_nPlayerIndex]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_nPlayerIndex]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0 && m_ppPlayers[m_nPlayerIndex]->GetColor() == PLAYER_COLOR::NORMAL) {
 			m_bNext = true;
+			CS_GAMECLEAR_PACKET* packet = new CS_GAMECLEAR_PACKET;
+			packet->type = CS_GAMECLEAR;
+			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_GAMECLEAR_PACKET));
 		}
 		else {
 			Reset();

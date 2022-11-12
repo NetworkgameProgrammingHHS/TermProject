@@ -89,6 +89,7 @@ void CScene::Collide_Potion()
 	for (auto& potion : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_P)->second) {
 		if (potion->GetEnable() && m_ppPlayers[m_nPlayerIndex]->GetAABB().intersects(potion->GetAABB())) {
 			potion->SetEnable(false);
+			collide_potion = true;
 			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			if (PLAYER_COLOR::GREEN == m_ppPlayers[m_nPlayerIndex]->GetColor())
 				m_ppPlayers[m_nPlayerIndex]->SetColor(PLAYER_COLOR::YELLOW);
@@ -104,6 +105,7 @@ void CScene::Collide_Potion()
 	for (auto& potion : m_pTileMap->m_umTiles.find(TILE_TYPE::GREEN_P)->second) {
 		if (potion->GetEnable() && m_ppPlayers[m_nPlayerIndex]->GetAABB().intersects(potion->GetAABB())) {
 			potion->SetEnable(false);
+			collide_potion = true;
 			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			if (PLAYER_COLOR::RED == m_ppPlayers[m_nPlayerIndex]->GetColor())
 				m_ppPlayers[m_nPlayerIndex]->SetColor(PLAYER_COLOR::YELLOW);
@@ -119,6 +121,7 @@ void CScene::Collide_Potion()
 	for (auto& potion : m_pTileMap->m_umTiles.find(TILE_TYPE::BLUE_P)->second) {
 		if (potion->GetEnable() && m_ppPlayers[m_nPlayerIndex]->GetAABB().intersects(potion->GetAABB())) {
 			potion->SetEnable(false);
+			collide_potion = true;
 			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			if (PLAYER_COLOR::RED == m_ppPlayers[m_nPlayerIndex]->GetColor())
 				m_ppPlayers[m_nPlayerIndex]->SetColor(PLAYER_COLOR::PURPLE);
@@ -139,6 +142,13 @@ void CScene::Collide_Potion()
 			m_pTileMap->SetPotionNum(m_pTileMap->GetPotionNum() - 1);
 			break;
 		}
+	}
+
+	if (collide_potion) {
+		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
+		packet->collide = false;
+		packet->color = static_cast<short>(m_ppPlayers[m_nPlayerIndex]->GetColor());
+		packet->type = CS_COLOR;
 	}
 }
 
