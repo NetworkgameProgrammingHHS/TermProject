@@ -2,10 +2,9 @@
 #include "CScene.h"
 #include "CTitle.h"
 #include "CNetworkMgr.h"
-#include "CPlayer.h"
 #include "CStage1.h"
 
-CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
+CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr)
 {
 	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Title_1.png"))
 		exit(1);
@@ -15,8 +14,6 @@ CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
 	m_sfBackground.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_sfBackground2.setTexture(m_sfTexture2);
 	m_sfBackground2.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-
-	m_pPlayer = player;
 
 	m_pNetworkMgr = networkmgr;
 	m_eCurScene = SCENE_NUM::TITLE;
@@ -39,22 +36,6 @@ void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 		packet->type = CS_LOGIN;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_LOGIN_PACKET));
 		break;
-	}
-
-	// After Login Scene is Created Use this code for player ready
-	bool ready = false;
-	if (ready) {
-		// Sending Ready Packet to Server
-		CS_PLAYER_READY_PACKET* packet = new CS_PLAYER_READY_PACKET;
-		if (m_pPlayer->GetReady()) {
-			packet->type = CS_PLAYER_READY;
-			packet->ready = READY_OFF;
-		}
-		else {
-			packet->type = CS_PLAYER_READY;
-			packet->ready = READY_ON;
-		}
-		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_READY));
 	}
 }
 

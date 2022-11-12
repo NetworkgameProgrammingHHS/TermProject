@@ -5,10 +5,6 @@
 #include "CTitle.h"
 #include "CStage1.h"
 #include "CStage2.h"
-#include "CStage3.h"
-#include "CStage4.h"
-#include "CStage5.h"
-#include "CRanking.h"
 #include "CPlayer.h"
 
 CSceneMgr::CSceneMgr(shared_ptr<CNetworkMgr> networkmgr)
@@ -25,7 +21,7 @@ void CSceneMgr::Initialize()
 {
 	m_pPlayer = make_shared<CPlayer>(m_pNetworkMgr);
 
-	m_pScene = dynamic_pointer_cast<CScene>(make_shared<CTitle>(m_pNetworkMgr, m_pPlayer));
+	m_pScene = dynamic_pointer_cast<CScene>(make_shared<CTitle>(m_pNetworkMgr));
 
 	m_eCurScene = SCENE_NUM::TITLE;
 }
@@ -72,27 +68,9 @@ void CSceneMgr::Next_Stage()
 		m_eCurScene = SCENE_NUM::STAGE2;
 		break;
 	case SCENE_NUM::STAGE2:
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage3>(m_pNetworkMgr, m_pPlayer));
-		m_eCurScene = SCENE_NUM::STAGE3;
 		break;
 	case SCENE_NUM::STAGE3:
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage4>(m_pNetworkMgr, m_pPlayer));
-		m_eCurScene = SCENE_NUM::STAGE4;
 		break;
-	case SCENE_NUM::STAGE4:
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage5>(m_pNetworkMgr, m_pPlayer));
-		m_eCurScene = SCENE_NUM::STAGE5;
-		break;
-	case SCENE_NUM::STAGE5:
-	{
-		CS_GAMECLEAR_PACKET* packet = new CS_GAMECLEAR_PACKET;
-		packet->type = CS_GAMECLEAR;
-		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_GAMECLEAR_PACKET));
-		break;
-	}
 	default:
 		break;
 	}

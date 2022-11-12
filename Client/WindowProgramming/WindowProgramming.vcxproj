@@ -148,7 +148,6 @@
     <ClCompile Include="CNetworkMgr.cpp" />
     <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CPlayer.cpp" />
-    <ClCompile Include="CRanking.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CSceneMgr.cpp" />
     <ClCompile Include="CStage1.cpp" />
@@ -169,7 +168,6 @@
     </ClInclude>
     <ClInclude Include="CObject.h" />
     <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="CRanking.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSceneMgr.h" />
     <ClInclude Include="CStage1.h" />
