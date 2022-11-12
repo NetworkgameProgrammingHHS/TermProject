@@ -118,6 +118,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		{
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[session->id].SetName(packet->name);
+			cout << g_Clients[session->id].GetName() << ": Login Success" << endl;
 			break;
 		}
 		case CS_PLAYER_READY:

@@ -7,7 +7,7 @@ class CNetworkMgr;
 class CTitle : public CScene
 {
 public:
-	CTitle(shared_ptr<CNetworkMgr> netwokrmgr);
+	CTitle(shared_ptr<CNetworkMgr> netwokrmgr, shared_ptr<CPlayer> player);
 	virtual ~CTitle();
 
 	virtual void KeyBoardInput(const sf::Keyboard::Key& key);

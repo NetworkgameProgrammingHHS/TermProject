@@ -33,6 +33,7 @@ void CNetworkMgr::InitializeSocket()
 
 void CNetworkMgr::SendPacket(char* packet, int size)
 {
+	send(m_sock, reinterpret_cast<char*>(&size), sizeof(int), 0);
 	send(m_sock, packet, size, 0);
 	delete packet;
 }

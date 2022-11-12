@@ -45,6 +45,12 @@ void CStage4::Reset()
 	m_pTileMap->Initialize();
 	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 	m_ppPlayers[m_nPlayerIndex]->Reset();
+
+	//Send Reset Packet to Server
+	CS_PLAYER_RESET_PACKET* packet = new CS_PLAYER_RESET_PACKET;
+	packet->type = CS_PLAYER_RESET;
+	packet->reset = RESET_ON;
+	m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_RESET_PACKET));
 }
 
 void CStage4::Update(const float ElapsedTime)
