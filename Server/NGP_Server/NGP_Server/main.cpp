@@ -4,23 +4,48 @@
 #include "Player.h"
 
 //Global Variable
+int g_iCntClientNum = 0;
 array<Player, PLAYER_NUM> g_Clients;
+
 array<unique_ptr<TileMap>, STAGE_NUM> g_TileMap;
 unique_ptr<Bullet> g_Bullet;
+
+float g_ElapsedTime;
+
 bool g_GameOver;
 CRITICAL_SECTION g_CS;
-float g_ElapsedTime;
-int g_iCntClientNum = 0;
 
 //Client Update Thread
 DWORD WINAPI ProcessPacket(LPVOID socket);
 //if complete, delete
 void err_display(const char* msg);
 void err_display(int errcode);
+chrono::time_point<chrono::system_clock> startTime;
 
 // Packet Send Thread
 DWORD WINAPI SendPacket(LPVOID)
 {
+	while (true) {
+		// send packet per 1/30sec --> 33.3 ms
+
+		auto endTime = chrono::system_clock::now();
+		g_ElapsedTime += chrono::duration<float, milli>(endTime - startTime).count();
+		startTime = endTime;
+
+		if ((g_ElapsedTime - 33.3f) >= DBL_EPSILON) {
+			if (g_iCntClientNum > 0) {
+				for (int i = 0; i < PLAYER_NUM; ++i) {
+					if (g_Clients[i].GetOnline()) {
+
+					}
+				}
+			}
+
+			g_ElapsedTime = 0.f;
+		}
+	}
+
+
 	return 0;
 }
 
@@ -47,28 +72,43 @@ int main()
 	if (ret == SOCKET_ERROR)
 		cout << "listen error" << endl;
 
-	SESSION* client_session = new SESSION;
 	struct sockaddr_in clientaddr;
 	int addrlen;
 	HANDLE hThread;
 
+	startTime = chrono::system_clock::now();
 	hThread = CreateThread(NULL, 0, SendPacket, NULL, 0, 0);
 	if (NULL == hThread) { cout << "failed to create Thread" << endl; }
 	else { CloseHandle(hThread); }
 
+	int index = 0;
 	while (1) {
+		if (g_iCntClientNum > 3)
+			continue;
+		else {
+			for (int i = 0; i < PLAYER_NUM; ++i) {
+				if (!g_Clients[i].GetOnline()) {
+					index = i;
+					break;
+				}
+			}
+		}
+
 		addrlen = sizeof(clientaddr);
-		client_session->client_sock = accept(listen_sock, reinterpret_cast<struct sockaddr*>(&clientaddr), &addrlen);
-		if (client_session->client_sock == INVALID_SOCKET) {
+		g_Clients[index].SetSocket(accept(listen_sock, reinterpret_cast<struct sockaddr*>(&clientaddr), &addrlen));
+		if (g_Clients[index].GetSocket() == INVALID_SOCKET) {
 			cout << "accept error" << endl;
 			exit(1);
 		}
 		//set client id
-		client_session->id = g_iCntClientNum++;
+		g_Clients[index].SetOnline(true);
+		g_Clients[index].SetID(index);
+		g_iCntClientNum++;
+		
 		DWORD ThreadId;
-		hThread = CreateThread(NULL, 0, ProcessPacket, reinterpret_cast<LPVOID>(client_session), 0, &ThreadId);
+		hThread = CreateThread(NULL, 0, ProcessPacket, reinterpret_cast<LPVOID>(g_Clients[index].GetSockInfo()), 0, &ThreadId);
 
-		if (NULL == hThread) { closesocket(client_session->client_sock); }
+		if (NULL == hThread) { closesocket(g_Clients[index].GetSocket()); }
 		else { CloseHandle(hThread); }
 	}
 
@@ -76,17 +116,15 @@ int main()
 
 	WSACleanup();
 
-	delete client_session;
-
 	return 0;
 }
 
 DWORD WINAPI ProcessPacket(LPVOID socket)
 {
 	int retval;
-	SESSION* session = reinterpret_cast<SESSION*> (socket);
+	SOCK_INFO* sock_info = reinterpret_cast<SOCK_INFO*> (socket);
 
-	SOCKET client_sock = session->client_sock;
+	SOCKET client_sock = sock_info->client_sock;
 	int len;
 	char buf[BUF_SIZE];
 	PLAYER_COLOR* packet_color = new PLAYER_COLOR;
@@ -119,16 +157,16 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		case CS_LOGIN://
 		{
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
-			g_Clients[session->id].SetName(packet->name);
+			g_Clients[sock_info->id].SetName(packet->name);
 			break;
 		}
 		case CS_PLAYER_READY://
 		{
 			CS_PLAYER_READY_PACKET* packet = reinterpret_cast<CS_PLAYER_READY_PACKET*>(buf);
 			if (packet->ready == READY_ON)
-				g_Clients[session->id].SetReady(true);
+				g_Clients[sock_info->id].SetReady(true);
 			else if(packet->ready == READY_OFF)
-				g_Clients[session->id].SetReady(false);
+				g_Clients[sock_info->id].SetReady(false);
 			break;
 		}
 		case CS_INPUT:
@@ -147,6 +185,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				}
 				else
 					g_Clients[session->id].SetDirection(packet->key);
+				g_Clients[sock_info->id].SetDirection(packet->key);
 			}
 			else if (packet->state == KEY_RELEASE)
 			{
@@ -154,6 +193,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				if (packet->type == KEY_FIREGUN);
 				else
 					g_Clients[session->id].SetDirection(0);
+				g_Clients[sock_info->id].SetDirection(0);
 			}
 			break;
 		}
@@ -163,6 +203,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			packet_color = reinterpret_cast<PLAYER_COLOR*>(packet->color);
 			//input color
 			g_Clients[session->id].SetColor(*packet_color);
+			g_Clients[sock_info->id].SetColor(*packet_color);
 			break;
 		}
 		case CS_PLAYER_RESET:
@@ -171,10 +212,10 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			if (packet->reset == RESET_ON)
 			{
 				//player go back to original position
-				//g_Clients[session->id].SetPos(0);
+				//g_Clients[sock_info->id].SetPos(0);
 				//set original color
-				g_Clients[session->id].SetColor(PLAYER_COLOR::NORMAL);
-				g_Clients[session->id].SetDirection(0);
+				g_Clients[sock_info->id].SetColor(PLAYER_COLOR::NORMAL);
+				g_Clients[sock_info->id].SetDirection(0);
 			}
 			break;
 		}

@@ -1,6 +1,11 @@
 #pragma once
 #include "TileMap.h"
 
+struct SOCK_INFO {
+	SOCKET client_sock = NULL;
+	int id = 0;
+};
+
 class Player
 {
 public:
@@ -17,6 +22,9 @@ public:
 	const bool GetReady() const { return m_bReady; }
 	const int GetStageNum() const { return m_iStageNum; }
 	const bool GetKeyState() const { return m_bKeyState; }
+	SOCK_INFO* GetSockInfo() const { return m_SockInfo; }
+	SOCKET GetSocket() const { return m_SockInfo->client_sock; }
+	const int GetID() const { return m_SockInfo->id; }
 
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
@@ -29,11 +37,15 @@ public:
 	void SetReady(const bool ready) { m_bReady = ready; }
 	void SetStageNum(const bool stageNum) { m_iStageNum = stageNum; }
 	void SetKeyState(const bool keyState) { m_bKeyState = keyState; }
+	void SetSocket(const SOCKET& sock) { m_SockInfo->client_sock = sock; }
+	void SetID(const int id) { m_SockInfo->id = id; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);
 
 private:
+	SOCK_INFO* m_SockInfo;
+
 	Vec2 m_Pos;
 	Vec2 m_Velocity;
 	char m_Direction;
