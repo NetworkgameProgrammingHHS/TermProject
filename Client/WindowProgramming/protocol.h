@@ -32,8 +32,8 @@ struct CS_PLAYER_READY_PACKET {
 
 struct CS_PLAYER_COLOR_PACKET {
 	char type;
-	short color;
-	char collide;
+	char color;
+	//char collide;
 };
 
 struct CS_PLAYER_RESET_PACKET {
@@ -41,12 +41,15 @@ struct CS_PLAYER_RESET_PACKET {
 	char reset;
 };
 
-//struct CS_NEXT_STAGE_PACKET {
-//	char type;
-//};
-struct CS_GAMECLEAR_PACKET {
+struct CS_NEXT_STAGE_PACKET
+{
 	char type;
 };
+
+//struct CS_GAMECLEAR_PACKET
+//{
+//	char type;
+//};
 
 //Server to Client packet
 struct SC_READY_PACKET {
@@ -79,14 +82,17 @@ struct SC_WORLD_UPDATE_PACKET {
 	char type;
 
 	char color_p1;
+	short stage_p1;
 	short x_p1, y_p1;
 	char dir_p1;
 
 	char color_p2;
+	short stage_p2;
 	short x_p2, y_p2;
 	char dir_p2;
 
 	char color_p3;
+	short stage_p3;
 	short x_p3, y_p3;
 	char dir_p3;
 
@@ -104,7 +110,8 @@ constexpr char CS_PLAYER_READY = 2;
 constexpr char CS_INPUT = 3;
 constexpr char CS_COLOR = 4;
 constexpr char CS_PLAYER_RESET = 5;
-constexpr char CS_GAMECLEAR = 6;
+//constexpr char CS_GAMECLEAR = 6;
+constexpr char CS_NEXTSTAGE = 6;
 
 constexpr char SC_LOGIN_INFO = 1;
 constexpr char SC_READY = 2;
@@ -113,12 +120,12 @@ constexpr char SC_WORLD_UPDATE = 4;
 constexpr char SC_RANK = 5;
 constexpr char SC_REMOVE = 6;
 
-
 //Packet Value
-constexpr char DIR_LEFT = 1;
-constexpr char DIR_RIGHT = 2;
-constexpr char DIR_UP = 3;
-constexpr char DIR_DOWN = 4;
+constexpr char KEY_DIR_LEFT = 1;
+constexpr char KEY_DIR_RIGHT = 2;
+constexpr char KEY_DIR_UP = 3;
+constexpr char KEY_DIR_DOWN = 4;
+constexpr char KEY_FIREGUN = 5;
 
 constexpr char READY_ON = 1;
 constexpr char READY_OFF = 2;
@@ -138,3 +145,10 @@ constexpr char CLIENT_OFFLINE = 2;
 
 constexpr char KEY_PRESS = 1;
 constexpr char KEY_RELEASE = 2;
+
+constexpr char STAGE_1 = 1;
+constexpr char STAGE_2 = 2;
+constexpr char STAGE_3 = 3;
+constexpr char STAGE_4 = 4;
+constexpr char STAGE_5 = 5;
+constexpr char STAGE_END = 6;

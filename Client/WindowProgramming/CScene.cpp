@@ -152,7 +152,7 @@ void CScene::Collide_Potion()
 
 	if (collide_potion) {
 		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
-		packet->collide = false;
+		//packet->collide = false;
 		packet->color = static_cast<short>(m_ppPlayers[m_nPlayerIndex]->GetColor());
 		packet->type = CS_COLOR;
 	}

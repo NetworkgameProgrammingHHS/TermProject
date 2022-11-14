@@ -193,21 +193,21 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		if (m_iDir > -1) {
 			m_iDir -= 1;
 			input = true;
-			dir = DIR_LEFT;
+			dir = KEY_DIR_LEFT;
 		}
 		break;
 	case sf::Keyboard::Right:
 		if (m_iDir < 1) {
 			m_iDir += 1;
 			input = true;
-			dir = DIR_RIGHT;
+			dir = KEY_DIR_RIGHT;
 		}
 		break;
 	case sf::Keyboard::Space:
 		if (!m_bJump) {
 			m_bJump = true;
 			input = true;
-			dir = DIR_UP;
+			dir = KEY_DIR_UP;
 			if (m_bSuperJump) {
 				m_fJumpVelocity = SUPERJUMP_SPEED;
 				m_iJumpChange = 30;
@@ -245,7 +245,7 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
 		packet->type = CS_COLOR;
 		packet->color = static_cast<short>(m_eSavedColor);
-		packet->collide = POTION_COLLIDE_OFF;
+		//packet->collide = POTION_COLLIDE_OFF;
 	}
 }
 
