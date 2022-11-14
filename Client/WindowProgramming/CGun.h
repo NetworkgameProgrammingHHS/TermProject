@@ -10,7 +10,8 @@ public:
 
 	void Render(sf::RenderWindow& RW);
 	void Update(const float ElapsedTime);
-	void SetEnable(bool enable) { m_bEnable = enable; }
+	void SetEnable(int enable);
+	void SetBulletPos(int x, int y);
 	const bool GetEnable() const { return m_bEnable; }
 
 private:

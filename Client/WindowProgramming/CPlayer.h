@@ -49,6 +49,7 @@ public:
 	void SetSpoid(const bool spoid) { m_bSpoid = spoid; }
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
+	void SetDir(const int dir) { m_iDir = dir; }
 
 private:
 	void Animation(const float ElapsedTime);

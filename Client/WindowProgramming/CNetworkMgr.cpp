@@ -79,19 +79,46 @@ void CNetworkMgr::RecvPacket(CScene* scene, CPlayer* player)
 	}
 	case SC_WORLD_UPDATE: {
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
+		int curPlayerIndex = scene->GetPlayerIndex();
+		switch (curPlayerIndex)
+		{
+		case 0:
+		{
+			player->SetColor((PLAYER_COLOR)packet->color_p1);
+			player->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
+			player->SetDir((int)packet->dir_p1);
+		}
+			break;
+
+		case 1:
+		{
+			player->SetColor((PLAYER_COLOR)packet->color_p2);
+			player->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
+			player->SetDir((int)packet->dir_p2);
+		}
+			break;
+
+		case 2:
+		{
+			player->SetColor((PLAYER_COLOR)packet->color_p2);
+			player->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
+			player->SetDir((int)packet->dir_p2);
+		}
+			break;
+		}
 		
-		
+		scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
 
 		break;
 	}
 	case SC_RANK: {
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
-
+		// Show Ranking Scene
 		break;
 	}
 	case SC_REMOVE: {
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
-	
+		
 		break;
 	}
 	}

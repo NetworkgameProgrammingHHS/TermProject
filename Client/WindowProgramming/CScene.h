@@ -28,6 +28,8 @@ public:
 	void SetNext(bool next) { m_bNext = next; }
 	void SetPlayerIndex(int index) { m_nPlayerIndex = index; }
 
+	void SetGunState(int enable, int bulletx, int bullety);
+
 protected:
 	void Collide_Wall();
 	void Collide_OBJ();
