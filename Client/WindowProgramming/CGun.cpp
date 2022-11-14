@@ -28,3 +28,38 @@ void CGun::Update(const float ElapsedTime)
 {
 	m_pBullet->Update(ElapsedTime);
 }
+
+void CGun::SetEnable(int enable)
+{
+	switch (enable)
+	{
+	case BULLET_OFF:
+	{
+		m_pBullet->SetEnable(false);
+	}
+		break;
+
+	case BULLET_ON:
+	{
+		m_bEnable = false;
+		m_pBullet->SetEnable(true);
+	}
+		break;
+
+	case GUN_OBJECT:
+	{
+		m_bEnable = true;
+		m_pBullet->SetEnable(false);
+	}
+		break;
+	}
+
+}
+
+void CGun::SetBulletPos(int x, int y)
+{
+	if (m_pBullet->GetEnable())
+	{
+		m_pBullet->SetPosition(sf::Vector2f((float)x, (float)y));
+	}
+}

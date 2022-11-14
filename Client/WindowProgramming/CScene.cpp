@@ -35,6 +35,12 @@ void CScene::Render(sf::RenderWindow& RW)
 	}
 }
 
+void CScene::SetGunState(int enable, int bulletx, int bullety)
+{
+	m_pGun->SetEnable(enable);
+	m_pGun->SetBulletPos(bulletx, bullety);
+}
+
 void CScene::Collide_Wall()
 {
 	if (m_pTileMap) {
