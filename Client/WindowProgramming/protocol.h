@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 608;
+constexpr int WINDOW_HEIGHT = 680;
 
 constexpr int TILE_NUM_W = 25;
 constexpr int TILE_NUM_H = 19;
@@ -41,6 +41,9 @@ struct CS_PLAYER_RESET_PACKET {
 	char reset;
 };
 
+//struct CS_NEXT_STAGE_PACKET {
+//	char type;
+//};
 struct CS_GAMECLEAR_PACKET {
 	char type;
 };

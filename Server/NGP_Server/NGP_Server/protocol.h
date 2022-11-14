@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 608;
+constexpr int WINDOW_HEIGHT = 680;
 
 constexpr int TILE_NUM_W = 25;
 constexpr int TILE_NUM_H = 19;
@@ -36,15 +36,14 @@ struct CS_PLAYER_COLOR_PACKET {
 	char collide;
 };
 
-
-//struct CS_NEXT_STAGE_PACKET {
-//	char type;
-//};
 struct CS_PLAYER_RESET_PACKET {
 	char type;
 	char reset;
 };
 
+//struct CS_NEXT_STAGE_PACKET {
+//	char type;
+//};
 struct CS_GAMECLEAR_PACKET {
 	char type;
 };
@@ -112,7 +111,7 @@ constexpr char SC_READY = 2;
 constexpr char SC_GAMESTART = 3;
 constexpr char SC_WORLD_UPDATE = 4;
 constexpr char SC_RANK = 5;
-
+constexpr char SC_REMOVE = 6;
 
 //Packet Value
 constexpr char DIR_LEFT = 1;
