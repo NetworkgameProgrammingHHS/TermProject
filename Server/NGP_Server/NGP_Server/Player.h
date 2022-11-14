@@ -15,6 +15,9 @@ public:
 	const bool GetGun() const { return m_bGun; }
 	const char* GetName() const { return m_Client_Name; };
 	const bool GetReady() const { return m_bReady; }
+	const int GetStageNum() const { return m_iStageNum; }
+	const bool GetKeyState() const { return m_bKeyState; }
+
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
 	void SetVelocity(const Vec2& velocity) { m_Velocity = velocity; }
@@ -24,6 +27,8 @@ public:
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetName(const char* name) { memcpy(m_Client_Name, name, NAME_SIZE); };
 	void SetReady(const bool ready) { m_bReady = ready; }
+	void SetStageNum(const bool stageNum) { m_iStageNum = stageNum; }
+	void SetKeyState(const bool keyState) { m_bKeyState = keyState; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);
@@ -37,5 +42,7 @@ private:
 	bool m_bGun;
 	char m_Client_Name[NAME_SIZE];
 	bool m_bReady; 
+	bool m_bKeyState; // true = ket_press
+	int  m_iStageNum;
 };
 
