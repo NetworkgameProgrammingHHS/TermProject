@@ -128,9 +128,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 	int len;
 	char buf[BUF_SIZE];
 	PLAYER_COLOR* packet_color = new PLAYER_COLOR;
-	cout << "id: " << session->id << endl;
+	cout << "id: " << sock_info->id << endl;
 	//When the players first come in, set stage 1
-	g_Clients[session->id].SetStageNum(STAGE_1);
+	g_Clients[sock_info->id].SetStageNum(STAGE_1);
 	while (1)
 	{
 		//recv packet size
@@ -175,25 +175,23 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			//input key
 			if (packet->state == KEY_PRESS)
 			{
-				g_Clients[session->id].SetKeyState(true);
+				g_Clients[sock_info->id].SetKeyState(true);
 				if (packet->type == KEY_FIREGUN)
 				{
-					if (g_Clients[session->id].GetGun())
+					if (g_Clients[sock_info->id].GetGun())
 					{
 						//creat gun and shooting bullet
 					}
 				}
 				else
-					g_Clients[session->id].SetDirection(packet->key);
-				g_Clients[sock_info->id].SetDirection(packet->key);
+					g_Clients[sock_info->id].SetDirection(packet->key);
 			}
 			else if (packet->state == KEY_RELEASE)
 			{
-				g_Clients[session->id].SetKeyState(false);
+				g_Clients[sock_info->id].SetKeyState(false);
 				if (packet->type == KEY_FIREGUN);
 				else
-					g_Clients[session->id].SetDirection(0);
-				g_Clients[sock_info->id].SetDirection(0);
+					g_Clients[sock_info->id].SetDirection(0);
 			}
 			break;
 		}
@@ -202,7 +200,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			CS_PLAYER_COLOR_PACKET* packet = reinterpret_cast<CS_PLAYER_COLOR_PACKET*>(buf);
 			packet_color = reinterpret_cast<PLAYER_COLOR*>(packet->color);
 			//input color
-			g_Clients[session->id].SetColor(*packet_color);
 			g_Clients[sock_info->id].SetColor(*packet_color);
 			break;
 		}
@@ -221,22 +218,22 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		}
 		case CS_NEXTSTAGE:
 		{
-			switch (g_Clients[session->id].GetStageNum())
+			switch (g_Clients[sock_info->id].GetStageNum())
 			{
 			case STAGE_1:
-				g_Clients[session->id].SetStageNum(STAGE_2);
+				g_Clients[sock_info->id].SetStageNum(STAGE_2);
 				break;
 			case STAGE_2:
-				g_Clients[session->id].SetStageNum(STAGE_3);
+				g_Clients[sock_info->id].SetStageNum(STAGE_3);
 				break;
 			case STAGE_3:
-				g_Clients[session->id].SetStageNum(STAGE_4);
+				g_Clients[sock_info->id].SetStageNum(STAGE_4);
 				break;
 			case STAGE_4:
-				g_Clients[session->id].SetStageNum(STAGE_5);
+				g_Clients[sock_info->id].SetStageNum(STAGE_5);
 				break;
 			case STAGE_5:
-				g_Clients[session->id].SetStageNum(STAGE_END);
+				g_Clients[sock_info->id].SetStageNum(STAGE_END);
 				//send rank all player
 				break;
 			default:
