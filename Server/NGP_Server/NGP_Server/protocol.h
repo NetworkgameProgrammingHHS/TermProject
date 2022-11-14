@@ -79,14 +79,17 @@ struct SC_WORLD_UPDATE_PACKET {
 	char type;
 
 	char color_p1;
+	short stage_p1;
 	short x_p1, y_p1;
 	char dir_p1;
 
 	char color_p2;
+	short stage_p2;
 	short x_p2, y_p2;
 	char dir_p2;
 
 	char color_p3;
+	short stage_p3;
 	short x_p3, y_p3;
 	char dir_p3;
 

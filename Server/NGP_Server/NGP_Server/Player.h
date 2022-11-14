@@ -1,6 +1,11 @@
 #pragma once
 #include "TileMap.h"
 
+struct SOCK_INFO {
+	SOCKET client_sock = NULL;
+	int id = 0;
+};
+
 class Player
 {
 public:
@@ -15,6 +20,9 @@ public:
 	const bool GetGun() const { return m_bGun; }
 	const char* GetName() const { return m_Client_Name; };
 	const bool GetReady() const { return m_bReady; }
+	SOCK_INFO* GetSockInfo() const { return m_SockInfo; }
+	SOCKET GetSocket() const { return m_SockInfo->client_sock; }
+	const int GetID() const { return m_SockInfo->id; }
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
 	void SetVelocity(const Vec2& velocity) { m_Velocity = velocity; }
@@ -24,11 +32,15 @@ public:
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetName(const char* name) { memcpy(m_Client_Name, name, NAME_SIZE); };
 	void SetReady(const bool ready) { m_bReady = ready; }
+	void SetSocket(const SOCKET& sock) { m_SockInfo->client_sock = sock; }
+	void SetID(const int id) { m_SockInfo->id = id; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);
 
 private:
+	SOCK_INFO* m_SockInfo;
+
 	Vec2 m_Pos;
 	Vec2 m_Velocity;
 	char m_Direction;
@@ -36,6 +48,6 @@ private:
 	bool m_bOnline;
 	bool m_bGun;
 	char m_Client_Name[NAME_SIZE];
-	bool m_bReady; 
+	bool m_bReady;
 };
 

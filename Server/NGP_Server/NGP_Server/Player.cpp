@@ -3,10 +3,12 @@
 
 Player::Player()
 {
+	m_SockInfo = new SOCK_INFO;
 }
 
 Player::~Player()
 {
+	delete m_SockInfo;
 }
 
 void Player::Update(const float ElapsedTime)
