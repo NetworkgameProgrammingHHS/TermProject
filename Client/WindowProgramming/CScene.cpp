@@ -41,6 +41,14 @@ void CScene::SetGunState(int enable, int bulletx, int bullety)
 	m_pGun->SetBulletPos(bulletx, bullety);
 }
 
+void CScene::Logout(int index)
+{
+	m_ppPlayers[index]->Reset();
+	m_ppPlayers[index]->SetPosition(sf::Vector2f(-1000.0f, -1000.0f));
+	
+
+}
+
 void CScene::Collide_Wall()
 {
 	if (m_pTileMap) {

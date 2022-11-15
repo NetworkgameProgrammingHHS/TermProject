@@ -118,6 +118,8 @@ void CNetworkMgr::RecvPacket(CScene* scene, CPlayer* player)
 	}
 	case SC_REMOVE: {
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
+		std::cout << packet->id << "·Î±×¾Æ¿ô" << std::endl;
+		scene->Logout((int)packet->id);
 		
 		break;
 	}

@@ -29,6 +29,7 @@ public:
 	void SetPlayerIndex(int index) { m_nPlayerIndex = index; }
 
 	void SetGunState(int enable, int bulletx, int bullety);
+	void Logout(int index);
 
 protected:
 	void Collide_Wall();

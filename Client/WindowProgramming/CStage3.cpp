@@ -56,7 +56,10 @@ void CStage3::Reset()
 
 void CStage3::Update(const float ElapsedTime)
 {
-	m_ppPlayers[m_nPlayerIndex]->Update(ElapsedTime);
+	for (int i = 0; i < PLAYERNUM; ++i)
+	{
+		if (m_ppPlayers[i])m_ppPlayers[i]->Update(ElapsedTime);
+	}
 	if (m_pGun)m_pGun->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
@@ -73,7 +76,10 @@ void CStage3::Render(sf::RenderWindow& RW)
 	m_pTileMap->Render(RW);
 
 	// Player Render
-	m_ppPlayers[m_nPlayerIndex]->Render(RW);
+	for (int i = 0; i < PLAYERNUM; ++i)
+	{
+		if (m_ppPlayers[i]) m_ppPlayers[i]->Render(RW);
+	}
 
 	// Gun, Bullet Render
 	if (m_pGun)m_pGun->Render(RW);

@@ -19,6 +19,15 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
 	m_ppPlayers[m_nPlayerIndex] = player;
 	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 
+	for (int i = 0; i < PLAYERNUM; ++i)
+	{
+		if (!m_ppPlayers[i])
+		{
+			m_ppPlayers[i] = make_shared<CPlayer>(m_pNetworkMgr);
+			m_ppPlayers[i]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+		}
+	}
+
 	m_pNetworkMgr = networkmgr;
 	m_eCurScene = SCENE_NUM::STAGE1;
 }
@@ -57,6 +66,10 @@ void CStage1::Reset()
 void CStage1::Update(const float ElapsedTime)
 {	
 	m_ppPlayers[m_nPlayerIndex]->Update(ElapsedTime);
+	for (int i = 0; i < PLAYERNUM; ++i) 
+	{
+		if(m_ppPlayers[i])m_ppPlayers[i]->Update(ElapsedTime);
+	}
 	if (m_pGun)m_pGun->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
@@ -73,7 +86,10 @@ void CStage1::Render(sf::RenderWindow& RW)
 	m_pTileMap->Render(RW);
 
 	// Player Render
-	m_ppPlayers[m_nPlayerIndex]->Render(RW);
+	for (int i = 0; i < PLAYERNUM; ++i)
+	{
+		if (m_ppPlayers[i]) m_ppPlayers[i]->Render(RW);
+	}
 
 	// Gun, Bullet Render
 	if(m_pGun)m_pGun->Render(RW);
