@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 680;
+constexpr int WINDOW_HEIGHT = 608;
 
 constexpr int TILE_NUM_W = 25;
 constexpr int TILE_NUM_H = 19;
@@ -81,22 +81,23 @@ struct SC_GAMESTART_PACKET {
 struct SC_WORLD_UPDATE_PACKET {
 	char type;
 
-	char color_p1;
-	short stage_p1;
+	short color_p1;
+	char stage_p1;
 	short x_p1, y_p1;
 	char dir_p1;
 
-	char color_p2;
-	short stage_p2;
+	short color_p2;
+	char stage_p2;
 	short x_p2, y_p2;
 	char dir_p2;
 
-	char color_p3;
-	short stage_p3;
+	short color_p3;
+	char stage_p3;
 	short x_p3, y_p3;
 	char dir_p3;
 
 	char bullet_enable;
+	char stage_bullet;
 	short x_bullet, y_bullet;
 	char dir_bullet;
 };

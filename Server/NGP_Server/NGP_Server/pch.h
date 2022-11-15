@@ -29,11 +29,6 @@ struct Vec2 {
 	float y = 0.f;
 };
 
-struct SESSION {
-	SOCKET client_sock = NULL;
-	int id = 0;
-};
-
 enum class PLAYER_COLOR {
 	NORMAL, RED, GREEN, BLUE, YELLOW, PURPLE, GB, END
 };

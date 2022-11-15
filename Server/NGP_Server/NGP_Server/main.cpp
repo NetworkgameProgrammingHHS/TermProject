@@ -25,6 +25,9 @@ chrono::time_point<chrono::system_clock> startTime;
 // Packet Send Thread
 DWORD WINAPI SendPacket(LPVOID)
 {
+	SC_WORLD_UPDATE_PACKET* packet = new SC_WORLD_UPDATE_PACKET;
+	int update_len = sizeof(SC_WORLD_UPDATE_PACKET);
+	packet->type = SC_WORLD_UPDATE;
 	while (true) {
 		// send packet per 1/30sec --> 33.3 ms
 
@@ -34,9 +37,41 @@ DWORD WINAPI SendPacket(LPVOID)
 
 		if ((g_ElapsedTime - 33.3f) >= DBL_EPSILON) {
 			if (g_iCntClientNum > 0) {
+				if (g_Clients[0].GetOnline()) {
+					packet->color_p1 = static_cast<short>(g_Clients[0].GetColor());
+					packet->dir_p1 = g_Clients[0].GetDirection();
+					packet->stage_p1 = g_Clients[0].GetStageNum();
+					packet->x_p1 = g_Clients[0].GetPos().x;
+					packet->y_p1 = g_Clients[0].GetPos().y;
+				}
+				if (g_Clients[1].GetOnline()) {
+					packet->color_p2 = static_cast<short>(g_Clients[1].GetColor());
+					packet->dir_p2 = g_Clients[1].GetDirection();
+					packet->stage_p2 = g_Clients[1].GetStageNum();
+					packet->x_p2 = g_Clients[1].GetPos().x;
+					packet->y_p2 = g_Clients[1].GetPos().y;
+				}
+				if (g_Clients[2].GetOnline()) {
+					packet->color_p3 = static_cast<short>(g_Clients[2].GetColor());
+					packet->dir_p3 = g_Clients[2].GetDirection();
+					packet->stage_p3 = g_Clients[2].GetStageNum();
+					packet->x_p2 = g_Clients[2].GetPos().x;
+					packet->y_p2 = g_Clients[2].GetPos().y;
+				}
+				if (g_Bullet) {
+					packet->bullet_enable = BULLET_ON;
+					packet->dir_bullet = g_Bullet->GetDirection();
+					packet->stage_bullet = g_Bullet->GetStage();
+					packet->x_bullet = g_Bullet->GetPos().x;
+					packet->y_bullet = g_Bullet->GetPos().y;
+				}
+				else {
+					packet->bullet_enable = BULLET_OFF;
+				}
 				for (int i = 0; i < PLAYER_NUM; ++i) {
 					if (g_Clients[i].GetOnline()) {
-
+						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&update_len), sizeof(SC_WORLD_UPDATE_PACKET), 0);
+						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), update_len, 0);
 					}
 				}
 			}
@@ -46,6 +81,7 @@ DWORD WINAPI SendPacket(LPVOID)
 	}
 
 
+	delete packet;
 	return 0;
 }
 
