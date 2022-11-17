@@ -194,6 +194,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		{
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[sock_info->id].SetName(packet->name);
+			g_Clients[sock_info->id].SetOnline(true);
 			break;
 		}
 		case CS_PLAYER_READY://
