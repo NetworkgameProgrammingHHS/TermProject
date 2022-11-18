@@ -20,6 +20,7 @@ public:
 	const shared_ptr<CScene> GetpScene() const { return m_pScene; }
 	const array<shared_ptr<CPlayer>, PLAYERNUM> GetpPlayer() const { return m_ppPlayers; }
 
+	CRITICAL_SECTION g_CS;
 private:
 	void Next_Stage();
 

@@ -83,7 +83,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		{
 			SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
 			int curPlayerIndex = scene->GetPlayerIndex();
-			cout << "World Update Packet : " << curPlayerIndex << endl;
+			//cout << "World Update Packet : " << curPlayerIndex << endl;
 			
 
 			players[0]->SetColor((PLAYER_COLOR)packet->color_p1);

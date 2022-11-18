@@ -1,6 +1,6 @@
 #pragma once
-#include "CBullet.h"
 #include "CObject.h"
+#include "CBullet.h"
 
 class CGun : public CObject
 {

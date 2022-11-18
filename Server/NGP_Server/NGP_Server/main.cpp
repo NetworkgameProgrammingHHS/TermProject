@@ -88,6 +88,7 @@ DWORD WINAPI SendPacket(LPVOID)
 
 int main()
 {
+	InitializeCriticalSection(&g_CS);
 	float ElapsedTime = 0.f;
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
@@ -137,6 +138,7 @@ int main()
 		}
 		//set client id
 		g_Clients[index].SetID(index);
+		g_Clients[index].SetOnline(true);
 		g_iCntClientNum++;
 		
 		DWORD ThreadId;
@@ -181,6 +183,8 @@ int main()
 	closesocket(listen_sock);
 
 	WSACleanup();
+
+	DeleteCriticalSection(&g_CS);
 
 	return 0;
 }

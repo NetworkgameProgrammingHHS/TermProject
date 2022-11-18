@@ -1,5 +1,7 @@
 #include "pch.h"
+#include "CObject.h"
 #include "CBullet.h"
+
 
 CBullet::CBullet()
 {
