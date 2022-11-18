@@ -54,6 +54,7 @@ struct CS_NEXT_STAGE_PACKET
 //Server to Client packet
 struct SC_READY_PACKET {
 	char type;
+	short id;
 };
 
 struct SC_RANK_PACKET {
@@ -83,22 +84,22 @@ struct SC_WORLD_UPDATE_PACKET {
 
 	char color_p1;
 	short stage_p1;
-	short x_p1, y_p1;
-	char dir_p1;
+	float x_p1, y_p1;
+	short dir_p1;
 
 	char color_p2;
 	short stage_p2;
-	short x_p2, y_p2;
-	char dir_p2;
+	float x_p2, y_p2;
+	short dir_p2;
 
 	char color_p3;
 	short stage_p3;
-	short x_p3, y_p3;
-	char dir_p3;
+	float x_p3, y_p3;
+	short dir_p3;
 
 	char bullet_enable;
-	short x_bullet, y_bullet;
-	char dir_bullet;
+	float x_bullet, y_bullet;
+	short dir_bullet;
 };
 #pragma pack(pop)
 

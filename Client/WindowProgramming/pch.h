@@ -51,3 +51,7 @@ enum class PLAYER_COLOR {
 enum class SCENE_NUM {
 	NONE, TITLE, STAGE1, STAGE2, STAGE3, STAGE4, STAGE5, RANKING
 };
+
+enum DIR {
+	LEFT = -1, RIGHT = 1, UP = 2, DOWN = 3
+};

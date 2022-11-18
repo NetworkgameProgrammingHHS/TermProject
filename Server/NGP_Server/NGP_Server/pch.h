@@ -32,3 +32,7 @@ struct Vec2 {
 enum class PLAYER_COLOR {
 	NORMAL, RED, GREEN, BLUE, YELLOW, PURPLE, GB, END
 };
+
+enum DIR {
+	LEFT = -1, RIGHT = 1, UP = 2, DOWN = 3
+};

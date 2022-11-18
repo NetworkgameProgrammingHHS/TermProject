@@ -186,19 +186,17 @@ void CPlayer::UpdateAABB()
 void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 {
 	bool input = false;
-	char dir = NULL;
+	char dir = 0;
 
 	switch (key) {
 	case sf::Keyboard::Left:
 		if (m_iDir > -1) {
-			m_iDir -= 1;
 			input = true;
 			dir = KEY_DIR_LEFT;
 		}
 		break;
 	case sf::Keyboard::Right:
 		if (m_iDir < 1) {
-			m_iDir += 1;
 			input = true;
 			dir = KEY_DIR_RIGHT;
 		}
@@ -251,16 +249,30 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 
 void CPlayer::KeyBoardRelease(const sf::Keyboard::Key& key)
 {
+	bool input = false;
+	char dir = 0;
+
 	switch (key) {
 	case sf::Keyboard::Left:
-		if (m_iDir < 1)
-			m_iDir += 1;
+		if (m_iDir < 1) {
+			input = true;
+			dir = KEY_DIR_LEFT;
+		}
 		break;
 	case sf::Keyboard::Right:
-		if (m_iDir > -1)
-			m_iDir -= 1;
+		if (m_iDir > -1) {
+			input = true;
+			dir = KEY_DIR_RIGHT;
+		}
 		break;
 	default:
 		break;
+	}
+	if (input && dir != NULL) {
+		CS_INPUT_PACKET* packet = new CS_INPUT_PACKET;
+		packet->type = CS_INPUT;
+		packet->key = dir;
+		packet->state = KEY_RELEASE;
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_INPUT_PACKET));
 	}
 }

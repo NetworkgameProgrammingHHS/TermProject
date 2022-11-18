@@ -13,6 +13,7 @@ unique_ptr<Bullet> g_Bullet;
 float g_ElapsedTime;
 
 bool g_GameOver;
+bool g_InGame = false;
 CRITICAL_SECTION g_CS;
 
 //Client Update Thread
@@ -38,7 +39,7 @@ DWORD WINAPI SendPacket(LPVOID)
 		if ((g_ElapsedTime - 33.3f) >= DBL_EPSILON) {
 			if (g_iCntClientNum > 0) {
 				if (g_Clients[0].GetOnline()) {
-					packet->color_p1 = static_cast<short>(g_Clients[0].GetColor());
+					packet->color_p1 = static_cast<short>(g_Clients[0].GetColor	());
 					packet->dir_p1 = g_Clients[0].GetDirection();
 					packet->stage_p1 = g_Clients[0].GetStageNum();
 					packet->x_p1 = g_Clients[0].GetPos().x;
@@ -87,6 +88,7 @@ DWORD WINAPI SendPacket(LPVOID)
 
 int main()
 {
+	float ElapsedTime = 0.f;
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 		return 1;
@@ -113,12 +115,9 @@ int main()
 	HANDLE hThread;
 
 	startTime = chrono::system_clock::now();
-	hThread = CreateThread(NULL, 0, SendPacket, NULL, 0, 0);
-	if (NULL == hThread) { cout << "failed to create Thread" << endl; }
-	else { CloseHandle(hThread); }
 
 	int index = 0;
-	while (1) {
+	while (!g_InGame) {
 		if (g_iCntClientNum > 3)
 			continue;
 		else {
@@ -137,7 +136,6 @@ int main()
 			exit(1);
 		}
 		//set client id
-		g_Clients[index].SetOnline(true);
 		g_Clients[index].SetID(index);
 		g_iCntClientNum++;
 		
@@ -146,6 +144,38 @@ int main()
 
 		if (NULL == hThread) { closesocket(g_Clients[index].GetSocket()); }
 		else { CloseHandle(hThread); }
+
+		hThread = CreateThread(NULL, 0, SendPacket, NULL, 0, 0);
+		if (NULL == hThread) { cout << "failed to create Thread" << endl; }
+		else { CloseHandle(hThread); }
+	}
+	
+	
+
+	auto endTime = chrono::system_clock::now();
+	auto StartT = endTime;
+	while (true) {
+		ElapsedTime = chrono::duration<float, milli>(endTime - StartT).count();
+		//InGame
+		// Bullet, Move, Collide
+		if (g_Bullet) {
+			int dir = 0;
+			if (g_Bullet->GetDirection() == KEY_DIR_LEFT)
+				dir = -1;
+			else if (g_Bullet->GetDirection() == KEY_DIR_RIGHT)
+				dir = 1;
+			
+			g_Bullet->SetPos({ g_Bullet->GetPos().x + dir * ElapsedTime, g_Bullet->GetPos().y});
+		}
+
+		// Player, Move, Collides
+
+		for (int i = 0; i < PLAYER_NUM; ++i) {
+			g_Clients[i].SetPos({g_Clients[i].GetPos().x + g_Clients[i].GetDirection() * ElapsedTime, g_Clients[i].GetPos().y});
+		}
+
+		StartT = endTime;
+		endTime = chrono::system_clock::now();
 	}
 
 	closesocket(listen_sock);
@@ -195,15 +225,51 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[sock_info->id].SetName(packet->name);
 			g_Clients[sock_info->id].SetOnline(true);
+
+			// Send Login Info packet to Client which logined
+			SC_LOGIN_INFO_PACKET* scp = new SC_LOGIN_INFO_PACKET;
+			scp->type = SC_LOGIN_INFO;
+			scp->id = sock_info->id;
+			scp->online_p1 = g_Clients[0].GetOnline();
+			scp->online_p2 = g_Clients[1].GetOnline();
+			scp->online_p3 = g_Clients[2].GetOnline();
+			len = sizeof(SC_LOGIN_INFO_PACKET);
+			send(sock_info->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
+			send(sock_info->client_sock, reinterpret_cast<char*>(scp), len, 0);
+			delete scp;
+
 			break;
 		}
-		case CS_PLAYER_READY://
+		case CS_PLAYER_READY:
 		{
 			CS_PLAYER_READY_PACKET* packet = reinterpret_cast<CS_PLAYER_READY_PACKET*>(buf);
-			if (packet->ready == READY_ON)
+			if (packet->ready == READY_ON) {
 				g_Clients[sock_info->id].SetReady(true);
-			else if(packet->ready == READY_OFF)
+
+				// Send Ready packet to Clients
+				SC_READY_PACKET* scp = new SC_READY_PACKET;
+				scp->type = READY_ON;
+				scp->id = sock_info->id;
+				len = sizeof(SC_READY_PACKET);
+				for (int i = 0; i < 3; ++i) {
+					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(scp), len, 0);
+				}
+			}
+			else if (packet->ready == READY_OFF) {
 				g_Clients[sock_info->id].SetReady(false);
+
+				// Send Ready packet to Clients
+				SC_READY_PACKET* scp = new SC_READY_PACKET;
+				scp->type = READY_OFF;
+				scp->id = sock_info->id;
+				len = sizeof(SC_READY_PACKET);
+				for (int i = 0; i < 3; ++i) {
+					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(scp), len, 0);
+				}
+			}
+
 			break;
 		}
 		case CS_INPUT:
@@ -220,8 +286,18 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 						//creat gun and shooting bullet
 					}
 				}
-				else
-					g_Clients[sock_info->id].SetDirection(packet->key);
+				else {
+					switch (packet->key) {
+					case KEY_DIR_LEFT:
+						g_Clients[sock_info->id].SetDirection(LEFT);
+						break;
+					case KEY_DIR_RIGHT:
+						g_Clients[sock_info->id].SetDirection(RIGHT);
+						break;
+					default:
+						break;
+					}
+				}
 			}
 			else if (packet->state == KEY_RELEASE)
 			{

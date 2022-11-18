@@ -54,6 +54,7 @@ struct CS_NEXT_STAGE_PACKET
 //Server to Client packet
 struct SC_READY_PACKET {
 	char type;
+	short id;
 };
 
 struct SC_RANK_PACKET {
@@ -79,27 +80,27 @@ struct SC_GAMESTART_PACKET {
 };
 
 struct SC_WORLD_UPDATE_PACKET {
-	char type;
+	char type = ' ';
 
-	short color_p1;
-	char stage_p1;
-	short x_p1, y_p1;
-	char dir_p1;
+	short color_p1 = 0;
+	char stage_p1 = ' ';
+	float x_p1 = 0.f, y_p1 = 0.f;
+	short dir_p1 = 0;
 
-	short color_p2;
-	char stage_p2;
-	short x_p2, y_p2;
-	char dir_p2;
+	short color_p2 = 0;
+	char stage_p2 = ' ';
+	float x_p2 = 0.f, y_p2 = 0.f;
+	short dir_p2 = 0;
 
-	short color_p3;
-	char stage_p3;
-	short x_p3, y_p3;
-	char dir_p3;
+	short color_p3 = 0;
+	char stage_p3 = ' ';
+	float x_p3 = 0.f, y_p3 = 0.f;
+	short dir_p3 = 0;
 
-	char bullet_enable;
-	char stage_bullet;
-	short x_bullet, y_bullet;
-	char dir_bullet;
+	char bullet_enable = ' ';
+	char stage_bullet = ' ';
+	float x_bullet = 0.f, y_bullet = 0.f;
+	short dir_bullet = 0;
 };
 #pragma pack(pop)
 
