@@ -6,7 +6,7 @@
 #include "CObject.h"
 #include "CPlayer.h"
 
-CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
+CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM>  players)
 {
 	if(!m_sfTexture.loadFromFile("Resource\\BackGround\\Information_Room.png"))
 		exit(1);
@@ -16,7 +16,7 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
 	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage1.txt");
 	m_pTileMap->Initialize();
 
-	m_ppPlayers[m_nPlayerIndex] = player;
+	m_ppPlayers = players;
 	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 
 	for (int i = 0; i < PLAYERNUM; ++i)

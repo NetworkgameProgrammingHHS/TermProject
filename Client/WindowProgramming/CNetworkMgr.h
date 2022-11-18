@@ -11,7 +11,7 @@ public:
 
 	void InitializeSocket();
 	void SendPacket(char* packet, int size);
-	void RecvPacket(CScene* scene, CPlayer* player);
+	void RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM> players);
 	
 	SOCKET GetSocket() { return m_sock; };
 

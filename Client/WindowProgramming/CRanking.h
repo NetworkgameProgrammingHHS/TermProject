@@ -7,7 +7,7 @@ class CNetworkMgr;
 class CRanking :public CScene
 {
 public:
-	CRanking(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player);
+	CRanking(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM> players);
 	virtual ~CRanking();
 
 	virtual void Update(const float ElpasedTime);

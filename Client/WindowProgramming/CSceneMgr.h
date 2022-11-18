@@ -18,7 +18,7 @@ public:
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
 
 	const shared_ptr<CScene> GetpScene() const { return m_pScene; }
-	const shared_ptr<CPlayer> GetpPlayer() const { return m_pPlayer; }
+	const array<shared_ptr<CPlayer>, PLAYERNUM> GetpPlayer() const { return m_ppPlayers; }
 
 private:
 	void Next_Stage();
@@ -26,7 +26,7 @@ private:
 private:
 	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
 	shared_ptr<CScene> m_pScene = nullptr;
-	shared_ptr<CPlayer> m_pPlayer = nullptr;
+	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers;
 	SCENE_NUM m_eCurScene;
 };
 

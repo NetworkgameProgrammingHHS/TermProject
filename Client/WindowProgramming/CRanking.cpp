@@ -6,7 +6,7 @@
 #include "CObject.h"
 #include "CPlayer.h"
 
-CRanking::CRanking(shared_ptr<CNetworkMgr> networkmgr, shared_ptr<CPlayer> player)
+CRanking::CRanking(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM> players)
 {
 }
 

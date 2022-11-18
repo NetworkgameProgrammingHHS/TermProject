@@ -71,7 +71,7 @@ DWORD WINAPI SendPacket(LPVOID)
 				}
 				for (int i = 0; i < PLAYER_NUM; ++i) {
 					if (g_Clients[i].GetOnline()) {
-						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&update_len), sizeof(SC_WORLD_UPDATE_PACKET), 0);
+						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&update_len), sizeof(int), 0);
 						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), update_len, 0);
 					}
 				}

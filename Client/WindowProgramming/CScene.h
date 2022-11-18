@@ -3,8 +3,6 @@
 #include "CPlayer.h"
 #include <array>
 
-#define PLAYERNUM 3
-
 class CPlayer;
 class CTileMap;
 class CNetworkMgr;

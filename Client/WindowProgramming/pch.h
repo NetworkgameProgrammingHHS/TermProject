@@ -8,6 +8,7 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include <array>
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -32,6 +33,8 @@ using namespace std;
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "winmm.lib")
 #pragma comment(lib, "ws2_32")
+
+#define PLAYERNUM 3
 
 enum class PLAYER_STATE { IDLE, MOVE_L, MOVE_R, JUMP };
 
