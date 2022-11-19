@@ -32,7 +32,7 @@ struct CS_PLAYER_READY_PACKET {
 
 struct CS_PLAYER_COLOR_PACKET {
 	char type;
-	char color;
+	short color;
 	//char collide;
 };
 

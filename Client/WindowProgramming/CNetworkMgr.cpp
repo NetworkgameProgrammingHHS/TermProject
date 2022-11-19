@@ -69,7 +69,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			players[2]->SetOnlie(true);
 		}
 		std::cout << packet->id << "Á¢¼Ó" << std::endl;
-		scene->SetPlayerIndex(packet->id);
+		scene->SetPlayerIndex(packet->id);		
 		break;
 	}
 	case SC_READY: {
@@ -85,35 +85,31 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_WORLD_UPDATE: {
-		if (scene) 
-		{
-			SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
-			int curPlayerIndex = scene->GetPlayerIndex();
-			//cout << "World Update Packet : " << curPlayerIndex << endl;
-			
+		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
+		int curPlayerIndex = scene->GetPlayerIndex();
+		//cout << "World Update Packet : " << curPlayerIndex << endl;
 
-			players[0]->SetColor((PLAYER_COLOR)packet->color_p1);
-			players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
-			if (packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) {
-				players[0]->SetDir((int)packet->dir_p1);
-			}
 
-			players[1]->SetColor((PLAYER_COLOR)packet->color_p2);
-			players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
-			if (packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) {
-				players[1]->SetDir((int)packet->dir_p2);
-			}
-
-			players[2]->SetColor((PLAYER_COLOR)packet->color_p3);
-			players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
-			if (packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) {
-				players[2]->SetDir((int)packet->dir_p3);
-			}
-			
-			scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
-			
+		players[0]->SetColor((PLAYER_COLOR)packet->color_p1);
+		players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
+		if (packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) {
+			players[0]->SetDir((int)packet->dir_p1);
 		}
-		
+
+		players[1]->SetColor((PLAYER_COLOR)packet->color_p2);
+		players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
+		if (packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) {
+			players[1]->SetDir((int)packet->dir_p2);
+		}
+
+		players[2]->SetColor((PLAYER_COLOR)packet->color_p3);
+		players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
+		if (packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) {
+			players[2]->SetDir((int)packet->dir_p3);
+		}
+
+		scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
+
 		break;
 	}
 	case SC_RANK: {

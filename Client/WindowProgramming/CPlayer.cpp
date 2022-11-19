@@ -257,12 +257,14 @@ void CPlayer::KeyBoardRelease(const sf::Keyboard::Key& key)
 		if (m_iDir < 1) {
 			input = true;
 			dir = KEY_DIR_LEFT;
+			m_iDir += 1;
 		}
 		break;
 	case sf::Keyboard::Right:
 		if (m_iDir > -1) {
 			input = true;
 			dir = KEY_DIR_RIGHT;
+			m_iDir -= 1;
 		}
 		break;
 	default:

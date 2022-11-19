@@ -199,7 +199,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 	SOCKET client_sock = sock_info->client_sock;
 	int len;
 	char buf[BUF_SIZE];
-	PLAYER_COLOR* packet_color = new PLAYER_COLOR;
 	cout << "id: " << sock_info->id << endl;
 	//When the players first come in, set stage 1
 	g_Clients[sock_info->id].SetStageNum(STAGE_1);
@@ -274,6 +273,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
 					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(scp), len, 0);
 				}
+				delete scp;
 			}
 
 			break;
@@ -317,9 +317,8 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		case CS_COLOR:
 		{
 			CS_PLAYER_COLOR_PACKET* packet = reinterpret_cast<CS_PLAYER_COLOR_PACKET*>(buf);
-			packet_color = reinterpret_cast<PLAYER_COLOR*>(packet->color);
 			//input color
-			g_Clients[sock_info->id].SetColor(*packet_color);
+			g_Clients[sock_info->id].SetColor(static_cast<PLAYER_COLOR>(packet->color));
 			break;
 		}
 		case CS_PLAYER_RESET:
@@ -354,6 +353,15 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			case STAGE_5:
 				g_Clients[sock_info->id].SetStageNum(STAGE_END);
 				//send rank all player
+				SC_RANK_PACKET* packet = new SC_RANK_PACKET;
+				packet->type = SC_RANK;
+				memcpy(packet->winner_name, g_Clients[sock_info->id].GetName(), NAME_SIZE);
+				len = sizeof(SC_RANK_PACKET);
+				for (int i = 0; i < PLAYER_NUM; ++i) {
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+				}
+				delete packet;
 				break;
 			default:
 				break;
