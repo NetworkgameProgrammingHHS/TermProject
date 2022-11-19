@@ -38,6 +38,7 @@ public:
 	const bool GetSpoid() const { return m_bSpoid; }
 	const bool GetGun() const { return m_bGun; }
 	const PLAYER_COLOR& GetSavedColor() const { return m_eSavedColor; }
+	const bool GetOnline() const { return m_bOnline; }
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
 	void SetColor(const PLAYER_COLOR color) { m_eColor = color; m_sfSprite.setTexture(m_umTextures.find(color)->second); }
@@ -50,7 +51,7 @@ public:
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 	void SetDir(const int dir) { m_iDir = dir; }
-
+	void SetOnlie(const bool online) { m_bOnline = online; }
 private:
 	void Animation(const float ElapsedTime);
 
@@ -70,6 +71,7 @@ private:
 	// State, Color
 	float m_fSpriteLeft = 0;
 	int m_iSpriteTop = 32;
+	bool m_bOnline = false;
 	PLAYER_STATE m_eState = PLAYER_STATE::IDLE;
 	PLAYER_COLOR m_eColor = PLAYER_COLOR::NORMAL;
 	PLAYER_COLOR m_eSavedColor = PLAYER_COLOR::NORMAL;

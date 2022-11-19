@@ -117,6 +117,10 @@ int main()
 
 	startTime = chrono::system_clock::now();
 
+	hThread = CreateThread(NULL, 0, SendPacket, NULL, 0, 0);
+	if (NULL == hThread) { cout << "failed to create Thread" << endl; }
+	else { CloseHandle(hThread); }
+
 	int index = 0;
 	while (!g_InGame) {
 		if (g_iCntClientNum > 3)
@@ -147,9 +151,7 @@ int main()
 		if (NULL == hThread) { closesocket(g_Clients[index].GetSocket()); }
 		else { CloseHandle(hThread); }
 
-		hThread = CreateThread(NULL, 0, SendPacket, NULL, 0, 0);
-		if (NULL == hThread) { cout << "failed to create Thread" << endl; }
-		else { CloseHandle(hThread); }
+		
 	}
 	
 	

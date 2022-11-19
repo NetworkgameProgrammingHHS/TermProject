@@ -21,7 +21,7 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 
 	for (int i = 0; i < PLAYERNUM; ++i)
 	{
-		if (!m_ppPlayers[i])
+		if (m_ppPlayers[i])
 		{
 			m_ppPlayers[i] = make_shared<CPlayer>(m_pNetworkMgr);
 			m_ppPlayers[i]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });

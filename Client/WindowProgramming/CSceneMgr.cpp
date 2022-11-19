@@ -69,7 +69,6 @@ void CSceneMgr::Next_Stage()
 	switch (m_pScene->GetSceneNum()) {
 	case SCENE_NUM::TITLE:
 		EnterCriticalSection(&g_CS);
-		std::cout << "½Ã¹ß" << std::endl;
 		m_pScene.reset();
 		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));
 		m_eCurScene = SCENE_NUM::STAGE1;

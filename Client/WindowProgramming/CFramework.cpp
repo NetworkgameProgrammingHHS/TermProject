@@ -28,8 +28,7 @@ CFramework::~CFramework()
 }
 
 void CFramework::Process()
-{
-	std::cout << "잠시 문장을 적어서 텀을 둘게요" << std::endl;
+{	
 	//Thread 생성
 	HANDLE hThread = CreateThread(NULL, 0, RecvProcess, reinterpret_cast<LPVOID>(m_pRTParameter), 0, NULL);
 	if (hThread == NULL)
@@ -101,8 +100,7 @@ DWORD WINAPI CFramework::RecvProcess(LPVOID arg)
 	RecVThreadParameter* pParameter = reinterpret_cast<RecVThreadParameter*> (arg);
 	while (pParameter->p->GetRenderWindow()->isOpen())
 	{
-		if (pParameter->pSceneMgr->GetpScene().get() == NULL) std::cout << "엥 시발?" << std::endl;
-		//packet Recv
+		//packet Recv		
 		pParameter->pNetMgr->RecvPacket(pParameter->pSceneMgr->GetpScene().get(), pParameter->pSceneMgr->GetpPlayer());
 	}
 

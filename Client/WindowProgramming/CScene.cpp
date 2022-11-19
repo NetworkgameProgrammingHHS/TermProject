@@ -22,7 +22,9 @@ void CScene::Update(const float ElapsedTime)
 {
 	for (int i = 0; i < PLAYERNUM; ++i)
 	{
-		if(m_ppPlayers[i]) m_ppPlayers[i]->Update(ElapsedTime);
+		if(m_ppPlayers[i]) 
+			if (m_ppPlayers[i]->GetOnline())
+				m_ppPlayers[i]->Update(ElapsedTime);
 	}
 	
 }
@@ -31,7 +33,9 @@ void CScene::Render(sf::RenderWindow& RW)
 {
 	for (int i = 0; i < PLAYERNUM; ++i)
 	{
-		if (m_ppPlayers[i]) m_ppPlayers[i]->Render(RW);
+		if (m_ppPlayers[i])
+			if(m_ppPlayers[i]->GetOnline())
+				m_ppPlayers[i]->Render(RW);
 	}
 }
 
