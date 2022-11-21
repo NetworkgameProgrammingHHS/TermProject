@@ -112,6 +112,7 @@ CTileMap::CTileMap(const string& Filename)
 	m_umTileInfo.try_emplace('^', CTile("Resource\\Object\\Gate_Green+Blue.png", TILE_TYPE::GB_G));
 
 	m_umTileInfo.try_emplace('P', CTile("Resource\\Object\\Pipette.png", TILE_TYPE::SPOID));
+	//m_umTileInfo.try_emplace('A', CTile("Resource\\Object\\GUN.png", TILE_TYPE::GUN));
 }
 
 CTileMap::~CTileMap()

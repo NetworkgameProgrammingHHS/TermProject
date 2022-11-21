@@ -43,7 +43,7 @@ enum class TILE_TYPE {NONE, WALL,
 					  RED_T, GREEN_T, BLUE_T, YELLOW_T, PURPLE_T, GB_T, IDLE_T,
 					  RED_J, GREEN_J, BLUE_J, YELLOW_J, PURPLE_J, GB_J,
 					  RED_G, GREEN_G, BLUE_G, YELLOW_G, PURPLE_G, GB_G,
-					  SPOID,
+					  SPOID, GUN,
 					  END
 };
 
