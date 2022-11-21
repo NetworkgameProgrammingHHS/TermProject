@@ -16,6 +16,8 @@ bool g_GameOver;
 bool g_InGame = false;
 CRITICAL_SECTION g_CS;
 
+void UploadMap();
+
 //Client Update Thread
 DWORD WINAPI ProcessPacket(LPVOID socket);
 //if complete, delete
@@ -154,32 +156,34 @@ int main()
 		else { CloseHandle(hThread); }
 	}
 	
-	
-
 	auto endTime = chrono::system_clock::now();
 	auto StartT = endTime;
 	while (true) {
-		ElapsedTime = chrono::duration<float, deci>(endTime - StartT).count();
-		//InGame
-		// Bullet, Move, Collide
-		if (g_Bullet) {
-			int dir = 0;
-			if (g_Bullet->GetDirection() == KEY_DIR_LEFT)
-				dir = -1;
-			else if (g_Bullet->GetDirection() == KEY_DIR_RIGHT)
-				dir = 1;
-			
-			g_Bullet->SetPos({ g_Bullet->GetPos().x + dir * ElapsedTime, g_Bullet->GetPos().y});
-		}
-
-		// Player, Move, Collides
-
-		for (int i = 0; i < PLAYER_NUM; ++i) {
-			g_Clients[i].SetPos({g_Clients[i].GetPos().x + g_Clients[i].GetDirection() * ElapsedTime, g_Clients[i].GetPos().y});
-		}
-
-		StartT = endTime;
 		endTime = chrono::system_clock::now();
+		ElapsedTime = chrono::duration<float, deci>(endTime - StartT).count();
+		if (ElapsedTime >= 1.f / 60.f) {
+			//InGame
+			// Bullet, Move, Collide
+			if (g_Bullet) {
+				int dir = 0;
+				if (g_Bullet->GetDirection() == KEY_DIR_LEFT)
+					dir = -1;
+				else if (g_Bullet->GetDirection() == KEY_DIR_RIGHT)
+					dir = 1;
+
+				g_Bullet->SetPos({ g_Bullet->GetPos().x + dir * ElapsedTime, g_Bullet->GetPos().y });
+			}
+
+			// Player, Move, Collides
+
+			for (int i = 0; i < PLAYER_NUM; ++i) {
+				g_Clients[i].SetPos({ g_Clients[i].GetPos().x + PLAYER_SPEED * g_Clients[i].GetDirection() * ElapsedTime, g_Clients[i].GetPos().y });
+			}
+			StartT = endTime;
+		}
+		else {
+			Sleep(1);
+		}
 	}
 
 	closesocket(listen_sock);
@@ -189,6 +193,18 @@ int main()
 	DeleteCriticalSection(&g_CS);
 
 	return 0;
+}
+
+void UploadMap()
+{
+	g_TileMap[0] = make_unique<TileMap>("Stage1.txt");
+	g_TileMap[1] = make_unique<TileMap>("Stage2.txt");
+	g_TileMap[2] = make_unique<TileMap>("Stage3.txt");
+	g_TileMap[3] = make_unique<TileMap>("Stage4.txt");
+	g_TileMap[4] = make_unique<TileMap>("Stage5.txt");
+	// 0: Nothing,      D: wall
+	// Z: Red Jump,     Y: Green Jump,     X: Blue Jump,     W: Yellow Jump  V: Purple Jump		U: GB Jump
+	// !: Red Gate		@: Green Gate,     #: Blue Gate,	 $: Yellow Gate  %: Purple Gate		^: GB Gate
 }
 
 DWORD WINAPI ProcessPacket(LPVOID socket)
@@ -367,6 +383,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				delete packet;
 			}
 				break;
+			}
 			default:
 				break;
 			}

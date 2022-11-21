@@ -4,6 +4,7 @@
 Player::Player()
 {
 	m_SockInfo = new SOCK_INFO;
+	m_Pos = { TILE_SIZE, WINDOW_HEIGHT - 2 * TILE_SIZE };
 }
 
 Player::~Player()

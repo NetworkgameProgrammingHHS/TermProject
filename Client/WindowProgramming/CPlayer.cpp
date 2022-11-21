@@ -169,7 +169,8 @@ void CPlayer::Render(sf::RenderWindow& RW)
 		RW.draw(rt);
 	}
 
-	RW.draw(m_sfSprite);
+	if(m_bOnline)
+		RW.draw(m_sfSprite);
 }
 
 void CPlayer::UpdateAABB()

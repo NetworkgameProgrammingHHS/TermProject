@@ -76,7 +76,6 @@ void CFramework::Update()
 {
 	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
 	m_pSceneMgr->Update(ElapsedTime);
-
 	// FPS
 	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
 	++m_iFrame;
@@ -86,7 +85,6 @@ void CFramework::Update()
 		m_fBaseTime = m_fTime;
 		m_iFrame = 0;
 	}
-
 	m_sfFrame.restart();
 }
 

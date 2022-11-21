@@ -22,7 +22,8 @@ using namespace std;
 #define PLAYER_NUM 3
 #define STAGE_NUM 5
 
-#define BULLET_SPEED 300.f;
+#define BULLET_SPEED 300.f
+#define PLAYER_SPEED 25.0f
 
 struct Vec2 {
 	float x = 0.f;

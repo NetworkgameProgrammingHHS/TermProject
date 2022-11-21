@@ -84,22 +84,22 @@ struct SC_WORLD_UPDATE_PACKET {
 
 	short color_p1 = 0;
 	char stage_p1 = ' ';
-	float x_p1 = 0.f, y_p1 = 0.f;
+	float x_p1 = TILE_SIZE, y_p1 = WINDOW_HEIGHT - 2 * TILE_SIZE;
 	short dir_p1 = 0;
 
 	short color_p2 = 0;
 	char stage_p2 = ' ';
-	float x_p2 = 0.f, y_p2 = 0.f;
+	float x_p2 = TILE_SIZE, y_p2 = WINDOW_HEIGHT - 2 * TILE_SIZE;
 	short dir_p2 = 0;
 
 	short color_p3 = 0;
 	char stage_p3 = ' ';
-	float x_p3 = 0.f, y_p3 = 0.f;
+	float x_p3 = TILE_SIZE, y_p3 = WINDOW_HEIGHT - 2 * TILE_SIZE;
 	short dir_p3 = 0;
 
 	char bullet_enable = ' ';
 	char stage_bullet = ' ';
-	float x_bullet = 0.f, y_bullet = 0.f;
+	float x_bullet = 0.f, y_bullet = WINDOW_HEIGHT - 2 * TILE_SIZE;
 	short dir_bullet = 0;
 };
 #pragma pack(pop)
