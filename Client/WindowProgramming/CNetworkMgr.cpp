@@ -5,10 +5,12 @@
 
 CNetworkMgr::CNetworkMgr()
 {
+	InitializeCriticalSection(&g_CS);
 }
 
 CNetworkMgr::~CNetworkMgr()
 {
+	DeleteCriticalSection(&g_CS);
 }
 
 void CNetworkMgr::InitializeSocket()
@@ -85,6 +87,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_WORLD_UPDATE: {
+		EnterCriticalSection(&g_CS);
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
 		int curPlayerIndex = scene->GetPlayerIndex();
 		//cout << "World Update Packet : " << curPlayerIndex << endl;
@@ -109,7 +112,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		}
 
 		scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
-
+		LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SC_RANK: {

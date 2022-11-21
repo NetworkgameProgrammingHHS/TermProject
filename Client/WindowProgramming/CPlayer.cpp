@@ -96,10 +96,10 @@ void CPlayer::Update(const float ElapsedTime)
 	
 	m_vec2fPrevPos = m_vec2fPos;
 
-	m_vec2fPos.x += m_iDir * PLAYER_SPEED * ElapsedTime;
+	//m_vec2fPos.x += m_iDir * PLAYER_SPEED * ElapsedTime;
 
 	// Jump Process
-	if (m_bJump) {
+	/*if (m_bJump) {
 		if (m_iJumpCnt < m_iJumpChange) {
 			m_vec2fPos.y -= m_fJumpVelocity * ElapsedTime;
 		}
@@ -113,7 +113,7 @@ void CPlayer::Update(const float ElapsedTime)
 
 	if (m_bFall) {
 		m_vec2fPos.y += JUMP_SPEED * ElapsedTime;
-	}
+	}*/
 
 	m_sfSprite.setPosition(m_vec2fPos);
 	UpdateAABB();

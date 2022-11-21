@@ -33,7 +33,7 @@ DWORD WINAPI SendPacket(LPVOID)
 		// send packet per 1/30sec --> 33.3 ms
 
 		auto endTime = chrono::system_clock::now();
-		g_ElapsedTime += chrono::duration<float, milli>(endTime - startTime).count();
+		g_ElapsedTime += chrono::duration<float, deci>(endTime - startTime).count();
 		startTime = endTime;
 
 		if ((g_ElapsedTime - 33.3f) >= DBL_EPSILON) {
@@ -144,14 +144,14 @@ int main()
 		g_Clients[index].SetID(index);
 		g_Clients[index].SetOnline(true);
 		g_iCntClientNum++;
-		
+		if (g_iCntClientNum > 2) 
+			g_InGame = true;
+
 		DWORD ThreadId;
 		hThread = CreateThread(NULL, 0, ProcessPacket, reinterpret_cast<LPVOID>(g_Clients[index].GetSockInfo()), 0, &ThreadId);
 
 		if (NULL == hThread) { closesocket(g_Clients[index].GetSocket()); }
 		else { CloseHandle(hThread); }
-
-		
 	}
 	
 	
@@ -159,7 +159,7 @@ int main()
 	auto endTime = chrono::system_clock::now();
 	auto StartT = endTime;
 	while (true) {
-		ElapsedTime = chrono::duration<float, milli>(endTime - StartT).count();
+		ElapsedTime = chrono::duration<float, deci>(endTime - StartT).count();
 		//InGame
 		// Bullet, Move, Collide
 		if (g_Bullet) {
@@ -284,6 +284,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			//input key
 			if (packet->state == KEY_PRESS)
 			{
+				std::cout << sock_info->id << "-" << (int)packet->key << "키를 누름" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(true);
 				if (packet->type == KEY_FIREGUN)
 				{
@@ -307,6 +308,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			}
 			else if (packet->state == KEY_RELEASE)
 			{
+				std::cout << sock_info->id << "-" << (int)packet->key << "키를 뗌" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(false);
 				if (packet->type == KEY_FIREGUN);
 				else
@@ -351,6 +353,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				g_Clients[sock_info->id].SetStageNum(STAGE_5);
 				break;
 			case STAGE_5:
+			{
 				g_Clients[sock_info->id].SetStageNum(STAGE_END);
 				//send rank all player
 				SC_RANK_PACKET* packet = new SC_RANK_PACKET;
@@ -362,6 +365,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
 				}
 				delete packet;
+			}
 				break;
 			default:
 				break;

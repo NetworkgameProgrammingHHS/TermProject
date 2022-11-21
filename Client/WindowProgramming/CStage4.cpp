@@ -23,7 +23,6 @@ CStage4::CStage4(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	{
 		if (m_ppPlayers[i])
 		{
-			m_ppPlayers[i] = make_shared<CPlayer>(m_pNetworkMgr);
 			m_ppPlayers[i]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 		}
 	}

@@ -19,5 +19,7 @@ private:
 	WSADATA m_wsa;
 	SOCKET m_sock;
 	SOCKADDR_IN m_serveraddr;
+
+	CRITICAL_SECTION g_CS;
 };
 
