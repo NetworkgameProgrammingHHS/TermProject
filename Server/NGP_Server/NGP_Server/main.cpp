@@ -205,6 +205,7 @@ void UploadMap()
 	// 0: Nothing,      D: wall
 	// Z: Red Jump,     Y: Green Jump,     X: Blue Jump,     W: Yellow Jump  V: Purple Jump		U: GB Jump
 	// !: Red Gate		@: Green Gate,     #: Blue Gate,	 $: Yellow Gate  %: Purple Gate		^: GB Gate
+	// A: Gun
 }
 
 DWORD WINAPI ProcessPacket(LPVOID socket)
@@ -390,7 +391,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			break;
 		}
 		}
-	}
 	closesocket(client_sock);
 	return 0;
 }
