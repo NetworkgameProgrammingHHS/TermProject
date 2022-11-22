@@ -62,4 +62,8 @@ void CGun::SetBulletPos(int x, int y)
 	{
 		m_pBullet->SetPosition(sf::Vector2f((float)x, (float)y));
 	}
+	else if (m_bEnable)
+	{
+		m_sfSprite.setPosition(sf::Vector2f((float)x, (float)y));
+	}
 }
