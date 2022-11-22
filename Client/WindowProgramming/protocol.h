@@ -65,9 +65,9 @@ struct SC_RANK_PACKET {
 struct SC_LOGIN_INFO_PACKET {
 	char type;
 	short id;
-	char online_p1;
-	char online_p2;
-	char online_p3;
+	bool online_p1;
+	bool online_p2;
+	bool online_p3;
 };
 
 struct SC_REMOVE_PACKET {
@@ -141,8 +141,8 @@ constexpr char GUN_OBJECT = 3;
 constexpr char POTION_COLLIDE_ON = 1;
 constexpr char POTION_COLLIDE_OFF = 2;
 
-constexpr char CLIENT_ONLINE = 1;
-constexpr char CLIENT_OFFLINE = 2;
+constexpr bool CLIENT_ONLINE = true;
+constexpr bool CLIENT_OFFLINE = false;
 
 constexpr char KEY_PRESS = 1;
 constexpr char KEY_RELEASE = 2;

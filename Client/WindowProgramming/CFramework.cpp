@@ -80,7 +80,7 @@ void CFramework::Update()
 	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
 	++m_iFrame;
 	if (m_fTime - m_fBaseTime > 1000) {
-		cout << "FPS : " << m_iFrame << endl;
+		//cout << "FPS : " << m_iFrame << endl;
 		m_iFrame = static_cast<int>(m_iFrame * 1000.0f / (m_fTime - m_fBaseTime));
 		m_fBaseTime = m_fTime;
 		m_iFrame = 0;

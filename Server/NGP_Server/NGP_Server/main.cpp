@@ -37,12 +37,13 @@ DWORD WINAPI SendPacket(LPVOID)
 	packet->type = SC_WORLD_UPDATE;
 	while (true) {
 		// send packet per 1/30sec --> 33.3 ms
-
+		if (!g_InGame)
+			continue;
 		auto endTime = chrono::system_clock::now();
 		g_ElapsedTime += chrono::duration<float, deci>(endTime - startTime).count();
 		startTime = endTime;
 
-		if ((g_ElapsedTime - 33.3f) >= DBL_EPSILON) {
+		if (/*(g_ElapsedTime - 33.3f) >= DBL_EPSILON*/true) {
 			if (g_iCntClientNum > 0) {
 				if (g_Clients[0].GetOnline()) {
 					packet->color_p1 = static_cast<short>(g_Clients[0].GetColor	());
@@ -62,8 +63,8 @@ DWORD WINAPI SendPacket(LPVOID)
 					packet->color_p3 = static_cast<short>(g_Clients[2].GetColor());
 					packet->dir_p3 = g_Clients[2].GetDirection();
 					packet->stage_p3 = g_Clients[2].GetStageNum();
-					packet->x_p2 = g_Clients[2].GetPos().x;
-					packet->y_p2 = g_Clients[2].GetPos().y;
+					packet->x_p3 = g_Clients[2].GetPos().x;
+					packet->y_p3 = g_Clients[2].GetPos().y;
 				}
 				if (g_Bullet) {
 					packet->bullet_enable = BULLET_ON;
@@ -301,10 +302,16 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			scp->online_p2 = g_Clients[1].GetOnline();
 			scp->online_p3 = g_Clients[2].GetOnline();
 			len = sizeof(SC_LOGIN_INFO_PACKET);
-			send(sock_info->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
-			send(sock_info->client_sock, reinterpret_cast<char*>(scp), len, 0);
+			for (int i = 0; i < PLAYER_NUM; ++i) {
+				if (g_Clients[i].GetOnline()) {
+					cout << i + 1 << "번 Client Send" << endl;
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
+				}
+			}
 			delete scp;
 
+			cout << "Login" << endl;
 			break;
 		}
 		case CS_PLAYER_READY:
@@ -319,8 +326,8 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				scp->id = sock_info->id;
 				len = sizeof(SC_READY_PACKET);
 				for (int i = 0; i < 3; ++i) {
-					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
-					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(scp), len, 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
 			}
 			else if (packet->ready == READY_OFF) {
@@ -332,8 +339,8 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				scp->id = sock_info->id;
 				len = sizeof(SC_READY_PACKET);
 				for (int i = 0; i < 3; ++i) {
-					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(&len), sizeof(len), 0);
-					send(g_Clients[i].GetSockInfo()->client_sock, reinterpret_cast<char*>(scp), len, 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
 				delete scp;
 			}
@@ -428,17 +435,17 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				}
 				delete packet;
 			}
-				break;
+			break;
 			}
-			default:
-				break;
-			}
+		default:
 			break;
 		}
+		break;
 		}
 	closesocket(client_sock);
 	return 0;
 }
+
 
 
 // 소켓 함수 오류 출력

@@ -58,17 +58,17 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		if (packet->online_p1 == CLIENT_ONLINE)
 		{
 			// 플레이어 1 클라이언트 화면에 로그인 하였다고 표시, 렌더
-			players[0]->SetOnlie(true);
+			players[0]->SetOnline(true);
 		}
 		if (packet->online_p2 == CLIENT_ONLINE)
 		{
 			// 플레이어 2 클라이언트 화면에 로그인 하였다고 표시, 렌더
-			players[1]->SetOnlie(true);
+			players[1]->SetOnline(true);
 		}
 		if (packet->online_p3 == CLIENT_ONLINE)
 		{
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
-			players[2]->SetOnlie(true);
+			players[2]->SetOnline(true);
 		}
 		std::cout << packet->id << "접속" << std::endl;
 		scene->SetPlayerIndex(packet->id);		
@@ -123,7 +123,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	case SC_REMOVE: {
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
 		std::cout << packet->id << "로그아웃" << std::endl;
-		scene->Logout((int)packet->id);
+		//scene->Logout((int)packet->id);
 		
 		break;
 	}

@@ -194,12 +194,14 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		if (m_iDir > -1) {
 			input = true;
 			dir = KEY_DIR_LEFT;
+			m_iDir -= 1;
 		}
 		break;
 	case sf::Keyboard::Right:
 		if (m_iDir < 1) {
 			input = true;
 			dir = KEY_DIR_RIGHT;
+			m_iDir += 1;
 		}
 		break;
 	case sf::Keyboard::Space:
@@ -239,6 +241,8 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		packet->key = dir;
 		packet->state = KEY_PRESS;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_INPUT_PACKET));
+		cout << "Å° ´©¸§" << endl;
+		cout << "Dir : " << m_iDir << endl;
 	}
 	else if (input && dir == NULL) {
 		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
@@ -255,17 +259,17 @@ void CPlayer::KeyBoardRelease(const sf::Keyboard::Key& key)
 
 	switch (key) {
 	case sf::Keyboard::Left:
-		if (m_iDir < 1) {
+		if (m_iDir == -1) {
 			input = true;
 			dir = KEY_DIR_LEFT;
-			m_iDir += 1;
+			m_iDir = 0;
 		}
 		break;
 	case sf::Keyboard::Right:
-		if (m_iDir > -1) {
+		if (m_iDir == 1) {
 			input = true;
 			dir = KEY_DIR_RIGHT;
-			m_iDir -= 1;
+			m_iDir = 0;
 		}
 		break;
 	default:
@@ -277,5 +281,7 @@ void CPlayer::KeyBoardRelease(const sf::Keyboard::Key& key)
 		packet->key = dir;
 		packet->state = KEY_RELEASE;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_INPUT_PACKET));
+		cout << "Å° ¶À" << endl;
+		cout << "Dir : " << m_iDir << endl;
 	}
 }

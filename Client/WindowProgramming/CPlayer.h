@@ -51,7 +51,7 @@ public:
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 	void SetDir(const int dir) { m_iDir = dir; }
-	void SetOnlie(const bool online) { m_bOnline = online; }
+	void SetOnline(const bool online) { m_bOnline = online; }
 private:
 	void Animation(const float ElapsedTime);
 
