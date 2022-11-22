@@ -210,6 +210,9 @@ int main()
 			for (int i = 0; i < PLAYER_NUM; ++i) {
 				g_Clients[i].SetPos({ g_Clients[i].GetPos().x + PLAYER_SPEED * g_Clients[i].GetDirection() * ElapsedTime, g_Clients[i].GetPos().y });
 			}
+
+			for (int i = 0; i < PLAYER_NUM; ++i) if(g_TileMap[g_iWhichStage])g_TileMap[g_Clients[i].GetStageNum()]->Collide_Wall(&g_Clients[i]);
+
 			StartT = endTime;
 		}
 		else {
@@ -442,8 +445,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		}
 		break;
 		}
-	closesocket(client_sock);
-	return 0;
+		closesocket(client_sock);
+		return 0;
+	}
 }
 
 

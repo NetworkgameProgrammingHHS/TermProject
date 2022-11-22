@@ -30,12 +30,12 @@ public:
 	void Logout(int index);
 
 protected:
-	void Collide_Wall();
+	//void Collide_Wall();
 	void Collide_OBJ();
 	void Collide_Potion();
-	void Collide_Gate();
+	//void Collide_Gate();
 	void Collide_Turret();
-	void Collide_Jump();
+	//void Collide_Jump();
 	void Collide_Spoid();
 
 	virtual void Reset();

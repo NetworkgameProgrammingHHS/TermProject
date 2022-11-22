@@ -1,4 +1,5 @@
 #pragma once
+class Player;
 
 class TileMap
 {
@@ -11,6 +12,10 @@ public:
 
 	int m_Tiles[TILE_NUM_W][TILE_NUM_H] = {0, };
 	void CreateGun();
+
+	void Collide_Wall(Player* in);
+
+	multimap<TILE_TYPE, Vec2> m_mmObjPos;
 
 private:
 	int m_PotionCnt = 0;

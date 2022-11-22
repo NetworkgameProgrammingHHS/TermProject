@@ -56,7 +56,7 @@ void CScene::Logout(int index)
 
 }
 
-void CScene::Collide_Wall()
+/*void CScene::Collide_Wall()
 {
 	if (m_pTileMap) {
 		for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
@@ -90,15 +90,15 @@ void CScene::Collide_Wall()
 			m_ppPlayers[m_nPlayerIndex]->SetFall(true);
 		}
 	}
-}
+}*/
 
 void CScene::Collide_OBJ()
 {
-	Collide_Wall();
+	//Collide_Wall();
 	Collide_Potion();
-	Collide_Gate();
+	//Collide_Gate();
 	Collide_Turret();
-	Collide_Jump();
+	//Collide_Jump();
 	Collide_Spoid();
 }
 
@@ -173,7 +173,7 @@ void CScene::Collide_Potion()
 	}
 }
 
-void CScene::Collide_Gate()
+/*void CScene::Collide_Gate()
 {
 	// Red Gate
 	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_G)->second) {
@@ -222,7 +222,7 @@ void CScene::Collide_Gate()
 			break;
 		}
 	}
-}
+}*/
 
 void CScene::Collide_Turret()
 {
@@ -389,7 +389,7 @@ void CScene::Collide_Turret()
 	}
 }
 
-void CScene::Collide_Jump()
+/*void CScene::Collide_Jump()
 {
 	//Red Jump
 	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_J)->second) {
@@ -440,7 +440,7 @@ void CScene::Collide_Jump()
 	}
 
 	m_ppPlayers[m_nPlayerIndex]->SetSuperJump(false);
-}
+}*/
 
 void CScene::Collide_Spoid() {
 	for (auto& spoid : m_pTileMap->m_umTiles.find(TILE_TYPE::SPOID)->second) {
