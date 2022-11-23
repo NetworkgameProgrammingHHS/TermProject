@@ -21,10 +21,10 @@ public:
 
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
 	const bool GetNext() const { return m_bNext; }
-	const int GetPlayerIndex() const { return m_nPlayerIndex; }
+	//const int GetPlayerIndex() const { return m_pNetworkMgr->GetPlayerIndex(); }
 
 	void SetNext(bool next) { m_bNext = next; }
-	void SetPlayerIndex(int index) { m_nPlayerIndex = index; }
+	//void SetPlayerIndex(int index) { m_pNetworkMgr->GetPlayerIndex() = index; }
 
 	void SetGunState(int enable, int bulletx, int bullety);
 	void Logout(int index);
@@ -54,6 +54,6 @@ protected:
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
 	bool m_bNext = false;	// 다음 스테이지 확인
 
-	int m_nPlayerIndex = 0;
+	//int m_pNetworkMgr->GetPlayerIndex() = 0;
 };
 

@@ -8,6 +8,8 @@
 
 CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM>  players)
 {
+	m_pNetworkMgr = networkmgr;
+
 	if(!m_sfTexture.loadFromFile("Resource\\BackGround\\Information_Room.png"))
 		exit(1);
 	m_sfBackground.setTexture(m_sfTexture);
@@ -17,7 +19,12 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	m_pTileMap->Initialize();
 
 	m_ppPlayers = players;
-	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+	while (m_pNetworkMgr->GetPlayerIndex() == -1) {
+		cout << "´ë±â" << endl;
+		m_pNetworkMgr->SetPlayerIndex(2);
+		//Sleep(1000);
+	}
+	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE)});
 
 	for (int i = 0; i < PLAYERNUM; ++i)
 	{
@@ -27,7 +34,7 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 		}
 	}
 
-	m_pNetworkMgr = networkmgr;
+	
 	m_eCurScene = SCENE_NUM::STAGE1;
 }
 
@@ -37,8 +44,8 @@ CStage1::~CStage1()
 
 void CStage1::Next_Stage()
 {
-	if (m_ppPlayers[m_nPlayerIndex]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_nPlayerIndex]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
-		if (m_pTileMap->GetPotionNum() == 0 && m_ppPlayers[m_nPlayerIndex]->GetColor() == PLAYER_COLOR::NORMAL) {
+	if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+		if (m_pTileMap->GetPotionNum() == 0 && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() == PLAYER_COLOR::NORMAL) {
 			m_bNext = true;
 		}
 		else {
@@ -51,8 +58,8 @@ void CStage1::Reset()
 {
 	m_pTileMap->Reset();
 	m_pTileMap->Initialize();
-	m_ppPlayers[m_nPlayerIndex]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-	m_ppPlayers[m_nPlayerIndex]->Reset();
+	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->Reset();
 
 	//Send Reset Packet to Server
 	CS_PLAYER_RESET_PACKET* packet = new CS_PLAYER_RESET_PACKET;
@@ -64,7 +71,7 @@ void CStage1::Reset()
 
 void CStage1::Update(const float ElapsedTime)
 {	
-	m_ppPlayers[m_nPlayerIndex]->Update(ElapsedTime);
+	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->Update(ElapsedTime);
 	for (int i = 0; i < PLAYERNUM; ++i) 
 	{
 		if(m_ppPlayers[i])m_ppPlayers[i]->Update(ElapsedTime);

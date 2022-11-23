@@ -22,7 +22,7 @@ void CNetworkMgr::InitializeSocket()
 	m_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
-	
+
 	memset(&m_serveraddr, 0, sizeof(m_serveraddr));
 	m_serveraddr.sin_family = AF_INET;
 	inet_pton(AF_INET, "127.0.0.1", &m_serveraddr.sin_addr);
@@ -53,6 +53,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 
 	switch (buf[0]) {
 	case SC_LOGIN_INFO: {
+		cout << "SC_LOGIN_INFO" << endl;
 		SC_LOGIN_INFO_PACKET* packet = reinterpret_cast<SC_LOGIN_INFO_PACKET*>(buf);
 		// 로그인 이후 게임 대기 방에서 플레이어가 들어온 순서대로 캐릭터를 렌더한다.
 		if (packet->online_p1 == CLIENT_ONLINE)
@@ -71,25 +72,31 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			players[2]->SetOnline(true);
 		}
 		std::cout << packet->id << "접속" << std::endl;
-		scene->SetPlayerIndex(packet->id);		
+
+		EnterCriticalSection(&g_CS);
+		if(m_nPlayerIndex == -1)
+			m_nPlayerIndex = packet->id;
+		LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SC_READY: {
+		cout << "SC_READY" << endl;
 		SC_READY_PACKET* packet = reinterpret_cast<SC_READY_PACKET*>(buf);
 		// 로그인 인포 패킷을 받아 로그인 한 플레이어의 순서에 따라 준비 상태를 출력한다.
-		if (packet->type == READY_OFF) { std::cout << "준비 안함" << std::endl; }
-		if (packet->type == READY_ON) { std::cout << "준비" << std::endl; }
+		if (packet->ready == READY_OFF) { std::cout << "준비 안함" << std::endl; }
+		if (packet->ready == READY_ON) { std::cout << "준비" << std::endl; }
 		break;
 	}
 	case SC_GAMESTART: {
+		cout << "SC_GAMESTART" << endl;
 		SC_GAMESTART_PACKET* packet = reinterpret_cast<SC_GAMESTART_PACKET*>(buf);
 		scene->SetNext(true);
 		break;
 	}
 	case SC_WORLD_UPDATE: {
-		EnterCriticalSection(&g_CS);
+		//EnterCriticalSection(&g_CS);
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
-		int curPlayerIndex = scene->GetPlayerIndex();
+		//int curPlayerIndex = m_nPlayerIndex;
 		//cout << "World Update Packet : " << curPlayerIndex << endl;
 
 
@@ -112,15 +119,17 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		}
 
 		scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
-		LeaveCriticalSection(&g_CS);
+		//LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SC_RANK: {
+		cout << "SC_RANK" << endl;
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
 		// Show Ranking Scene
 		break;
 	}
 	case SC_REMOVE: {
+		cout << "SC_REMOVE" << endl;
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
 		std::cout << packet->id << "로그아웃" << std::endl;
 		//scene->Logout((int)packet->id);

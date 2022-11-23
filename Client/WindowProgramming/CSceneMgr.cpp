@@ -32,7 +32,7 @@ void CSceneMgr::Initialize()
 	}
 
 	m_pScene = dynamic_pointer_cast<CScene>(make_shared<CTitle>(m_pNetworkMgr));
-
+	
 	m_eCurScene = SCENE_NUM::TITLE;
 }
 
@@ -55,25 +55,29 @@ void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 {
 	if (m_eCurScene == SCENE_NUM::TITLE)
 		m_pScene->KeyBoardInput(key);
-
-	m_ppPlayers[m_pScene->GetPlayerIndex()]->KeyBoardInput(key);
+	else {
+		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->KeyBoardInput(key);
+	}
 }
 
 void CSceneMgr::KeyBoardRelease(const sf::Keyboard::Key& key)
 {
-	m_ppPlayers[m_pScene->GetPlayerIndex()]->KeyBoardRelease(key);
+	if (m_eCurScene != SCENE_NUM::TITLE)
+		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->KeyBoardRelease(key);
 }
 
 void CSceneMgr::Next_Stage()
 {
 	switch (m_pScene->GetSceneNum()) {
-	case SCENE_NUM::TITLE:
+	case SCENE_NUM::TITLE: 
+	{
 		EnterCriticalSection(&g_CS);
 		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));
+		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));		
 		m_eCurScene = SCENE_NUM::STAGE1;
 		LeaveCriticalSection(&g_CS);
 		break;
+	}
 	case SCENE_NUM::STAGE1:
 		m_pScene.reset();
 		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pNetworkMgr, m_ppPlayers));

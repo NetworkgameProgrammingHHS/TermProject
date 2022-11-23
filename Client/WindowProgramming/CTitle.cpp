@@ -29,13 +29,24 @@ void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 	case sf::Keyboard::Escape:
 		exit(1);
 		break;
-	default:
+	case sf::Keyboard::R:
+	{
 		m_bNext = true;
+		CS_PLAYER_READY_PACKET* packet = new CS_PLAYER_READY_PACKET;
+		packet->ready = READY_ON;
+		packet->type = CS_PLAYER_READY;
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_READY_PACKET));
+		break;
+	}
+	
+	default:
+	{
 		CS_LOGIN_PACKET* packet = new CS_LOGIN_PACKET;
 		memcpy(packet->name, "test", sizeof("test"));
 		packet->type = CS_LOGIN;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_LOGIN_PACKET));
 		break;
+	}
 	}
 }
 

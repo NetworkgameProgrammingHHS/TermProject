@@ -54,6 +54,7 @@ struct CS_NEXT_STAGE_PACKET
 //Server to Client packet
 struct SC_READY_PACKET {
 	char type;
+	char ready;
 	short id;
 };
 

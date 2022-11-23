@@ -31,7 +31,7 @@ chrono::time_point<chrono::system_clock> startTime;
 
 // Packet Send Thread
 DWORD WINAPI SendPacket(LPVOID)
-{
+{	
 	SC_WORLD_UPDATE_PACKET* packet = new SC_WORLD_UPDATE_PACKET;
 	int update_len = sizeof(SC_WORLD_UPDATE_PACKET);
 	packet->type = SC_WORLD_UPDATE;
@@ -161,16 +161,38 @@ int main()
 		g_Clients[index].SetID(index);
 		g_Clients[index].SetOnline(true);
 		g_iCntClientNum++;
-		if (g_iCntClientNum > 2) 
-			g_InGame = true;
 
 		DWORD ThreadId;
 		hThread = CreateThread(NULL, 0, ProcessPacket, reinterpret_cast<LPVOID>(g_Clients[index].GetSockInfo()), 0, &ThreadId);
 
 		if (NULL == hThread) { closesocket(g_Clients[index].GetSocket()); }
 		else { CloseHandle(hThread); }
+
+		if (g_iCntClientNum > 2) {
+			break;
+			cout << "Ready" << endl;
+		}
 	}
-	
+	int cnt = 0;
+	while (true) {
+		for (int i = 0; i < 3; ++i) {
+			if (!g_Clients[i].GetReady())
+			{
+				cnt = 0;
+				break;
+			}
+			else
+				cnt++;
+		}
+		if (cnt == 3) {
+			g_InGame = true;
+			cout << g_Clients[0].GetOnline() << endl;
+			cout << g_Clients[1].GetOnline() << endl;
+			cout << g_Clients[2].GetOnline() << endl;
+			break;
+		}
+	}
+
 	auto endTime = chrono::system_clock::now();
 	auto StartT = endTime;
 	auto GunCoolTime = chrono::duration < float, deci>(0).count();
@@ -289,6 +311,8 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		else if (retval == 0)
 			break;
 
+		cout << g_Clients[0].GetPos().x << ", " << g_Clients[0].GetPos().y << endl;
+
 		switch (buf[0])
 		{
 		case CS_LOGIN://
@@ -308,7 +332,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			for (int i = 0; i < PLAYER_NUM; ++i) {
 				if (g_Clients[i].GetOnline()) {
 					cout << i + 1 << "번 Client Send" << endl;
-					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
 			}
@@ -325,11 +349,12 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 
 				// Send Ready packet to Clients
 				SC_READY_PACKET* scp = new SC_READY_PACKET;
-				scp->type = READY_ON;
+				scp->type = SC_READY;
+				scp->ready = READY_ON;
 				scp->id = sock_info->id;
 				len = sizeof(SC_READY_PACKET);
 				for (int i = 0; i < 3; ++i) {
-					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
 			}
@@ -338,11 +363,12 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 
 				// Send Ready packet to Clients
 				SC_READY_PACKET* scp = new SC_READY_PACKET;
-				scp->type = READY_OFF;
+				scp->type = SC_READY;
+				scp->ready = READY_OFF;
 				scp->id = sock_info->id;
 				len = sizeof(SC_READY_PACKET);
 				for (int i = 0; i < 3; ++i) {
-					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
 				delete scp;
@@ -354,6 +380,8 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		{
 			CS_INPUT_PACKET* packet = reinterpret_cast<CS_INPUT_PACKET*>(buf);
 			//input key
+			cout << g_Clients[0].GetPos().x << ", " << g_Clients[0].GetPos().y << endl;
+
 			if (packet->state == KEY_PRESS)
 			{
 				std::cout << sock_info->id << "-" << (int)packet->key << "키를 누름" << std::endl;
@@ -445,9 +473,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		}
 		break;
 		}
-		closesocket(client_sock);
-		return 0;
 	}
+	closesocket(client_sock);
+	return 0;
 }
 
 
