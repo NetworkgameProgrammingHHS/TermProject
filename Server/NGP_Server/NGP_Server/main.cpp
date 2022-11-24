@@ -40,27 +40,24 @@ DWORD WINAPI SendPacket(LPVOID)
 		if (!g_InGame)
 			continue;
 		auto endTime = chrono::system_clock::now();
-		g_ElapsedTime += chrono::duration<float, deci>(endTime - startTime).count();
+		g_ElapsedTime += chrono::duration<float, milli>(endTime - startTime).count();
 		startTime = endTime;
 
-		if (/*(g_ElapsedTime - 33.3f) >= DBL_EPSILON*/true) {
+		if ((g_ElapsedTime - 33.3f) >= DBL_EPSILON) {
 			if (g_iCntClientNum > 0) {
 				if (g_Clients[0].GetOnline()) {
-					packet->color_p1 = static_cast<short>(g_Clients[0].GetColor	());
 					packet->dir_p1 = g_Clients[0].GetDirection();
 					packet->stage_p1 = g_Clients[0].GetStageNum();
 					packet->x_p1 = g_Clients[0].GetPos().x;
 					packet->y_p1 = g_Clients[0].GetPos().y;
 				}
 				if (g_Clients[1].GetOnline()) {
-					packet->color_p2 = static_cast<short>(g_Clients[1].GetColor());
 					packet->dir_p2 = g_Clients[1].GetDirection();
 					packet->stage_p2 = g_Clients[1].GetStageNum();
 					packet->x_p2 = g_Clients[1].GetPos().x;
 					packet->y_p2 = g_Clients[1].GetPos().y;
 				}
-				if (g_Clients[2].GetOnline()) {
-					packet->color_p3 = static_cast<short>(g_Clients[2].GetColor());
+				if (g_Clients[2].GetOnline()) {					
 					packet->dir_p3 = g_Clients[2].GetDirection();
 					packet->stage_p3 = g_Clients[2].GetStageNum();
 					packet->x_p3 = g_Clients[2].GetPos().x;
@@ -114,6 +111,8 @@ int main()
 	SOCKET listen_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (listen_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
+	//int op = 1;
+	//setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&op), sizeof(op));
 
 	struct sockaddr_in serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
@@ -233,7 +232,9 @@ int main()
 				g_Clients[i].SetPos({ g_Clients[i].GetPos().x + PLAYER_SPEED * g_Clients[i].GetDirection() * ElapsedTime, g_Clients[i].GetPos().y });
 			}
 
-			for (int i = 0; i < PLAYER_NUM; ++i) if(g_TileMap[g_iWhichStage])g_TileMap[g_Clients[i].GetStageNum()]->Collide_Wall(&g_Clients[i]);
+			for (int i = 0; i < PLAYER_NUM; ++i) 
+				if(g_TileMap[g_Clients[i].GetStageNum()])
+					g_TileMap[g_Clients[i].GetStageNum()]->Collide_Wall(&g_Clients[i]);
 
 			StartT = endTime;
 		}
@@ -421,6 +422,20 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			CS_PLAYER_COLOR_PACKET* packet = reinterpret_cast<CS_PLAYER_COLOR_PACKET*>(buf);
 			//input color
 			g_Clients[sock_info->id].SetColor(static_cast<PLAYER_COLOR>(packet->color));
+			for (int i = 0; i < PLAYER_NUM; ++i) {
+				if (sock_info->id == i)
+					continue;
+				SC_COLOR_PACKET* scp = new SC_COLOR_PACKET;
+				scp->type = SC_COLOR;
+				scp->id = sock_info->id;
+				scp->color = packet->color;
+				len = sizeof(SC_COLOR_PACKET);
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
+
+				delete scp;
+			}
+
 			break;
 		}
 		case CS_PLAYER_RESET:

@@ -23,6 +23,9 @@ void CNetworkMgr::InitializeSocket()
 	if (m_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
 
+	//int op = 1;
+	//setsockopt(m_sock, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&op), sizeof(op));
+
 	memset(&m_serveraddr, 0, sizeof(m_serveraddr));
 	m_serveraddr.sin_family = AF_INET;
 	inet_pton(AF_INET, "127.0.0.1", &m_serveraddr.sin_addr);
@@ -97,22 +100,18 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		//EnterCriticalSection(&g_CS);
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
 		//int curPlayerIndex = m_nPlayerIndex;
-		//cout << "World Update Packet : " << curPlayerIndex << endl;
 
-
-		players[0]->SetColor((PLAYER_COLOR)packet->color_p1);
 		players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
 		if (packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) {
 			players[0]->SetDir((int)packet->dir_p1);
 		}
-
-		players[1]->SetColor((PLAYER_COLOR)packet->color_p2);
+		
 		players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
 		if (packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) {
 			players[1]->SetDir((int)packet->dir_p2);
 		}
 
-		players[2]->SetColor((PLAYER_COLOR)packet->color_p3);
+
 		players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
 		if (packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) {
 			players[2]->SetDir((int)packet->dir_p3);
@@ -134,6 +133,12 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		std::cout << packet->id << "·Î±×¾Æ¿ô" << std::endl;
 		//scene->Logout((int)packet->id);
 		
+		break;
+	}
+	case SC_COLOR:
+	{
+		SC_COLOR_PACKET* packet = reinterpret_cast<SC_COLOR_PACKET*>(buf);
+		players[packet->id]->SetColor(static_cast<PLAYER_COLOR>(packet->color));
 		break;
 	}
 	}

@@ -61,6 +61,7 @@ private:
 	// Pos, Move
 	sf::Vector2f m_vec2fPrevPos = {};
 	int m_iDir = 0;
+	int m_nKeyDir = 0;
 	bool m_bFall = false;
 	bool m_bJump = false;
 	bool m_bSuperJump = false;

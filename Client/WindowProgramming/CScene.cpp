@@ -171,6 +171,7 @@ void CScene::Collide_Potion()
 		//packet->collide = false;
 		packet->color = static_cast<short>(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor());
 		packet->type = CS_COLOR;
+		//m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
 	}
 }
 
@@ -441,7 +442,7 @@ void CScene::Collide_Turret()
 	}
 
 	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(false);
-}
+}*/
 
 void CScene::Collide_Spoid() {
 	for (auto& spoid : m_pTileMap->m_umTiles.find(TILE_TYPE::SPOID)->second) {
