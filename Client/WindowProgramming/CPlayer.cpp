@@ -94,26 +94,7 @@ void CPlayer::Update(const float ElapsedTime)
 {
 	Animation(ElapsedTime);
 	
-	m_vec2fPrevPos = m_vec2fPos;
-
-	//m_vec2fPos.x += m_iDir * PLAYER_SPEED * ElapsedTime;
-
-	// Jump Process
-	/*if (m_bJump) {
-		if (m_iJumpCnt < m_iJumpChange) {
-			m_vec2fPos.y -= m_fJumpVelocity * ElapsedTime;
-		}
-		else {
-			m_vec2fPos.y += m_fJumpVelocity * ElapsedTime;
-		}
-		++m_iJumpCnt;
-	}
-	else
-		m_iJumpCnt = 0;
-
-	if (m_bFall) {
-		m_vec2fPos.y += JUMP_SPEED * ElapsedTime;
-	}*/
+	//m_vec2fPrevPos = m_vec2fPos;
 
 	m_sfSprite.setPosition(m_vec2fPos);
 	UpdateAABB();
@@ -209,14 +190,6 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 			m_bJump = true;
 			input = true;
 			dir = KEY_DIR_UP;
-			if (m_bSuperJump) {
-				m_fJumpVelocity = SUPERJUMP_SPEED;
-				m_iJumpChange = 30;
-			}
-			else {
-				m_fJumpVelocity = JUMP_SPEED;
-				m_iJumpChange = 20;
-			}
 		}
 		break;
 	case sf::Keyboard::Escape:

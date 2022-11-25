@@ -19,11 +19,9 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	m_pTileMap->Initialize();
 
 	m_ppPlayers = players;
-	while (m_pNetworkMgr->GetPlayerIndex() == -1) {
-		cout << "´ë±â" << endl;
-		m_pNetworkMgr->SetPlayerIndex(2);
-		//Sleep(1000);
-	}
+	//while (m_pNetworkMgr->GetPlayerIndex() == -1) {
+	//	m_pNetworkMgr->SetPlayerIndex(2);
+	//}
 	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE)});
 
 	for (int i = 0; i < PLAYERNUM; ++i)
@@ -71,7 +69,6 @@ void CStage1::Reset()
 
 void CStage1::Update(const float ElapsedTime)
 {	
-	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->Update(ElapsedTime);
 	for (int i = 0; i < PLAYERNUM; ++i) 
 	{
 		if(m_ppPlayers[i])m_ppPlayers[i]->Update(ElapsedTime);

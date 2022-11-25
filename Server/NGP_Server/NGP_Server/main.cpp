@@ -103,6 +103,7 @@ DWORD WINAPI SendPacket(LPVOID)
 int main()
 {
 	InitializeCriticalSection(&g_CS);
+	float MilliTime = 0.f;
 	float ElapsedTime = 0.f;
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
@@ -169,7 +170,6 @@ int main()
 
 		if (g_iCntClientNum > 2) {
 			break;
-			cout << "Ready" << endl;
 		}
 	}
 
@@ -186,21 +186,20 @@ int main()
 		}
 		if (cnt == 3) {
 			g_InGame = true;
-			cout << g_Clients[0].GetOnline() << endl;
-			cout << g_Clients[1].GetOnline() << endl;
-			cout << g_Clients[2].GetOnline() << endl;
+			cout << "InGame" << endl;
 			break;
 		}
 	}
 
-	auto endTime = chrono::system_clock::now();
+	auto endTime = chrono::steady_clock::now();
 	auto StartT = endTime;
-	auto GunCoolTime = chrono::duration < float, deci>(0).count();
+	auto GunCoolTime = chrono::duration_cast<chrono::milliseconds>(endTime - StartT).count();
 	CreateGun();
 	while (true) {
-		endTime = chrono::system_clock::now();
-		ElapsedTime = chrono::duration<float, deci>(endTime - StartT).count();
-		if (ElapsedTime >= 1.f / 60.f) {
+		endTime = chrono::steady_clock::now();
+		MilliTime = chrono::duration_cast<chrono::milliseconds>(endTime - StartT).count();
+		ElapsedTime = MilliTime / 1000.f;
+		if (ElapsedTime >= (1.f / 60.f)) {
 			//InGame
 			// Bullet, Move, Collide
 			if (g_Bullet) {
@@ -226,7 +225,7 @@ int main()
 			// Player, Move, Collides
 
 			for (int i = 0; i < PLAYER_NUM; ++i) {
-				g_Clients[i].SetPos({ g_Clients[i].GetPos().x + PLAYER_SPEED * g_Clients[i].GetDirection() * ElapsedTime, g_Clients[i].GetPos().y });
+				g_Clients[i].Update(ElapsedTime);
 			}
 
 			for (int i = 0; i < PLAYER_NUM; ++i) 
@@ -310,8 +309,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		else if (retval == 0)
 			break;
 
-		cout << g_Clients[0].GetPos().x << ", " << g_Clients[0].GetPos().y << endl;
-
 		switch (buf[0])
 		{
 		case CS_LOGIN://
@@ -323,14 +320,17 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			// Send Login Info packet to Client which logined
 			SC_LOGIN_INFO_PACKET* scp = new SC_LOGIN_INFO_PACKET;
 			scp->type = SC_LOGIN_INFO;
-			scp->id = sock_info->id;
+			//scp->id = sock_info->id;
 			scp->online_p1 = g_Clients[0].GetOnline();
 			scp->online_p2 = g_Clients[1].GetOnline();
 			scp->online_p3 = g_Clients[2].GetOnline();
 			len = sizeof(SC_LOGIN_INFO_PACKET);
 			for (int i = 0; i < PLAYER_NUM; ++i) {
-				if (g_Clients[i].GetOnline()) {
-					cout << i + 1 << "번 Client Send" << endl;
+				if (i == sock_info->id)
+					scp->id = sock_info->id;
+				else
+					scp->id = -1;
+				if (g_Clients[i].GetOnline()) {					
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
@@ -379,11 +379,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		{
 			CS_INPUT_PACKET* packet = reinterpret_cast<CS_INPUT_PACKET*>(buf);
 			//input key
-			cout << g_Clients[0].GetPos().x << ", " << g_Clients[0].GetPos().y << endl;
-
 			if (packet->state == KEY_PRESS)
 			{
-				std::cout << sock_info->id << "-" << (int)packet->key << "키를 누름" << std::endl;
+				//std::cout << sock_info->id << "-" << (int)packet->key << "키를 누름" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(true);
 				if (packet->type == KEY_FIREGUN)
 				{
@@ -400,6 +398,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 					case KEY_DIR_RIGHT:
 						g_Clients[sock_info->id].SetDirection(RIGHT);
 						break;
+					case KEY_DIR_UP:
+						g_Clients[sock_info->id].SetJump(true);
+						break;
 					default:
 						break;
 					}
@@ -407,7 +408,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			}
 			else if (packet->state == KEY_RELEASE)
 			{
-				std::cout << sock_info->id << "-" << (int)packet->key << "키를 뗌" << std::endl;
+				//std::cout << sock_info->id << "-" << (int)packet->key << "키를 뗌" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(false);
 				if (packet->type == KEY_FIREGUN);
 				else

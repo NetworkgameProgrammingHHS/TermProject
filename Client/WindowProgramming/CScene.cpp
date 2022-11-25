@@ -22,12 +22,6 @@ void CScene::KeyBoardInput(const sf::Keyboard::Key& key)
 
 void CScene::Update(const float ElapsedTime)
 {
-	for (int i = 0; i < PLAYERNUM; ++i)
-	{
-		if(m_ppPlayers[i]) 
-			if (m_ppPlayers[i]->GetOnline())
-				m_ppPlayers[i]->Update(ElapsedTime);
-	}
 	
 }
 
@@ -172,7 +166,7 @@ void CScene::Collide_Potion()
 		//packet->collide = false;
 		packet->color = static_cast<short>(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor());
 		packet->type = CS_COLOR;
-		//m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
 	}
 }
 
