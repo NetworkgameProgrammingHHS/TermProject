@@ -5,6 +5,7 @@ CGun::CGun()
 {
 	m_sfTexture.loadFromFile("Resource\\Object\\Gun.png");
 	m_sfSprite.setTexture(m_sfTexture);
+	m_pBullet = new CBullet;
 }
 
 CGun::~CGun()
@@ -36,6 +37,7 @@ void CGun::SetEnable(int enable)
 	case BULLET_OFF:
 	{
 		m_pBullet->SetEnable(false);
+		m_bEnable = false;
 	}
 		break;
 

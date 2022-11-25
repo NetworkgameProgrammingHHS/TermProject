@@ -17,6 +17,7 @@ bool g_InGame = false;
 
 bool g_bGun = false;
 int g_iWhichStage = 0;
+char g_chGStagePacket;
 CRITICAL_SECTION g_CS;
 
 void UploadMap();
@@ -75,10 +76,9 @@ DWORD WINAPI SendPacket(LPVOID)
 					{
 						packet->bullet_enable = GUN_OBJECT;
 						packet->dir_bullet = 0;
-						packet->stage_bullet = g_iWhichStage;
+						packet->stage_bullet = (char)g_iWhichStage;
 						packet->x_bullet = g_TileMap[g_iWhichStage].get()->GetGunPos().x;
 						packet->y_bullet = g_TileMap[g_iWhichStage].get()->GetGunPos().y;
-						g_bGun = false;
 					}
 					else
 						packet->bullet_enable = BULLET_OFF;
@@ -111,8 +111,7 @@ int main()
 	SOCKET listen_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (listen_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
-	//int op = 1;
-	//setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&op), sizeof(op));
+
 
 	struct sockaddr_in serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
@@ -138,6 +137,7 @@ int main()
 	else { CloseHandle(hThread); }
 
 	int index = 0;
+	UploadMap();
 	while (!g_InGame) {
 		if (g_iCntClientNum > 3)
 			continue;
@@ -172,6 +172,7 @@ int main()
 			cout << "Ready" << endl;
 		}
 	}
+
 	int cnt = 0;
 	while (true) {
 		for (int i = 0; i < 3; ++i) {
@@ -195,6 +196,7 @@ int main()
 	auto endTime = chrono::system_clock::now();
 	auto StartT = endTime;
 	auto GunCoolTime = chrono::duration < float, deci>(0).count();
+	CreateGun();
 	while (true) {
 		endTime = chrono::system_clock::now();
 		ElapsedTime = chrono::duration<float, deci>(endTime - StartT).count();
@@ -212,19 +214,14 @@ int main()
 			}
 
 			// Gun CoolTime
-			if (g_bGun)
+			GunCoolTime += ElapsedTime;
+			if (GunCoolTime >= 300.f)
 			{
-				GunCoolTime += ElapsedTime;
-				if (GunCoolTime >= 30.f)
-				{
-					GunCoolTime = 0.f;
-					CreateGun();
-				}
-			}
-			else
-			{
+				//into zero, collision zero
 				GunCoolTime = 0.f;
+				CreateGun();
 			}
+
 
 			// Player, Move, Collides
 
@@ -254,11 +251,11 @@ int main()
 
 void UploadMap()
 {
-	g_TileMap[0] = make_unique<TileMap>("ServerFile\\Stage1.txt");
-	g_TileMap[1] = make_unique<TileMap>("ServerFile\\Stage2.txt");
-	g_TileMap[2] = make_unique<TileMap>("ServerFile\\Stage3.txt");
-	g_TileMap[3] = make_unique<TileMap>("ServerFile\\Stage4.txt");
-	g_TileMap[4] = make_unique<TileMap>("ServerFile\\Stage5.txt");
+	g_TileMap[1] = make_unique<TileMap>("Server_File\\Stage2.txt");
+	g_TileMap[2] = make_unique<TileMap>("Server_File\\Stage3.txt");
+	g_TileMap[3] = make_unique<TileMap>("Server_File\\Stage4.txt");
+	g_TileMap[0] = make_unique<TileMap>("Server_File\\Stage1.txt");
+	g_TileMap[4] = make_unique<TileMap>("Server_File\\Stage5.txt");
 	// 0: Nothing,      D: wall
 	// Z: Red Jump,     Y: Green Jump,     X: Blue Jump,     W: Yellow Jump  V: Purple Jump		U: GB Jump
 	// !: Red Gate		@: Green Gate,     #: Blue Gate,	 $: Yellow Gate  %: Purple Gate		^: GB Gate
@@ -274,7 +271,8 @@ void CreateGun()
 	}
 	g_iWhichStage /= PLAYER_NUM;
 	g_iWhichStage -= 1;
-	g_TileMap[g_iWhichStage].get()->CreateGun();
+	cout << "CreatGun" << endl;
+	g_TileMap[g_iWhichStage]->CreateGun();
 	g_bGun = true;
 	//After CreateGun, SendPacket
 
@@ -391,7 +389,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				{
 					if (g_Clients[sock_info->id].GetGun())
 					{
-						//creat gun and shooting bullet
+						//shooting bullet
 					}
 				}
 				else {

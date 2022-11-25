@@ -9,6 +9,7 @@
 
 CScene::CScene()
 {
+	m_pGun = make_unique<CGun>();
 }
 
 CScene::~CScene()

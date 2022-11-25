@@ -34,17 +34,16 @@ void TileMap::CreateGun()
 	std::default_random_engine dre(rd());
 	std::uniform_int_distribution<int> uid(0, TILE_NUM_W * TILE_NUM_H); //625
 	int iRand = uid(dre);
-	while (m_Tiles[iRand / TILE_NUM_W][iRand % TILE_NUM_W] == 'S')
+	while (m_Tiles[iRand / TILE_NUM_W][iRand % TILE_NUM_W] != 'S')
 	{
 		iRand = uid(dre);
 	}
-	m_GunPos.x = iRand / TILE_NUM_W;
-	m_GunPos.y = iRand % TILE_NUM_W;
+	m_GunPos.x = iRand / TILE_NUM_W * TILE_SIZE;
+	m_GunPos.y = iRand % TILE_NUM_W * TILE_SIZE;
+	cout << iRand / TILE_NUM_W << endl;
+	cout << iRand % TILE_NUM_W << endl;
 	//Is it need?
-	m_Tiles[(int)m_GunPos.x][(int)m_GunPos.y] == 'A';
-	
-
-
+	m_Tiles[iRand / TILE_NUM_W][iRand % TILE_NUM_W] = 'A';
 
 }
 

@@ -17,7 +17,7 @@ public:
 	const int GetDir() const { return m_Dir; }
 
 private:
-	bool		m_bEnable;
+	bool		m_bEnable = false;
 	int			m_Dir;
 };
 

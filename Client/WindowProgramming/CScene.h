@@ -18,6 +18,7 @@ public:
 	virtual void Update(const float ElpasedTime);
 	virtual void Render(sf::RenderWindow& RW);
 	virtual void Next_Stage();
+	
 
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
 	const bool GetNext() const { return m_bNext; }
