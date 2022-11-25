@@ -23,9 +23,6 @@ void CNetworkMgr::InitializeSocket()
 	if (m_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
 
-	//int op = 1;
-	//setsockopt(m_sock, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&op), sizeof(op));
-
 	memset(&m_serveraddr, 0, sizeof(m_serveraddr));
 	m_serveraddr.sin_family = AF_INET;
 	inet_pton(AF_INET, "127.0.0.1", &m_serveraddr.sin_addr);
@@ -52,6 +49,8 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	char buf[BUF_SIZE];
 
 	recv(m_sock, reinterpret_cast<char*>(&len), sizeof(int), MSG_WAITALL);
+	if (len > BUF_SIZE)
+		len = BUF_SIZE;
 	recv(m_sock, buf, len, MSG_WAITALL);
 
 	switch (buf[0]) {
@@ -74,11 +73,12 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[2]->SetOnline(true);
 		}
-		std::cout << packet->id << "접속" << std::endl;
 
 		EnterCriticalSection(&g_CS);
-		if(m_nPlayerIndex == -1)
+		if (m_nPlayerIndex == -1 && packet->id != -1) {
+			std::cout << packet->id << "접속" << std::endl;
 			m_nPlayerIndex = packet->id;
+		}
 		LeaveCriticalSection(&g_CS);
 		break;
 	}

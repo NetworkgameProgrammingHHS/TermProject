@@ -25,7 +25,8 @@ public:
 	SOCK_INFO* GetSockInfo() const { return m_SockInfo; }
 	SOCKET GetSocket() const { return m_SockInfo->client_sock; }
 	const int GetID() const { return m_SockInfo->id; }
-
+	const bool GetJump() const { return m_Jump; }
+	const bool GetSuperJump() const { return m_SuperJump; }
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
 	void SetVelocity(const Vec2& velocity) { m_Velocity = velocity; }
@@ -39,6 +40,8 @@ public:
 	void SetKeyState(const bool keyState) { m_bKeyState = keyState; }
 	void SetSocket(const SOCKET& sock) { m_SockInfo->client_sock = sock; }
 	void SetID(const int id) { m_SockInfo->id = id; }
+	void SetJump(const bool jump) { m_Jump = jump; }
+	void SetSuperJump(const bool Sjump) { m_SuperJump = Sjump; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);
@@ -56,5 +59,11 @@ private:
 	bool m_bReady;
 	bool m_bKeyState; // true = ket_press
 	int  m_iStageNum;
+
+	bool m_Jump;
+	bool m_SuperJump;
+	int m_JumpCnt;
+	int m_JumpChange; //NormalJump 10, SuperJump 30
+	bool m_Fall;
 };
 
