@@ -230,7 +230,7 @@ int main()
 
 			for (int i = 0; i < PLAYER_NUM; ++i) 
 				if(g_TileMap[g_Clients[i].GetStageNum()])
-					g_TileMap[g_Clients[i].GetStageNum()]->Collide_Wall(&g_Clients[i]);
+					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Wall(&g_Clients[i]);
 
 			StartT = endTime;
 		}
@@ -399,7 +399,11 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 						g_Clients[sock_info->id].SetDirection(RIGHT);
 						break;
 					case KEY_DIR_UP:
-						g_Clients[sock_info->id].SetJump(true);
+						if (!g_Clients[sock_info->id].GetJump())
+						{
+							g_Clients[sock_info->id].SetJumpCount(0);
+							g_Clients[sock_info->id].SetJump(true);
+						}
 						break;
 					default:
 						break;

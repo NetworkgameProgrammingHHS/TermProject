@@ -41,7 +41,9 @@ public:
 	void SetSocket(const SOCKET& sock) { m_SockInfo->client_sock = sock; }
 	void SetID(const int id) { m_SockInfo->id = id; }
 	void SetJump(const bool jump) { m_Jump = jump; }
+	void SetFall(const bool fall) { m_Fall = fall; }
 	void SetSuperJump(const bool Sjump) { m_SuperJump = Sjump; }
+	void SetJumpCount(const int jumpcnt) { m_JumpCnt = jumpcnt; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);

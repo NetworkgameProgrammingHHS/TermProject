@@ -187,7 +187,7 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		break;
 	case sf::Keyboard::Space:
 		if (!m_bJump) {
-			m_bJump = true;
+			//m_bJump = true;
 			input = true;
 			dir = KEY_DIR_UP;
 		}

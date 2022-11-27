@@ -15,7 +15,7 @@ public:
 
 	void Collide_Wall(Player* in);
 
-	multimap<TILE_TYPE, Vec2> m_mmObjPos;
+	multimap<int, Vec2> m_mmObjPos;
 
 private:
 	int m_PotionCnt = 0;

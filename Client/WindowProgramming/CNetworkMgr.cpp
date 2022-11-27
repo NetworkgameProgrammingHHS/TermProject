@@ -49,6 +49,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	char buf[BUF_SIZE];
 
 	recv(m_sock, reinterpret_cast<char*>(&len), sizeof(int), MSG_WAITALL);
+	cout << "받아온 패킷의 크기 - " << len << endl;
 	if (len > BUF_SIZE)
 		len = BUF_SIZE;
 	recv(m_sock, buf, len, MSG_WAITALL);

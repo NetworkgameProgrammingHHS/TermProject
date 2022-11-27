@@ -12,14 +12,14 @@ TileMap::TileMap(string filename)
 	while (!in.eof()) {
 		in >> tile;
 		if (cnt < TILE_NUM_W * TILE_NUM_H) {
-			m_Tiles[cnt % TILE_NUM_W][cnt / TILE_NUM_W] = tile;
+			m_Tiles[cnt / TILE_NUM_W][cnt % TILE_NUM_W] = tile;
 			++cnt;
 		}
 	}
 
 	for (int i = 0; i < TILE_NUM_H; ++i){
 		for (int j = 0; j < TILE_NUM_W; ++j){
-			m_mmObjPos.emplace(static_cast<TILE_TYPE>(m_Tiles[i][j]), Vec2{ (float)j * TILE_SIZE, (float)i * TILE_SIZE });
+			m_mmObjPos.emplace(static_cast<int>(m_Tiles[i][j]), Vec2{ (float)j * TILE_SIZE, (float)i * TILE_SIZE });
 		}
 	}
 }
@@ -49,27 +49,43 @@ void TileMap::CreateGun()
 
 void TileMap::Collide_Wall(Player* in)
 {
-	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4, in->GetPos().y};
-	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f, in->GetPos().y + TILE_SIZE };
+	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3};
+	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE -3 };
 
-	auto range = m_mmObjPos.equal_range(TILE_TYPE::WALL);
+	bool isCollide = false;
+
+	auto range = m_mmObjPos.equal_range(static_cast<int>('D'));
 	for (auto i = range.first; i != range.second; ++i){
-		Vec2 wallLT = {i->second.x, i->second.y};
-		Vec2 wallRB = {i->second.x + TILE_SIZE, i->second.y + TILE_SIZE};
+		Vec2 wallLT = {i->second.x - 1, i->second.y};
+		Vec2 wallRB = {i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE};
 
 		if (inLT.x > wallRB.x) continue;
 		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y < wallRB.y) continue;
-		else if (inRB.y > wallLT.y) continue;
+		else if (inLT.y > wallRB.y) continue;
+		else if (inRB.y < wallLT.y) continue;
 		else{
 			Vec2 figure = {min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (inLT.x > wallLT.x) updatePos.x += figure.x;
-			else updatePos.x -= figure.x;
-			if (inLT.y > wallLT.y) updatePos.y -= figure.y;
-			else updatePos.y += figure.y;
+			if (figure.x > figure.y) {
+				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				else
+				{
+					updatePos.y -= figure.y + 3.1;
+					in->SetJump(false);
+				}
+			}
+			else {
+				if (inLT.x > wallLT.x) updatePos.x += figure.x;
+				else updatePos.x -= figure.x;
+			}
 			in->SetPos(updatePos);
+			isCollide = true;
 		}
+	}
+
+	if (!isCollide)
+	{
+		in->SetJump(true);
 	}
 }
 
