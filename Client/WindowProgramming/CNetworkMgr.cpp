@@ -168,6 +168,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	{
 		SC_COLOR_PACKET* packet = reinterpret_cast<SC_COLOR_PACKET*>(buf);
 		players[packet->id]->SetColor(static_cast<PLAYER_COLOR>(packet->color));
+		scene->SetPlayerInfo(static_cast<PLAYER_COLOR>(packet->color), packet->id);
 		break;
 	}
 	}

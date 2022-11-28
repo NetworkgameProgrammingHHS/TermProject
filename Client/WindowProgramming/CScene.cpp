@@ -10,6 +10,37 @@
 CScene::CScene()
 {
 	m_pGun = make_unique<CGun>();
+
+	m_sfFont.loadFromFile("Resource\\Font\\cour.ttf");
+	m_sfPlayerColor[0].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 0, 32, 32)); // Normal
+	m_sfPlayerColor[1].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(32, 0, 32, 32)); // Red
+	m_sfPlayerColor[2].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 32, 32, 32)); // Green
+	m_sfPlayerColor[3].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(32, 32, 32, 32)); // Blue
+	m_sfPlayerColor[4].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 64, 32, 32)); // GB
+	m_sfPlayerColor[5].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(32, 64, 32, 32)); // Yellow
+	m_sfPlayerColor[6].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 96, 32, 32)); // Cyan
+
+
+	m_sfPlayerInfoText[0][0].setString("Player 1");
+	m_sfPlayerInfoText[1][0].setString("Player 2");
+	m_sfPlayerInfoText[2][0].setString("Player 3");
+	m_sfPlayerInfoText[0][1].setString("Stage 1");
+	m_sfPlayerInfoText[1][1].setString("Stage 1");
+	m_sfPlayerInfoText[2][1].setString("Stage 1");
+	for (int i = 0; i < 3; ++i) {
+		m_sfPlayerInfo[i].setTexture(m_sfPlayerColor[0]);
+		m_sfPlayerInfo[i].setScale(2, 2);
+		m_sfPlayerInfo[i].setPosition(WINDOW_WIDTH - (m_sfPlayerInfo[0].getScale().x * TILE_SIZE * (3 - i)), 0);
+
+		for (int j = 0; j < 2; ++j) {
+			m_sfPlayerInfoText[i][j].setOutlineThickness(1.0f);
+			m_sfPlayerInfoText[i][j].setCharacterSize(12);
+			m_sfPlayerInfoText[i][j].setFont(m_sfFont);
+			m_sfPlayerInfoText[i][j].setFillColor(sf::Color::White);
+			auto size = m_sfPlayerInfoText[i][j].getGlobalBounds();
+			m_sfPlayerInfoText[i][j].setPosition(WINDOW_WIDTH - (m_sfPlayerInfo[0].getScale().x * TILE_SIZE * (3 - i)) + 5, TILE_SIZE * 2 + j * 14 + 5 * (j + 1));
+		}
+	}
 }
 
 CScene::~CScene()
@@ -27,11 +58,18 @@ void CScene::Update(const float ElapsedTime)
 
 void CScene::Render(sf::RenderWindow& RW)
 {
-	for (int i = 0; i < PLAYERNUM; ++i)
-	{
-		if (m_ppPlayers[i])
-			if(m_ppPlayers[i]->GetOnline())
-				m_ppPlayers[i]->Render(RW);
+	for (int i = 0; i < 3; ++i) {
+		if (!m_sfPlayerInfo.empty()) {
+			RW.draw(m_sfPlayerInfo[i]);
+		}
+
+		for (int j = 0; j < 2; ++j) {
+			if (!m_sfPlayerInfoText.empty()) {
+				if (!m_sfPlayerInfoText[i].empty()) {
+					RW.draw(m_sfPlayerInfoText[i][j]);
+				}
+			}
+		}
 	}
 }
 
@@ -50,6 +88,59 @@ void CScene::Logout(int index)
 	m_ppPlayers[index]->SetPosition(sf::Vector2f(-1000.0f, -1000.0f));
 	
 
+}
+
+void CScene::SetPlayerInfo(const PLAYER_COLOR pc, const int index)
+{
+	switch (m_ppPlayers[index]->GetColor()) {
+	case PLAYER_COLOR::NORMAL:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[0]);
+		break;
+	case PLAYER_COLOR::RED:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[1]);
+		break;
+	case PLAYER_COLOR::GREEN:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[2]);
+		break;
+	case PLAYER_COLOR::BLUE:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[3]);
+		break;
+	case PLAYER_COLOR::GB:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[4]);
+		break;
+	case PLAYER_COLOR::YELLOW:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[5]);
+		break;
+	case PLAYER_COLOR::PURPLE:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[6]);
+		break;
+	default:
+		break;
+	}
+
+}
+
+void CScene::SetPlayerInfo(const SCENE_NUM sn, const int index)
+{
+	switch (m_ppPlayers[index]->GetStageNum()) {
+	case SCENE_NUM::STAGE1:
+		m_sfPlayerInfoText[index][1].setString("Stage 1");
+		break;
+	case SCENE_NUM::STAGE2:
+		m_sfPlayerInfoText[index][1].setString("Stage 2");
+		break;
+	case SCENE_NUM::STAGE3:
+		m_sfPlayerInfoText[index][1].setString("Stage 3");
+		break;
+	case SCENE_NUM::STAGE4:
+		m_sfPlayerInfoText[index][1].setString("Stage 4");
+		break;
+	case SCENE_NUM::STAGE5:
+		m_sfPlayerInfoText[index][1].setString("Stage 5");
+		break;
+	default:
+		break;
+	}
 }
 
 /*void CScene::Collide_Wall()
@@ -87,6 +178,10 @@ void CScene::Logout(int index)
 		}
 	}
 }*/
+
+void CScene::ShowPlayerInfo()
+{
+}
 
 void CScene::Collide_OBJ()
 {
@@ -167,6 +262,7 @@ void CScene::Collide_Potion()
 		packet->color = static_cast<short>(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor());
 		packet->type = CS_COLOR;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
+		SetPlayerInfo(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor(), m_pNetworkMgr->GetPlayerIndex());
 	}
 }
 

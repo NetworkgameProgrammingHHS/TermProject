@@ -31,7 +31,6 @@ void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 		break;
 	case sf::Keyboard::R:
 	{
-		m_bNext = true;
 		CS_PLAYER_READY_PACKET* packet = new CS_PLAYER_READY_PACKET;
 		packet->ready = READY_ON;
 		packet->type = CS_PLAYER_READY;

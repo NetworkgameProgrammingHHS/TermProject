@@ -1,6 +1,7 @@
 #pragma once
 #define SFML_STATIC 1
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -23,12 +24,14 @@ using namespace std;
 #pragma comment (lib, "lib/sfml-window-s-d.lib")
 #pragma comment (lib, "lib/sfml-system-s-d.lib")
 #pragma comment (lib, "lib/sfml-network-s-d.lib")
+#pragma comment (lib, "lib/freetype.lib")
 #else
 #pragma comment (lib, "lib/sfml-audio-s.lib")
 #pragma comment (lib, "lib/sfml-graphics-s.lib")
 #pragma comment (lib, "lib/sfml-window-s.lib")
 #pragma comment (lib, "lib/sfml-system-s.lib")
 #pragma comment (lib, "lib/sfml-network-s.lib")
+#pragma comment (lib, "lib/freetype.lib")
 #endif
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "winmm.lib")

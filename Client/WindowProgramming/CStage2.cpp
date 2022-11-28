@@ -70,7 +70,7 @@ void CStage2::Update(const float ElapsedTime)
 	}
 	if (m_pGun)m_pGun->Update(ElapsedTime);
 
-	CScene::Collide_OBJ();
+	CScene::Collide_OBJ();	
 
 	Next_Stage();
 }
@@ -91,4 +91,6 @@ void CStage2::Render(sf::RenderWindow& RW)
 	
 	// Gun, Bullet Render
 	if (m_pGun)m_pGun->Render(RW);
+
+	CScene::Render(RW);
 }

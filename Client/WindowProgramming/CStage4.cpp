@@ -90,4 +90,6 @@ void CStage4::Render(sf::RenderWindow& RW)
 
 	// Gun, Bullet Render
 	if (m_pGun)m_pGun->Render(RW);
+
+	CScene::Render(RW);
 }

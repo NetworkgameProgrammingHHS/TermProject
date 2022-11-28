@@ -39,6 +39,7 @@ public:
 	const bool GetGun() const { return m_bGun; }
 	const PLAYER_COLOR& GetSavedColor() const { return m_eSavedColor; }
 	const bool GetOnline() const { return m_bOnline; }
+	const SCENE_NUM GetStageNum() const { return m_eStageNum; }
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
 	void SetColor(const PLAYER_COLOR color) { m_eColor = color; m_sfSprite.setTexture(m_umTextures.find(color)->second); }
@@ -52,6 +53,8 @@ public:
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 	void SetDir(const int dir) { m_iDir = dir; }
 	void SetOnline(const bool online) { m_bOnline = online; }
+	void SetStage(const SCENE_NUM sn) { m_eStageNum = sn; }
+
 private:
 	void Animation(const float ElapsedTime);
 
@@ -77,6 +80,8 @@ private:
 	PLAYER_COLOR m_eColor = PLAYER_COLOR::NORMAL;
 	PLAYER_COLOR m_eSavedColor = PLAYER_COLOR::NORMAL;
 	unordered_map<PLAYER_COLOR, sf::Texture> m_umTextures = {};
+
+	SCENE_NUM m_eStageNum = SCENE_NUM::STAGE1;
 
 	sf::Rect<float> m_rtFallBB = {};
 

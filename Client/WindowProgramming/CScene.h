@@ -30,7 +30,11 @@ public:
 	void SetGunState(int enable, int bulletx, int bullety);
 	void Logout(int index);
 
+	void SetPlayerInfo(const PLAYER_COLOR pc, const int index);
+	void SetPlayerInfo(const SCENE_NUM sn, const int index);
+
 protected:
+	void ShowPlayerInfo();
 	//void Collide_Wall();
 	void Collide_OBJ();
 	void Collide_Potion();
@@ -51,6 +55,11 @@ protected:
 
 	sf::Texture m_sfTexture;
 	sf::Sprite m_sfBackground;
+
+	sf::Font m_sfFont;	
+	array<sf::Texture, 7> m_sfPlayerColor;
+	array<sf::Sprite, 3> m_sfPlayerInfo;
+	array<array<sf::Text, 2>, 3> m_sfPlayerInfoText;
 
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
 	bool m_bNext = false;	// 다음 스테이지 확인

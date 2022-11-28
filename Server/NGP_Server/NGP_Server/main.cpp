@@ -116,6 +116,8 @@ int main()
 	if (listen_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
 
+	int opt = 1;
+	setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(int));
 
 	struct sockaddr_in serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
@@ -189,6 +191,13 @@ int main()
 				cnt++;
 		}
 		if (cnt == 3) {
+			SC_GAMESTART_PACKET* packet = new SC_GAMESTART_PACKET;
+			packet->type = SC_GAMESTART;
+			int len = sizeof(SC_GAMESTART_PACKET);
+			for (int i = 0; i < 3; ++i) {
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+			}
 			g_InGame = true;
 			cout << "InGame" << endl;
 			break;
@@ -383,6 +392,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
 					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
 				}
+				delete scp;
 			}
 			else if (packet->ready == READY_OFF) {
 				g_Clients[sock_info->id].SetReady(false);
