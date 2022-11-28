@@ -204,6 +204,10 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 			SetColor(m_eSavedColor);
 		}
 		break;
+	case sf::Keyboard::C:
+		input = true;
+		dir = KEY_FIREGUN;
+		break;
 	default:
 		break;
 	}

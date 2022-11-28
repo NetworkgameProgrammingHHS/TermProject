@@ -8,7 +8,7 @@ int g_iCntClientNum = 0;
 array<Player, PLAYER_NUM> g_Clients;
 
 array<unique_ptr<TileMap>, STAGE_NUM> g_TileMap;
-unique_ptr<Bullet> g_Bullet;
+unique_ptr<Bullet> g_Bullet = make_unique<Bullet>();
 
 float g_ElapsedTime;
 
@@ -16,12 +16,15 @@ bool g_GameOver;
 bool g_InGame = false;
 
 bool g_bGun = false;
+bool g_bCollideGun = false;
 int g_iWhichStage = 0;
 char g_chGStagePacket;
 CRITICAL_SECTION g_CS;
 
 void UploadMap();
 void CreateGun();
+void Collide_Bullet(Player* in, Vec2 BulletPos);
+
 
 //Client Update Thread
 DWORD WINAPI ProcessPacket(LPVOID socket);
@@ -64,7 +67,7 @@ DWORD WINAPI SendPacket(LPVOID)
 					packet->x_p3 = g_Clients[2].GetPos().x;
 					packet->y_p3 = g_Clients[2].GetPos().y;
 				}
-				if (g_Bullet) {
+				if (g_Bullet->GetbShow()) {
 					packet->bullet_enable = BULLET_ON;
 					packet->dir_bullet = g_Bullet->GetDirection();
 					packet->stage_bullet = g_Bullet->GetStage();
@@ -160,6 +163,7 @@ int main()
 		//set client id
 		g_Clients[index].SetID(index);
 		g_Clients[index].SetOnline(true);
+		//g_Clients[2].SetGun(true);
 		g_iCntClientNum++;
 
 		DWORD ThreadId;
@@ -193,7 +197,7 @@ int main()
 
 	auto endTime = chrono::steady_clock::now();
 	auto StartT = endTime;
-	auto GunCoolTime = chrono::duration_cast<chrono::milliseconds>(endTime - StartT).count();
+	float GunCoolTime = chrono::duration_cast<chrono::milliseconds>(endTime - StartT).count();
 	CreateGun();
 	while (true) {
 		endTime = chrono::steady_clock::now();
@@ -202,19 +206,25 @@ int main()
 		if (ElapsedTime >= (1.f / 60.f)) {
 			//InGame
 			// Bullet, Move, Collide
-			if (g_Bullet) {
-				int dir = 0;
-				if (g_Bullet->GetDirection() == KEY_DIR_LEFT)
+			if (g_Bullet->GetbShow()) {
+				/*int dir = 0;
+				if (g_Bullet->GetDirection() == LEFT)
 					dir = -1;
-				else if (g_Bullet->GetDirection() == KEY_DIR_RIGHT)
+				else if (g_Bullet->GetDirection() == RIGHT)
 					dir = 1;
 
-				g_Bullet->SetPos({ g_Bullet->GetPos().x + dir * ElapsedTime, g_Bullet->GetPos().y });
+				g_Bullet->SetPos({ g_Bullet->GetPos().x + dir * ElapsedTime * 300.f, g_Bullet->GetPos().y });*/
+
+				g_Bullet->Update(ElapsedTime);
+				for (int i = 0; i < PLAYER_NUM; ++i)
+				{
+					Collide_Bullet(&g_Clients[i], g_Bullet->GetPos());
+				}
 			}
 
 			// Gun CoolTime
 			GunCoolTime += ElapsedTime;
-			if (GunCoolTime >= 300.f)
+			if (GunCoolTime >= 10.f)
 			{
 				//into zero, collision zero
 				GunCoolTime = 0.f;
@@ -229,8 +239,25 @@ int main()
 			}
 
 			for (int i = 0; i < PLAYER_NUM; ++i) 
-				if(g_TileMap[g_Clients[i].GetStageNum()])
+				if (g_TileMap[g_Clients[i].GetStageNum() - 1])
+				{
 					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Wall(&g_Clients[i]);
+					if (!g_Clients[i].GetGun())
+					{
+						g_Clients[i].SetGun(g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gun(&g_Clients[i]));
+					}
+					else
+					{
+						g_bGun = false;
+						g_bCollideGun = true;
+					}
+						
+				}
+					
+			if (g_bCollideGun)
+			{
+				GunCoolTime = 0.f;
+			}
 
 			StartT = endTime;
 		}
@@ -383,20 +410,28 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			{
 				//std::cout << sock_info->id << "-" << (int)packet->key << "키를 누름" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(true);
-				if (packet->type == KEY_FIREGUN)
+				if (packet->key == KEY_FIREGUN)
 				{
 					if (g_Clients[sock_info->id].GetGun())
 					{
 						//shooting bullet
+						g_Bullet->SetbShow(true);
+						g_Bullet->SetDirection(g_Clients[sock_info->id].GetSubDirection());
+						g_Bullet->SetStage(g_Clients[sock_info->id].GetStageNum());
+						Vec2 pos = g_Clients[sock_info->id].GetPos();
+						pos.x += g_Bullet->GetDirection() * TILE_SIZE * 1.0f;
+						g_Bullet->SetPos(pos);
 					}
 				}
 				else {
 					switch (packet->key) {
 					case KEY_DIR_LEFT:
 						g_Clients[sock_info->id].SetDirection(LEFT);
+						g_Clients[sock_info->id].SetSubDirection(LEFT);
 						break;
 					case KEY_DIR_RIGHT:
 						g_Clients[sock_info->id].SetDirection(RIGHT);
+						g_Clients[sock_info->id].SetSubDirection(RIGHT);
 						break;
 					case KEY_DIR_UP:
 						if (!g_Clients[sock_info->id].GetJump())
@@ -447,7 +482,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			if (packet->reset == RESET_ON)
 			{
 				//player go back to original position
-				//g_Clients[sock_info->id].SetPos(0);
+				g_Clients[sock_info->id].SetPos(Vec2{ TILE_SIZE, WINDOW_HEIGHT - 2 * TILE_SIZE });
 				//set original color
 				g_Clients[sock_info->id].SetColor(PLAYER_COLOR::NORMAL);
 				g_Clients[sock_info->id].SetDirection(0);
@@ -496,6 +531,33 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 	return 0;
 }
 
+void Collide_Bullet(Player* in, Vec2 BulletPos)
+{
+	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
+	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
+
+	bool bCollide = false;
+
+	Vec2 bulletLT = { BulletPos.x + TILE_SIZE / 4 + 3, BulletPos.y + TILE_SIZE / 4 + 3 };
+	Vec2 bulletRB = { BulletPos.x + TILE_SIZE * 0.75f - 3, BulletPos.y + TILE_SIZE * 0.75f - 3 };
+
+	if (inLT.x > bulletRB.x);
+	else if (inRB.x < bulletLT.x);
+	else if (inLT.y > bulletRB.y);
+	else if (inRB.y < bulletLT.y);
+	else {
+		g_Bullet->SetbShow(false);
+		g_bCollideGun = false;
+		in->SetPos(Vec2{ TILE_SIZE, WINDOW_HEIGHT - 2 * TILE_SIZE });
+		in->SetColor(PLAYER_COLOR::NORMAL);
+		in->SetDirection(0);
+		for (int i = 0; i < PLAYER_NUM; ++i)
+		{
+			g_Clients[i].SetGun(false);
+		}
+
+	}
+}
 
 
 // 소켓 함수 오류 출력

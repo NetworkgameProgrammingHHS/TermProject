@@ -38,13 +38,19 @@ void TileMap::CreateGun()
 	{
 		iRand = uid(dre);
 	}
-	m_GunPos.x = iRand / TILE_NUM_W * TILE_SIZE;
-	m_GunPos.y = iRand % TILE_NUM_W * TILE_SIZE;
-	cout << iRand / TILE_NUM_W << endl;
-	cout << iRand % TILE_NUM_W << endl;
+	int indexX = iRand / TILE_NUM_W;
+	int indexY = iRand % TILE_NUM_W;
+	// testing
+	//int indexX = 17;
+	//int indexY = 11;
+	m_GunPos.x = indexY * TILE_SIZE;
+	m_GunPos.y = indexX * TILE_SIZE;
+	//cout << iRand / TILE_NUM_W << endl;
+	//cout << iRand % TILE_NUM_W << endl;
 	//Is it need?
-	m_Tiles[iRand / TILE_NUM_W][iRand % TILE_NUM_W] = 'A';
 
+	m_Tiles[indexX][indexY] = 'A';
+	m_mmObjPos.emplace(static_cast<int>(m_Tiles[indexX][indexY]), Vec2{ (float)indexY * TILE_SIZE, (float)indexX * TILE_SIZE });
 }
 
 void TileMap::Collide_Wall(Player* in)
@@ -87,5 +93,40 @@ void TileMap::Collide_Wall(Player* in)
 	{
 		in->SetJump(true);
 	}
+}
+
+bool TileMap::Collide_Gun(Player* in)
+{
+	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
+	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
+
+	bool bCollide = false;
+
+	auto range = m_mmObjPos.equal_range((int)'A');
+	for (auto i = range.first; i != range.second; ++i) {
+		Vec2 wallLT = { i->second.x - 1, i->second.y };
+		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+
+		if (inLT.x > wallRB.x) continue;
+		else if (inRB.x < wallLT.x) continue;
+		else if (inLT.y > wallRB.y) continue;
+		else if (inRB.y < wallLT.y) continue;
+		else {
+			bCollide = true;
+			//for (auto it = range.first; it != range.second;)
+			//{
+			//	if (it->first == (int)'A')
+			//	{
+			//		it = m_mmObjPos.erase(it);
+			//		break;
+			//	}
+			//	else
+			//		++it;
+			//}
+			i = m_mmObjPos.erase(i);
+			break;
+		}
+	}
+	return bCollide;
 }
 

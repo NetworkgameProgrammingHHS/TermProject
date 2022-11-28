@@ -14,6 +14,7 @@ public:
 	void CreateGun();
 
 	void Collide_Wall(Player* in);
+	bool Collide_Gun(Player* in);
 
 	multimap<int, Vec2> m_mmObjPos;
 
