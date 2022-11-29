@@ -3,6 +3,7 @@
 #include "CScene.h"
 #include "CSceneMgr.h"
 #include "CNetworkMgr.h"
+#include "CTitle.h"
 
 CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
@@ -48,9 +49,37 @@ void CFramework::Process()
 			if (event.type == sf::Event::Closed)
 				m_sfWindow.close();
 			if (event.type == sf::Event::KeyPressed)
+			{
 				KeyBoardInput(event.key.code);
+				if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE &&
+					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getOutlineColor() == sf::Color::Blue)
+				{
+					if (event.text.unicode == 59)
+					{
+						if(titleID.size() > 0)
+							titleID.erase(titleID.size() - 1);
+					}
+
+				}
+			}		
 			if (event.type == sf::Event::KeyReleased)
 				KeyBoardRelease(event.key.code);
+			if (event.type == sf::Event::MouseButtonPressed)
+				MouseClick(event.mouseButton.button, m_sfWindow);
+			if (event.type == sf::Event::TextEntered)
+			{
+				if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE && 
+					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getOutlineColor() == sf::Color::Blue)
+				{
+					if (event.text.unicode < 128 && event.text.unicode != 8)
+					{
+						titleID += static_cast<char>(event.text.unicode);
+					}
+						
+				}
+				
+			}
+				
 		}
 		Update();
 
@@ -72,10 +101,19 @@ void CFramework::KeyBoardRelease(const sf::Keyboard::Key& key)
 	m_pSceneMgr->KeyBoardRelease(key);
 }
 
+void CFramework::MouseClick(const sf::Mouse::Button& btn, sf::RenderWindow& sfWindow)
+{
+	m_pSceneMgr->MouseClick(btn, sfWindow);
+}
+
 void CFramework::Update()
 {
 	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
 	m_pSceneMgr->Update(ElapsedTime);
+	if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE)
+	{
+		dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->SetPlayerID(titleID);
+	}
 	// FPS
 	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
 	++m_iFrame;

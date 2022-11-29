@@ -13,6 +13,7 @@ public:
 	void Process();
 	void KeyBoardInput(const sf::Keyboard::Key& key);
 	void KeyBoardRelease(const sf::Keyboard::Key& key);
+	void MouseClick(const sf::Mouse::Button& btn, sf::RenderWindow& sfWindow );
 
 	const sf::RenderWindow* GetRenderWindow() const{ return &m_sfWindow; };
 
@@ -30,6 +31,7 @@ private:
 	int m_iFrame = 0;
 	float m_fTime = 0.f;
 	float m_fBaseTime = 0.f;
+	string titleID ="";
 	
 	RecVThreadParameter* m_pRTParameter;
 };

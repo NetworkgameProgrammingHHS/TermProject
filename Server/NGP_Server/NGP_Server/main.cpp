@@ -352,7 +352,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[sock_info->id].SetName(packet->name);
 			g_Clients[sock_info->id].SetOnline(true);
-
+			cout << "ÀÌ¸§: " << g_Clients[sock_info->id].GetName() << endl;
 			// Send Login Info packet to Client which logined
 			SC_LOGIN_INFO_PACKET* scp = new SC_LOGIN_INFO_PACKET;
 			scp->type = SC_LOGIN_INFO;

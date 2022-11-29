@@ -15,6 +15,8 @@ public:
 
 	virtual void KeyBoardInput(const sf::Keyboard::Key& key);
 
+	virtual void MouseClickInput(const sf::Mouse::Button& btn, sf::RenderWindow& sfWindow) {};
+
 	virtual void Update(const float ElpasedTime);
 	virtual void Render(sf::RenderWindow& RW);
 	virtual void Next_Stage();

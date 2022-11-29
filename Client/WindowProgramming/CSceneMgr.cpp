@@ -66,6 +66,12 @@ void CSceneMgr::KeyBoardRelease(const sf::Keyboard::Key& key)
 		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->KeyBoardRelease(key);
 }
 
+void CSceneMgr::MouseClick(const sf::Mouse::Button& btn, sf::RenderWindow& sfWindow)
+{
+	if (m_eCurScene == SCENE_NUM::TITLE)
+		m_pScene->MouseClickInput(btn, sfWindow);
+}
+
 void CSceneMgr::Next_Stage()
 {
 	switch (m_pScene->GetSceneNum()) {

@@ -36,7 +36,7 @@ public:
 	void SetColor(const PLAYER_COLOR& color) { m_Color = color; }
 	void SetOnline(const bool online) { m_bOnline = online; }
 	void SetGun(const bool gun) { m_bGun = gun; }
-	void SetName(const char* name) { memcpy(m_Client_Name, name, NAME_SIZE); };
+	void SetName(const char* name) { memcpy(m_Client_Name, name, sizeof(name)); };
 	void SetReady(const bool ready) { m_bReady = ready; }
 	void SetStageNum(const int stageNum) { m_iStageNum = stageNum; }
 	void SetKeyState(const bool keyState) { m_bKeyState = keyState; }
