@@ -250,6 +250,8 @@ int main()
 			for (int i = 0; i < PLAYER_NUM; ++i) 
 				if (g_TileMap[g_Clients[i].GetStageNum() - 1])
 				{
+					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gate(&g_Clients[i]);
+					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Jump(&g_Clients[i]);
 					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Wall(&g_Clients[i]);
 					if (!g_Clients[i].GetGun())
 					{
@@ -286,10 +288,10 @@ int main()
 
 void UploadMap()
 {
+	g_TileMap[0] = make_unique<TileMap>("Server_File\\Stage1.txt");
 	g_TileMap[1] = make_unique<TileMap>("Server_File\\Stage2.txt");
 	g_TileMap[2] = make_unique<TileMap>("Server_File\\Stage3.txt");
 	g_TileMap[3] = make_unique<TileMap>("Server_File\\Stage4.txt");
-	g_TileMap[0] = make_unique<TileMap>("Server_File\\Stage1.txt");
 	g_TileMap[4] = make_unique<TileMap>("Server_File\\Stage5.txt");
 	// 0: Nothing,      D: wall
 	// Z: Red Jump,     Y: Green Jump,     X: Blue Jump,     W: Yellow Jump  V: Purple Jump		U: GB Jump
@@ -505,15 +507,19 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			{
 			case STAGE_1:
 				g_Clients[sock_info->id].SetStageNum(STAGE_2);
+				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 				break;
 			case STAGE_2:
 				g_Clients[sock_info->id].SetStageNum(STAGE_3);
+				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 				break;
 			case STAGE_3:
 				g_Clients[sock_info->id].SetStageNum(STAGE_4);
+				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 				break;
 			case STAGE_4:
 				g_Clients[sock_info->id].SetStageNum(STAGE_5);
+				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 				break;
 			case STAGE_5:
 			{

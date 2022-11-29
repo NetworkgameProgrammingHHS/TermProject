@@ -46,6 +46,7 @@ public:
 	void SetFall(const bool fall) { m_Fall = fall; }
 	void SetSuperJump(const bool Sjump) { m_SuperJump = Sjump; }
 	void SetJumpCount(const int jumpcnt) { m_JumpCnt = jumpcnt; }
+	void SetJumpChange(const int jumpchange) { m_JumpChange = jumpchange; }
 
 	void Update(const float ElapsedTime);
 	void CollideCheck(int x, int y, Vec2 bulletPos);
