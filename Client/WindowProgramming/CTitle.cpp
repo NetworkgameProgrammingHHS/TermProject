@@ -15,17 +15,37 @@ CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr)
 	m_sfBackground2.setTexture(m_sfTexture2);
 	m_sfBackground2.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-	rectangle.setSize(sf::Vector2f(400, 30));
-	rectangle.setOutlineColor(sf::Color::Green);
-	rectangle.setOutlineThickness(2);
-	rectangle.setPosition(WINDOW_WIDTH/2-200, WINDOW_HEIGHT - 100);
+	m_Rectangle.setSize(sf::Vector2f(400, 30));
+	//m_Rectangle.setOutlineColor(sf::Color::Green);
+	m_Rectangle.setOutlineThickness(0);
+	m_Rectangle.setPosition(WINDOW_WIDTH/2-170, WINDOW_HEIGHT - 100);
 
-	text.setFont(m_sfFont); 
-	text.setString("");
-	text.setCharacterSize(24);
-	text.setFillColor(sf::Color::Blue);
-	text.setStyle(sf::Text::Bold);
-	text.setPosition(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT - 100);
+	m_OuRectangle.setSize(sf::Vector2f(480, 60));
+	m_OuRectangle.setFillColor(sf::Color::Green);
+	m_OuRectangle.setOutlineThickness(0);
+	m_OuRectangle.setPosition(WINDOW_WIDTH / 2 - 230, WINDOW_HEIGHT - 115);
+
+	m_sfTitleFont.loadFromFile("Resource\\Font\\koverwatch.ttf");
+
+	m_Text.setFont(m_sfTitleFont);
+	m_Text.setString("");
+	m_Text.setCharacterSize(24);
+	m_Text.setFillColor(sf::Color::Blue);
+	m_Text.setStyle(sf::Text::Bold);
+	m_Text.setPosition(WINDOW_WIDTH / 2 - 170 + 5, WINDOW_HEIGHT - 100);
+
+
+	m_TextID.setFont(m_sfTitleFont);
+	m_TextID.setString("ID:");
+	m_TextID.setCharacterSize(50);
+	m_TextID.setFillColor(sf::Color::White);
+	m_TextID.setStyle(sf::Text::Bold);
+	m_TextID.setPosition(WINDOW_WIDTH / 2 - 220, WINDOW_HEIGHT - 115);
+
+	lines[0] = sf::Vertex(sf::Vector2f(WINDOW_WIDTH / 2 - 165, WINDOW_HEIGHT - 72));
+	lines[0].color = sf::Color::Black;
+	lines[1] = sf::Vertex(sf::Vector2f(WINDOW_WIDTH / 2 - 165, WINDOW_HEIGHT - 98));
+	lines[1].color = sf::Color::Black;
 
 	m_strPlayerID.reserve(NAME_SIZE);
 
@@ -39,7 +59,7 @@ CTitle::~CTitle()
 
 void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 {
-	if (rectangle.getOutlineColor() != sf::Color::Blue)
+	if (m_OuRectangle.getFillColor() != sf::Color::Blue)
 	{
 		switch (key) {
 		case sf::Keyboard::Escape:
@@ -73,19 +93,28 @@ void CTitle::Update(const float ElapsedTime)
 	if (m_fTime > 1.0f) {
 		m_fTime = 0.0f;
 	}
-	text.setString(m_strPlayerID);
+	m_Text.setString(m_strPlayerID);
+	for (int i = 0; i < 2; ++i)
+	{
+		lines[i].position.x = m_Text.getPosition().x + m_Text.getGlobalBounds().width + 5;
+	}
 }
 
 void CTitle::Render(sf::RenderWindow& RW)
 {
-	if (m_fTime < 0.5f) {
-		RW.draw(m_sfBackground);
-	}
-	else {
-		RW.draw(m_sfBackground2);
-	}
-	RW.draw(rectangle);
-	RW.draw(text);
+	RW.draw(m_sfBackground);
+	//if (m_fTime < 0.5f) {
+	//	RW.draw(m_sfBackground);
+	//}
+	//else {
+	//	RW.draw(m_sfBackground2);
+	//}
+	RW.draw(m_OuRectangle);
+	RW.draw(m_Rectangle);
+	RW.draw(m_TextID);
+	RW.draw(m_Text);
+	if (m_fTime < 0.5f && m_OuRectangle.getFillColor() == sf::Color::Blue)
+		RW.draw(lines, 2, sf::Lines);
 }
 
 void CTitle::MouseClickInput(const sf::Mouse::Button& btn, sf::RenderWindow& sfWindow)
@@ -95,19 +124,19 @@ void CTitle::MouseClickInput(const sf::Mouse::Button& btn, sf::RenderWindow& sfW
 	case sf::Mouse::Left:
 	{
 		sf::Vector2i temp = sf::Mouse::getPosition(sfWindow);
-		sf::Vector2f tempRect = rectangle.getPosition();
-		if ((temp.x >= tempRect.x && temp.x <= tempRect.x + rectangle.getSize().x) &&
-			(temp.y >= tempRect.y && temp.y <= tempRect.y + rectangle.getSize().y))
+		sf::Vector2f tempRect = m_OuRectangle.getPosition();
+		if ((temp.x >= tempRect.x && temp.x <= tempRect.x + m_OuRectangle.getSize().x) &&
+			(temp.y >= tempRect.y && temp.y <= tempRect.y + m_OuRectangle.getSize().y))
 		{
-			rectangle.setOutlineColor(sf::Color::Blue);
+			m_OuRectangle.setFillColor(sf::Color::Blue);
 		}
 		else
-			rectangle.setOutlineColor(sf::Color::Green);
+			m_OuRectangle.setFillColor(sf::Color::Green);
 		//cout << m_strPlayerID << endl;
 		break;
 	}
 	default:
-		rectangle.setOutlineColor(sf::Color::Green);
+		m_OuRectangle.setFillColor(sf::Color::Green);
 		break;
 	}
 }

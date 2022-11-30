@@ -52,7 +52,7 @@ void CFramework::Process()
 			{
 				KeyBoardInput(event.key.code);
 				if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE &&
-					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getOutlineColor() == sf::Color::Blue)
+					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getFillColor() == sf::Color::Blue)
 				{
 					if (event.text.unicode == 59)
 					{
@@ -69,7 +69,7 @@ void CFramework::Process()
 			if (event.type == sf::Event::TextEntered)
 			{
 				if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE && 
-					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getOutlineColor() == sf::Color::Blue)
+					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getFillColor() == sf::Color::Blue && titleID.size() < NAME_SIZE - 1)
 				{
 					if (event.text.unicode < 128 && event.text.unicode != 8)
 					{

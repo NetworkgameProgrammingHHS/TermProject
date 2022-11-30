@@ -17,13 +17,17 @@ public:
 
 	void SetPlayerID(string id) { m_strPlayerID = id; }
 
-	sf::RectangleShape& GetRectangle() { return rectangle; }
+	sf::RectangleShape& GetRectangle() { return m_OuRectangle; }
 
 private:
 	sf::Texture m_sfTexture2 = {};
 	sf::Sprite m_sfBackground2 = {};
-	sf::RectangleShape rectangle;
-	sf::Text text;
+	sf::RectangleShape m_Rectangle;
+	sf::RectangleShape m_OuRectangle;
+	sf::Text m_Text;
+	sf::Text m_TextID;
+	sf::Font m_sfTitleFont;
+	sf::Vertex lines[2];
 	string m_strPlayerID;
 	float m_fTime = 0.f;
 };

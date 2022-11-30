@@ -440,12 +440,15 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 					if (g_Clients[sock_info->id].GetGun())
 					{
 						//shooting bullet
-						g_Bullet->SetbShow(true);
-						g_Bullet->SetDirection(g_Clients[sock_info->id].GetSubDirection());
-						g_Bullet->SetStage(g_Clients[sock_info->id].GetStageNum());
-						Vec2 pos = g_Clients[sock_info->id].GetPos();
-						pos.x += g_Bullet->GetDirection() * TILE_SIZE * 1.0f;
-						g_Bullet->SetPos(pos);
+						if (!g_Bullet->GetbShow())
+						{
+							g_Bullet->SetbShow(true);
+							g_Bullet->SetDirection(g_Clients[sock_info->id].GetSubDirection());
+							g_Bullet->SetStage(g_Clients[sock_info->id].GetStageNum());
+							Vec2 pos = g_Clients[sock_info->id].GetPos();
+							pos.x += g_Bullet->GetDirection() * TILE_SIZE * 1.0f;
+							g_Bullet->SetPos(pos);
+						}
 					}
 				}
 				else {
