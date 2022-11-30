@@ -120,36 +120,36 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		if (packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) {
 			players[2]->SetDir((int)packet->dir_p3);
 		}
-		//SCENE_NUM packetSceneNum = SCENE_NUM::NONE;
-		//switch (packet->stage_bullet)
-		//{
-		//case STAGE_1:
-		//	packetSceneNum = SCENE_NUM::STAGE1;
-		//	cout << "Stage1" << endl;
-		//	break;
-		//case STAGE_2:
-		//	packetSceneNum = SCENE_NUM::STAGE2;
-		//	break;
-		//case STAGE_3:
-		//	packetSceneNum = SCENE_NUM::STAGE3;
-		//	break;
-		//case STAGE_4:
-		//	packetSceneNum = SCENE_NUM::STAGE4;
-		//	break;
-		//case STAGE_5:
-		//	packetSceneNum = SCENE_NUM::STAGE5;
-		//	break;
-		//case STAGE_END:
-		//	packetSceneNum = SCENE_NUM::RANKING;
-		//	break;
-		//default:
-		//	break;
-		//}
-		//if (scene->GetSceneNum() == packetSceneNum)
-		//{
-		//	scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
-		//}
-		scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
+		SCENE_NUM packetSceneNum = SCENE_NUM::NONE;
+		switch (packet->stage_bullet)
+		{
+		case STAGE_1:
+			packetSceneNum = SCENE_NUM::STAGE1;
+			cout << "Stage1" << endl;
+			break;
+		case STAGE_2:
+			packetSceneNum = SCENE_NUM::STAGE2;
+			break;
+		case STAGE_3:
+			packetSceneNum = SCENE_NUM::STAGE3;
+			break;
+		case STAGE_4:
+			packetSceneNum = SCENE_NUM::STAGE4;
+			break;
+		case STAGE_5:
+			packetSceneNum = SCENE_NUM::STAGE5;
+			break;
+		case STAGE_END:
+			packetSceneNum = SCENE_NUM::RANKING;
+			break;
+		default:
+			break;
+		}
+		if (scene->GetSceneNum() == packetSceneNum)
+		{
+			scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
+		}
+		//scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
 		//LeaveCriticalSection(&g_CS);
 		break;
 	}

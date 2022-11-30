@@ -80,7 +80,28 @@ DWORD WINAPI SendPacket(LPVOID)
 					{
 						packet->bullet_enable = GUN_OBJECT;
 						packet->dir_bullet = 0;
-						packet->stage_bullet = (char)g_iWhichStage;
+						g_iWhichStage = 2;
+						switch (g_iWhichStage)
+						{
+						case 0:
+							packet->stage_bullet = STAGE_1;
+							break;
+						case 1:
+							packet->stage_bullet = STAGE_2;
+							break;
+						case 2:
+							packet->stage_bullet = STAGE_3;
+							break;
+						case 3:
+							packet->stage_bullet = STAGE_4;
+							break;
+						case 4:
+							packet->stage_bullet = STAGE_5;
+							break;
+						default:
+							cout << "stage End or bug" << endl;
+							break;
+						}
 						packet->x_bullet = g_TileMap[g_iWhichStage].get()->GetGunPos().x;
 						packet->y_bullet = g_TileMap[g_iWhichStage].get()->GetGunPos().y;
 					}
