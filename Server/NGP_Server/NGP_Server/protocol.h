@@ -69,6 +69,9 @@ struct SC_LOGIN_INFO_PACKET {
 	bool online_p1;
 	bool online_p2;
 	bool online_p3;
+	char name_p1[NAME_SIZE];
+	char name_p2[NAME_SIZE];
+	char name_p3[NAME_SIZE];
 };
 
 struct SC_REMOVE_PACKET {

@@ -362,6 +362,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			scp->online_p1 = g_Clients[0].GetOnline();
 			scp->online_p2 = g_Clients[1].GetOnline();
 			scp->online_p3 = g_Clients[2].GetOnline();
+			memcpy(scp->name_p1, g_Clients[0].GetName(), NAME_SIZE);
+			memcpy(scp->name_p2, g_Clients[1].GetName(), NAME_SIZE);
+			memcpy(scp->name_p3, g_Clients[2].GetName(), NAME_SIZE);
 			len = sizeof(SC_LOGIN_INFO_PACKET);
 			for (int i = 0; i < PLAYER_NUM; ++i) {
 				if (i == sock_info->id)

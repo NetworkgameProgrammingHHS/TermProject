@@ -63,16 +63,19 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		{
 			// 플레이어 1 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[0]->SetOnline(true);
+			scene->SetPlayerName(packet->name_p1, 0);
 		}
 		if (packet->online_p2 == CLIENT_ONLINE)
 		{
 			// 플레이어 2 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[1]->SetOnline(true);
+			scene->SetPlayerName(packet->name_p2, 1);
 		}
 		if (packet->online_p3 == CLIENT_ONLINE)
 		{
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[2]->SetOnline(true);
+			scene->SetPlayerName(packet->name_p3, 2);
 		}
 
 		EnterCriticalSection(&g_CS);

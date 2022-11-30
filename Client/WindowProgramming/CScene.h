@@ -34,6 +34,7 @@ public:
 
 	void SetPlayerInfo(const PLAYER_COLOR pc, const int index);
 	void SetPlayerInfo(const SCENE_NUM sn, const int index);
+	void SetPlayerName(const char* name, const int index);
 
 protected:
 	void ShowPlayerInfo();

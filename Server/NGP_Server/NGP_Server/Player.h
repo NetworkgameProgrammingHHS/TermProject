@@ -61,7 +61,7 @@ private:
 	PLAYER_COLOR m_Color;
 	bool m_bOnline;
 	bool m_bGun;
-	char m_Client_Name[NAME_SIZE];
+	char m_Client_Name[NAME_SIZE] = {'\0'};
 	bool m_bReady;
 	bool m_bKeyState; // true = ket_press
 	int  m_iStageNum;
