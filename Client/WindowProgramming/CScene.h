@@ -36,6 +36,8 @@ public:
 	void SetPlayerInfo(const SCENE_NUM sn, const int index);
 	void SetPlayerName(const char* name, const int index);
 
+	void TileRest();
+
 protected:
 	void ShowPlayerInfo();
 	//void Collide_Wall();

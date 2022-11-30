@@ -20,6 +20,7 @@ bool g_bCollideGun = false;
 int g_iWhichStage = 0;
 char g_chGStagePacket;
 CRITICAL_SECTION g_CS;
+CRITICAL_SECTION g_CS1;
 
 void UploadMap();
 void CreateGun();
@@ -108,6 +109,7 @@ DWORD WINAPI SendPacket(LPVOID)
 int main()
 {
 	InitializeCriticalSection(&g_CS);
+	InitializeCriticalSection(&g_CS1);
 	float MilliTime = 0.f;
 	float ElapsedTime = 0.f;
 	WSADATA wsa;
@@ -286,6 +288,7 @@ int main()
 	WSACleanup();
 
 	DeleteCriticalSection(&g_CS);
+	DeleteCriticalSection(&g_CS1);
 
 	return 0;
 }
@@ -521,12 +524,16 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			switch (g_Clients[sock_info->id].GetStageNum())
 			{
 			case STAGE_1:
+				EnterCriticalSection(&g_CS1);
 				g_Clients[sock_info->id].SetStageNum(STAGE_2);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+				LeaveCriticalSection(&g_CS1);
 				break;
 			case STAGE_2:
+				EnterCriticalSection(&g_CS1);
 				g_Clients[sock_info->id].SetStageNum(STAGE_3);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+				LeaveCriticalSection(&g_CS1);
 				break;
 			case STAGE_3:
 				g_Clients[sock_info->id].SetStageNum(STAGE_4);
@@ -584,6 +591,19 @@ void Collide_Bullet(Player* in, Vec2 BulletPos)
 		in->SetPos(Vec2{ TILE_SIZE, WINDOW_HEIGHT - 2 * TILE_SIZE });
 		in->SetColor(PLAYER_COLOR::NORMAL);
 		in->SetDirection(0);
+
+		SC_RESET_PACKET* packet = new SC_RESET_PACKET;
+		packet->type = SC_RESET;
+		packet->id = in->GetID();
+		int len = sizeof(SC_RESET_PACKET);
+		for (int i = 0; i < 3; ++i) {
+			EnterCriticalSection(&g_CS);
+			send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
+			send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+			LeaveCriticalSection(&g_CS);
+		}
+		delete packet;
+
 		for (int i = 0; i < PLAYER_NUM; ++i)
 		{
 			g_Clients[i].SetGun(false);

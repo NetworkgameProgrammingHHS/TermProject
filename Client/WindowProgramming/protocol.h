@@ -74,6 +74,11 @@ struct SC_LOGIN_INFO_PACKET {
 	char name_p3[NAME_SIZE];
 };
 
+struct SC_RESET_PACKET {
+	char type;
+	short id;
+};
+
 struct SC_REMOVE_PACKET {
 	char type;
 	short id;
@@ -129,6 +134,7 @@ constexpr char SC_WORLD_UPDATE = 4;
 constexpr char SC_RANK = 5;
 constexpr char SC_REMOVE = 6;
 constexpr char SC_COLOR = 7;
+constexpr char SC_RESET = 8;
 
 //Packet Value
 constexpr char KEY_DIR_LEFT = 1;

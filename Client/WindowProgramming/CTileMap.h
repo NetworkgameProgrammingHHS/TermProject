@@ -56,6 +56,7 @@ public:
 	void Initialize();
 	void Render(sf::RenderWindow& RW);
 	void Reset();
+	void TileReset();
 
 	const int GetPotionNum() const { return m_iPotionNum; }
 	int SetPotionNum(int num) { return m_iPotionNum = num; }

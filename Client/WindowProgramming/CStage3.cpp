@@ -66,7 +66,8 @@ void CStage3::Update(const float ElapsedTime)
 {
 	for (int i = 0; i < PLAYERNUM; ++i)
 	{
-		if (m_ppPlayers[i])m_ppPlayers[i]->Update(ElapsedTime);
+		if (m_ppPlayers[i] && m_ppPlayers[i]->GetStageNum() == SCENE_NUM::STAGE3)
+			m_ppPlayers[i]->Update(ElapsedTime);
 	}
 	if (m_pGun)m_pGun->Update(ElapsedTime);
 
@@ -86,7 +87,8 @@ void CStage3::Render(sf::RenderWindow& RW)
 	// Player Render
 	for (int i = 0; i < PLAYERNUM; ++i)
 	{
-		if (m_ppPlayers[i]) m_ppPlayers[i]->Render(RW);
+		if (m_ppPlayers[i] && m_ppPlayers[i]->GetStageNum() == SCENE_NUM::STAGE3)
+			m_ppPlayers[i]->Render(RW);
 	}
 
 	// Gun, Bullet Render
