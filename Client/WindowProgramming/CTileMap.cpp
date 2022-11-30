@@ -211,3 +211,18 @@ void CTileMap::Reset()
 {
 	m_umTiles.clear();
 }
+
+void CTileMap::TileReset()
+{
+	m_iPotionNum = 0;
+	for (int i = 0; i < static_cast<int>(TILE_TYPE::END); ++i) {
+		for (const auto& j : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+			if (!j->GetEnable()) {
+				j->SetEnable(true);
+			}
+			if (j->GetType() == TILE_TYPE::RED_P || j->GetType() == TILE_TYPE::GREEN_P || j->GetType() == TILE_TYPE::BLUE_P || j->GetType() == TILE_TYPE::BLACK_P) {
+				m_iPotionNum++;
+			}
+		}
+	}
+}

@@ -77,11 +77,9 @@ void CSceneMgr::Next_Stage()
 	switch (m_pScene->GetSceneNum()) {
 	case SCENE_NUM::TITLE: 
 	{
-		EnterCriticalSection(&g_CS);
 		m_pScene.reset();
 		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));		
 		m_eCurScene = SCENE_NUM::STAGE1;
-		LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SCENE_NUM::STAGE1:

@@ -148,6 +148,12 @@ void CScene::SetPlayerName(const char* name, const int index)
 	m_sfPlayerInfoText[index][0].setString(name);
 }
 
+void CScene::TileRest()
+{
+	m_pTileMap->TileReset();
+
+}
+
 /*void CScene::Collide_Wall()
 {
 	if (m_pTileMap) {
