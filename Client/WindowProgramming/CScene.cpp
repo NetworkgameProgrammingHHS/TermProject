@@ -21,9 +21,9 @@ CScene::CScene()
 	m_sfPlayerColor[6].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 96, 32, 32)); // Cyan
 
 
-	//m_sfPlayerInfoText[0][0].setString("Player 1");
-	//m_sfPlayerInfoText[1][0].setString("Player 2");
-	//m_sfPlayerInfoText[2][0].setString("Player 3");
+	m_sfPlayerInfoText[0][0].setString("Player 1");
+	m_sfPlayerInfoText[1][0].setString("Player 2");
+	m_sfPlayerInfoText[2][0].setString("Player 3");
 	m_sfPlayerInfoText[0][1].setString("Stage 1");
 	m_sfPlayerInfoText[1][1].setString("Stage 1");
 	m_sfPlayerInfoText[2][1].setString("Stage 1");
