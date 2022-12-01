@@ -73,10 +73,12 @@ void TileMap::Collide_Wall(Player* in)
 			Vec2 figure = {min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				if (inLT.y - 3 > wallLT.y) {
+					updatePos.y += figure.y + 3;
+				}
 				else
 				{
-					updatePos.y -= figure.y + 3;
+					updatePos.y = wallLT.y - TILE_SIZE;
 					in->SetJump(false);
 					if (in->GetSuperJump())
 					{
@@ -94,46 +96,30 @@ void TileMap::Collide_Wall(Player* in)
 		}
 	}
 	
-	//if ((!isCollide && !(in->GetJump() && in->IsJumpUp())) || in->GetFall()) {
-	//	bool FallCollide = false;
-	//	Vec2 FallLT = { in->GetPos().x + TILE_SIZE / 4, in->GetPos().y + TILE_SIZE };
-	//	Vec2 FallRB = { in->GetPos().x + TILE_SIZE * 0.75f, in->GetPos().y + TILE_SIZE + 3 };
-	//	for (auto i = range.first; i != range.second; ++i) {
-	//		Vec2 wallLT = { i->second.x - 1, i->second.y };
-	//		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+	if (!isCollide && !in->GetJump()) {
+		bool FallCollide = false;
+		Vec2 FallLT = { in->GetPos().x + TILE_SIZE / 4, in->GetPos().y + TILE_SIZE};
+		Vec2 FallRB = { in->GetPos().x + TILE_SIZE * 0.75f, in->GetPos().y + TILE_SIZE * 2};
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-	//		if (FallLT.x > wallRB.x) continue;
-	//		else if (FallRB.x < wallLT.x) continue;
-	//		else if (FallLT.y > wallRB.y) continue;
-	//		else if (FallRB.y < wallLT.y) continue;
-	//		else if (FallLT.y < wallLT.y) continue;
-	//		else {
-	//			FallCollide = true;
-	//			if (in->GetID() == 2) {
-	//				cout << "Jump : " << in->GetJump();
-	//				cout << "Fall : " << in->GetFall();
-	//			}
-	//			in->SetJump(false);
-	//			in->SetFall(false);
-	//			if (in->GetSuperJump())
-	//			{
-	//				in->SetSuperJump(false);
-	//				in->SetJumpChange(10);
-	//			}
-	//			//in->SetPos({ in->GetPos().x, wallLT.y + TILE_SIZE });
-	//			break;
-	//		}
-	//	}
+			if (FallLT.x > wallRB.x) continue;
+			else if (FallRB.x < wallLT.x) continue;
+			else if (FallLT.y > wallRB.y) continue;
+			else if (FallRB.y < wallLT.y) continue;
+			else {
+				FallCollide = true;
+				in->SetFall(false);
+				in->SetPos({ in->GetPos().x, wallLT.y - TILE_SIZE });
+				break;
+			}
+		}
 
-	//	if (!FallCollide) {
-	//		in->SetFall(true);
-	//	}
-	//}
-
-	/*if (!isCollide)
-	{
-		in->SetJump(true);
-	}*/
+		if (!FallCollide) {
+			in->SetFall(true);
+		}
+	}
 }
 
 void TileMap::Collide_Gate(Player* in)
@@ -326,123 +312,132 @@ void TileMap::Collide_Gate(Player* in)
 
 void TileMap::Collide_Jump(Player* in)
 {
-	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
-	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
+	if (!in->GetJump()) {
+		Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
+		Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
 
-	bool isCollide = false;
+		bool isCollide = false;
 
-	// Red Jump
-	auto range = m_mmObjPos.equal_range(static_cast<int>('Z'));
-	for (auto i = range.first; i != range.second; ++i) {
-		Vec2 wallLT = { i->second.x - 1, i->second.y };
-		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+		// Red Jump
+		auto range = m_mmObjPos.equal_range(static_cast<int>('Z'));
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-		if (inLT.x > wallRB.x) continue;
-		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y > wallRB.y) continue;
-		else if (inRB.y < wallLT.y) continue;
-		else if (in->GetColor() == PLAYER_COLOR::RED) {
-			in->SetJumpChange(30);
-			in->SetSuperJump(true);
-			isCollide = true;
-			break;
+			if (inLT.x > wallRB.x) continue;
+			else if (inRB.x < wallLT.x) continue;
+			else if (inLT.y > wallRB.y) continue;
+			else if (inRB.y < wallLT.y) continue;
+			else if (in->GetColor() == PLAYER_COLOR::RED) {
+				in->SetJumpChange(15);
+				in->SetSuperJump(true);
+				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
+				isCollide = true;
+				break;
+			}
 		}
-	}
 
-	// Green Jump
-	range = m_mmObjPos.equal_range(static_cast<int>('Y'));
-	for (auto i = range.first; i != range.second; ++i) {
-		Vec2 wallLT = { i->second.x - 1, i->second.y };
-		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+		// Green Jump
+		range = m_mmObjPos.equal_range(static_cast<int>('Y'));
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-		if (inLT.x > wallRB.x) continue;
-		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y > wallRB.y) continue;
-		else if (inRB.y < wallLT.y) continue;
-		else if (in->GetColor() == PLAYER_COLOR::GREEN) {
-			in->SetJumpChange(30);
-			in->SetSuperJump(true);
-			isCollide = true;
-			break;
+			if (inLT.x > wallRB.x) continue;
+			else if (inRB.x < wallLT.x) continue;
+			else if (inLT.y > wallRB.y) continue;
+			else if (inRB.y < wallLT.y) continue;
+			else if (in->GetColor() == PLAYER_COLOR::GREEN) {
+				in->SetJumpChange(15);
+				in->SetSuperJump(true);
+				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
+				isCollide = true;
+				break;
+			}
 		}
-	}
 
-	// Blue Jump
-	range = m_mmObjPos.equal_range(static_cast<int>('X'));
-	for (auto i = range.first; i != range.second; ++i) {
-		Vec2 wallLT = { i->second.x - 1, i->second.y };
-		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+		// Blue Jump
+		range = m_mmObjPos.equal_range(static_cast<int>('X'));
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-		if (inLT.x > wallRB.x) continue;
-		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y > wallRB.y) continue;
-		else if (inRB.y < wallLT.y) continue;
-		else if (in->GetColor() == PLAYER_COLOR::BLUE) {
-			in->SetJumpChange(30);
-			in->SetSuperJump(true);
-			isCollide = true;
-			break;
+			if (inLT.x > wallRB.x) continue;
+			else if (inRB.x < wallLT.x) continue;
+			else if (inLT.y > wallRB.y) continue;
+			else if (inRB.y < wallLT.y) continue;
+			else if (in->GetColor() == PLAYER_COLOR::BLUE) {
+				in->SetJumpChange(15);
+				in->SetSuperJump(true);
+				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
+				isCollide = true;
+				break;
+			}
 		}
-	}
 
-	// Yellow Jump
-	range = m_mmObjPos.equal_range(static_cast<int>('W'));
-	for (auto i = range.first; i != range.second; ++i) {
-		Vec2 wallLT = { i->second.x - 1, i->second.y };
-		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+		// Yellow Jump
+		range = m_mmObjPos.equal_range(static_cast<int>('W'));
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-		if (inLT.x > wallRB.x) continue;
-		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y > wallRB.y) continue;
-		else if (inRB.y < wallLT.y) continue;
-		else if (in->GetColor() == PLAYER_COLOR::YELLOW) {
-			in->SetJumpChange(30);
-			in->SetSuperJump(true);
-			isCollide = true;
-			break;
+			if (inLT.x > wallRB.x) continue;
+			else if (inRB.x < wallLT.x) continue;
+			else if (inLT.y > wallRB.y) continue;
+			else if (inRB.y < wallLT.y) continue;
+			else if (in->GetColor() == PLAYER_COLOR::YELLOW) {
+				in->SetJumpChange(15);
+				in->SetSuperJump(true);
+				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
+				isCollide = true;
+				break;
+			}
 		}
-	}
 
-	// Magenta Jump
-	range = m_mmObjPos.equal_range(static_cast<int>('V'));
-	for (auto i = range.first; i != range.second; ++i) {
-		Vec2 wallLT = { i->second.x - 1, i->second.y };
-		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+		// Magenta Jump
+		range = m_mmObjPos.equal_range(static_cast<int>('V'));
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-		if (inLT.x > wallRB.x) continue;
-		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y > wallRB.y) continue;
-		else if (inRB.y < wallLT.y) continue;
-		else if (in->GetColor() == PLAYER_COLOR::PURPLE) {
-			in->SetJumpChange(30);
-			in->SetSuperJump(true);
-			isCollide = true;
-			break;
+			if (inLT.x > wallRB.x) continue;
+			else if (inRB.x < wallLT.x) continue;
+			else if (inLT.y > wallRB.y) continue;
+			else if (inRB.y < wallLT.y) continue;
+			else if (in->GetColor() == PLAYER_COLOR::PURPLE) {
+				in->SetJumpChange(15);
+				in->SetSuperJump(true);
+				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
+				isCollide = true;
+				break;
+			}
 		}
-	}
 
-	// Cyan Jump
-	range = m_mmObjPos.equal_range(static_cast<int>('U'));
-	for (auto i = range.first; i != range.second; ++i) {
-		Vec2 wallLT = { i->second.x - 1, i->second.y };
-		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
+		// Cyan Jump
+		range = m_mmObjPos.equal_range(static_cast<int>('U'));
+		for (auto i = range.first; i != range.second; ++i) {
+			Vec2 wallLT = { i->second.x - 1, i->second.y };
+			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-		if (inLT.x > wallRB.x) continue;
-		else if (inRB.x < wallLT.x) continue;
-		else if (inLT.y > wallRB.y) continue;
-		else if (inRB.y < wallLT.y) continue;
-		else if (in->GetColor() == PLAYER_COLOR::GB) {
-			in->SetJumpChange(30);
-			in->SetSuperJump(true);
-			isCollide = true;
-			break;
+			if (inLT.x > wallRB.x) continue;
+			else if (inRB.x < wallLT.x) continue;
+			else if (inLT.y > wallRB.y) continue;
+			else if (inRB.y < wallLT.y) continue;
+			else if (in->GetColor() == PLAYER_COLOR::GB) {
+				in->SetJumpChange(15);
+				in->SetSuperJump(true);
+				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
+				isCollide = true;
+				break;
+			}
 		}
-	}
 
-	if (!isCollide)
-	{
-		//in->SetJumpChange(10);
-		//in->SetSuperJump(false);
+		if (!isCollide)
+		{
+			in->SetJumpChange(10);
+			in->SetSuperJump(false);
+			in->SetVelocity({in->GetVelocity().x, JUMP_SPEED});
+		}
 	}
 }
 

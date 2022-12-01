@@ -231,7 +231,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		SC_RESET_PACKET* packet = reinterpret_cast<SC_RESET_PACKET*>(buf);
 		players[packet->id]->Reset();
 		if(packet->id == m_nPlayerIndex)
-			scene->TileRest();
+			scene->TileReset();
 		SetPlayerInfo(PLAYER_COLOR::NORMAL, packet->id);
 		break;
 	}

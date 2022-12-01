@@ -554,24 +554,24 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			switch (g_Clients[sock_info->id].GetStageNum())
 			{
 			case STAGE_1:
-				EnterCriticalSection(&g_CS1);
 				g_Clients[sock_info->id].SetStageNum(STAGE_2);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-				LeaveCriticalSection(&g_CS1);
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_2:
-				EnterCriticalSection(&g_CS1);
 				g_Clients[sock_info->id].SetStageNum(STAGE_3);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-				LeaveCriticalSection(&g_CS1);
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_3:
 				g_Clients[sock_info->id].SetStageNum(STAGE_4);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_4:
 				g_Clients[sock_info->id].SetStageNum(STAGE_5);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_5:
 			{

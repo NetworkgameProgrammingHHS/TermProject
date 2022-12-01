@@ -29,7 +29,6 @@ public:
 	const bool GetJump() const { return m_Jump; }
 	const bool GetSuperJump() const { return m_SuperJump; }
 	const bool GetFall() const { return m_Fall; }
-	const bool IsJumpUp() const { return m_JumpCnt < m_JumpChange; }
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
 	void SetVelocity(const Vec2& velocity) { m_Velocity = velocity; }
@@ -72,6 +71,6 @@ private:
 	bool m_SuperJump;
 	int m_JumpCnt;
 	int m_JumpChange; //NormalJump 10, SuperJump 30
-	bool m_Fall;
+	bool m_Fall = false;
 };
 
