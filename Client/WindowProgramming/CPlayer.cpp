@@ -186,11 +186,8 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		}
 		break;
 	case sf::Keyboard::Space:
-		if (!m_bJump) {
-			//m_bJump = true;
-			input = true;
-			dir = KEY_DIR_UP;
-		}
+		input = true;
+		dir = KEY_DIR_UP;
 		break;
 	case sf::Keyboard::Escape:
 		exit(1);
@@ -218,14 +215,11 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		packet->key = dir;
 		packet->state = KEY_PRESS;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_INPUT_PACKET));
-		cout << "Å° ´©¸§" << endl;
-		cout << "Dir : " << m_nKeyDir << endl;
 	}
 	else if (input && dir == NULL) {
 		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
 		packet->type = CS_COLOR;
 		packet->color = static_cast<short>(m_eSavedColor);
-		//packet->collide = POTION_COLLIDE_OFF;
 	}
 }
 

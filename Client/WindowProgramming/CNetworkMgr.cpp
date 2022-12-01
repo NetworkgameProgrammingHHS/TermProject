@@ -49,9 +49,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	char buf[BUF_SIZE];
 
 	recv(m_sock, reinterpret_cast<char*>(&len), sizeof(int), MSG_WAITALL);
-	//cout << "받아온 패킷의 크기 - " << len << endl;
-	if (len > BUF_SIZE)
-		len = BUF_SIZE;
 	recv(m_sock, buf, len, MSG_WAITALL);
 
 	switch (buf[0]) {
@@ -101,23 +98,37 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_WORLD_UPDATE: {
-		//EnterCriticalSection(&g_CS);
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
-		//int curPlayerIndex = m_nPlayerIndex;
 
-		players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
-		if (packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) {
+		if (players[0]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p1 + 1)) {
+			players[0]->SetStage(static_cast<SCENE_NUM>(packet->stage_p1 + 1));
+			scene->SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p1 + 1), 0);
+		}
+		if (players[1]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p2 + 1)) {
+			players[1]->SetStage(static_cast<SCENE_NUM>(packet->stage_p2 + 1));
+			scene->SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p2 + 1), 1);
+		}
+		if (players[2]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p3 + 1)) {
+			players[2]->SetStage(static_cast<SCENE_NUM>(packet->stage_p3 + 1));
+			scene->SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p3 + 1), 2);
+		}
+
+		if (scene->GetSceneNum() == players[0]->GetStageNum())
+			players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
+		if (scene->GetSceneNum() == players[1]->GetStageNum())
+			players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
+		if (scene->GetSceneNum() == players[2]->GetStageNum())
+			players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
+
+		if ((packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) && scene->GetSceneNum() == players[0]->GetStageNum()) {
 			players[0]->SetDir((int)packet->dir_p1);
 		}
 		
-		players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
-		if (packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) {
+		if ((packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) && scene->GetSceneNum() == players[1]->GetStageNum()) {
 			players[1]->SetDir((int)packet->dir_p2);
 		}
-
-
-		players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
-		if (packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) {
+		
+		if ((packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) && scene->GetSceneNum() == players[2]->GetStageNum()) {
 			players[2]->SetDir((int)packet->dir_p3);
 		}
 		SCENE_NUM packetSceneNum = SCENE_NUM::NONE;

@@ -56,7 +56,7 @@ void TileMap::CreateGun()
 void TileMap::Collide_Wall(Player* in)
 {
 	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3};
-	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE -3 };
+	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
 
 	bool isCollide = false;
 
@@ -69,7 +69,7 @@ void TileMap::Collide_Wall(Player* in)
 		else if (inRB.x < wallLT.x) continue;
 		else if (inLT.y > wallRB.y) continue;
 		else if (inRB.y < wallLT.y) continue;
-		else{
+		else {
 			Vec2 figure = {min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
@@ -91,13 +91,50 @@ void TileMap::Collide_Wall(Player* in)
 			}
 			in->SetPos(updatePos);
 			isCollide = true;
+			break;
 		}
 	}
+	
+	//if ((!isCollide && !(in->GetJump() && in->IsJumpUp())) || in->GetFall()) {
+	//	bool FallCollide = false;
+	//	Vec2 FallLT = { in->GetPos().x + TILE_SIZE / 4, in->GetPos().y + TILE_SIZE };
+	//	Vec2 FallRB = { in->GetPos().x + TILE_SIZE * 0.75f, in->GetPos().y + TILE_SIZE + 3 };
+	//	for (auto i = range.first; i != range.second; ++i) {
+	//		Vec2 wallLT = { i->second.x - 1, i->second.y };
+	//		Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
 
-	if (!isCollide)
+	//		if (FallLT.x > wallRB.x) continue;
+	//		else if (FallRB.x < wallLT.x) continue;
+	//		else if (FallLT.y > wallRB.y) continue;
+	//		else if (FallRB.y < wallLT.y) continue;
+	//		else if (FallLT.y < wallLT.y) continue;
+	//		else {
+	//			FallCollide = true;
+	//			if (in->GetID() == 2) {
+	//				cout << "Jump : " << in->GetJump();
+	//				cout << "Fall : " << in->GetFall();
+	//			}
+	//			in->SetJump(false);
+	//			in->SetFall(false);
+	//			if (in->GetSuperJump())
+	//			{
+	//				in->SetSuperJump(false);
+	//				in->SetJumpChange(10);
+	//			}
+	//			//in->SetPos({ in->GetPos().x, wallLT.y + TILE_SIZE });
+	//			break;
+	//		}
+	//	}
+
+	//	if (!FallCollide) {
+	//		in->SetFall(true);
+	//	}
+	//}
+
+	/*if (!isCollide)
 	{
 		in->SetJump(true);
-	}
+	}*/
 }
 
 void TileMap::Collide_Gate(Player* in)
@@ -121,12 +158,12 @@ void TileMap::Collide_Gate(Player* in)
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
 				else
 				{
 					updatePos.y -= figure.y + 3;
 					in->SetJump(false);
-				}
+				}*/
 			}
 			else {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
@@ -151,12 +188,12 @@ void TileMap::Collide_Gate(Player* in)
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
 				else
 				{
 					updatePos.y -= figure.y + 3;
 					in->SetJump(false);
-				}
+				}*/
 			}
 			else {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
@@ -181,12 +218,12 @@ void TileMap::Collide_Gate(Player* in)
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
 				else
 				{
 					updatePos.y -= figure.y + 3;
 					in->SetJump(false);
-				}
+				}*/
 			}
 			else {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
@@ -211,12 +248,12 @@ void TileMap::Collide_Gate(Player* in)
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
 				else
 				{
 					updatePos.y -= figure.y + 3;
 					in->SetJump(false);
-				}
+				}*/
 			}
 			else {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
@@ -241,12 +278,12 @@ void TileMap::Collide_Gate(Player* in)
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
 				else
 				{
 					updatePos.y -= figure.y + 3;
 					in->SetJump(false);
-				}
+				}*/
 			}
 			else {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
@@ -271,12 +308,12 @@ void TileMap::Collide_Gate(Player* in)
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
 			if (figure.x > figure.y) {
-				if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
+				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
 				else
 				{
 					updatePos.y -= figure.y + 3;
 					in->SetJump(false);
-				}
+				}*/
 			}
 			else {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
@@ -285,11 +322,6 @@ void TileMap::Collide_Gate(Player* in)
 			in->SetPos(updatePos);
 			isCollide = true;
 		}
-	}
-
-	if (!isCollide)
-	{
-		in->SetJump(true);
 	}
 }
 
@@ -314,6 +346,7 @@ void TileMap::Collide_Jump(Player* in)
 			in->SetJumpChange(30);
 			in->SetSuperJump(true);
 			isCollide = true;
+			break;
 		}
 	}
 
@@ -331,6 +364,7 @@ void TileMap::Collide_Jump(Player* in)
 			in->SetJumpChange(30);
 			in->SetSuperJump(true);
 			isCollide = true;
+			break;
 		}
 	}
 
@@ -348,6 +382,7 @@ void TileMap::Collide_Jump(Player* in)
 			in->SetJumpChange(30);
 			in->SetSuperJump(true);
 			isCollide = true;
+			break;
 		}
 	}
 
@@ -365,6 +400,7 @@ void TileMap::Collide_Jump(Player* in)
 			in->SetJumpChange(30);
 			in->SetSuperJump(true);
 			isCollide = true;
+			break;
 		}
 	}
 
@@ -382,6 +418,7 @@ void TileMap::Collide_Jump(Player* in)
 			in->SetJumpChange(30);
 			in->SetSuperJump(true);
 			isCollide = true;
+			break;
 		}
 	}
 
@@ -399,6 +436,7 @@ void TileMap::Collide_Jump(Player* in)
 			in->SetJumpChange(30);
 			in->SetSuperJump(true);
 			isCollide = true;
+			break;
 		}
 	}
 
@@ -408,7 +446,6 @@ void TileMap::Collide_Jump(Player* in)
 		//in->SetSuperJump(false);
 	}
 }
-
 
 bool TileMap::Collide_Gun(Player* in)
 {
@@ -444,4 +481,3 @@ bool TileMap::Collide_Gun(Player* in)
 	}
 	return bCollide;
 }
-

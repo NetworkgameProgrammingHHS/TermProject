@@ -8,6 +8,8 @@
 
 CStage3::CStage3(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM>  players)
 {
+	m_pNetworkMgr = networkmgr;
+
 	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Security_Room.png"))
 		exit(1);
 	m_sfBackground.setTexture(m_sfTexture);
@@ -19,15 +21,6 @@ CStage3::CStage3(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	m_ppPlayers = players;
 	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 
-	for (int i = 0; i < PLAYERNUM; ++i)
-	{
-		if (m_ppPlayers[i])
-		{
-			m_ppPlayers[i]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-		}
-	}
-
-	m_pNetworkMgr = networkmgr;
 	m_eCurScene = SCENE_NUM::STAGE3;
 }
 

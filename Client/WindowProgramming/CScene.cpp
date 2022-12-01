@@ -553,6 +553,12 @@ void CScene::Collide_Spoid() {
 			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSavedColor(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor());
 			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetColor(PLAYER_COLOR::NORMAL);
 			spoid->SetEnable(false);
+
+			CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
+			packet->color = static_cast<short>(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor());
+			packet->type = CS_COLOR;
+			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
+			SetPlayerInfo(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor(), m_pNetworkMgr->GetPlayerIndex());
 			break;
 		}
 	}
