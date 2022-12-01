@@ -142,15 +142,15 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	case SC_WORLD_UPDATE: {
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
 
-		if (players[0]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p1 + 1)) {
+		if (players[0]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p1 + 2)) {
 			players[0]->SetStage(static_cast<SCENE_NUM>(packet->stage_p1 + 1));
 			SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p1 + 1), 0);
 		}
-		if (players[1]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p2 + 1)) {
+		if (players[1]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p2 + 2)) {
 			players[1]->SetStage(static_cast<SCENE_NUM>(packet->stage_p2 + 1));
 			SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p2 + 1), 1);
 		}
-		if (players[2]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p3 + 1)) {
+		if (players[2]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p3 + 2)) {
 			players[2]->SetStage(static_cast<SCENE_NUM>(packet->stage_p3 + 1));
 			SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p3 + 1), 2);
 		}
