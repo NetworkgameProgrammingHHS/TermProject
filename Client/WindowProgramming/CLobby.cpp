@@ -51,11 +51,12 @@ CLobby::CLobby(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PL
 		m_sfPlayerText[i].setStyle(sf::Text::Bold);
 		m_sfPlayerText[i].setPosition(m_sfPlayer[i].getPosition().x, 50);
 
-		m_sfPlayerInfoText[i][0].setFont(m_sfFont);
-		m_sfPlayerInfoText[i][0].setCharacterSize(36);
-		m_sfPlayerInfoText[i][0].setFillColor(sf::Color::Red);
-		m_sfPlayerInfoText[i][0].setStyle(sf::Text::Bold);
-		m_sfPlayerInfoText[i][0].setPosition(m_sfPlayer[i].getPosition().x, 120);
+		m_sfNameText[i].setFont(m_sfFont);
+		m_sfNameText[i].setString(m_pNetworkMgr->GetPlayerInfoText()[i][0].getString());
+		m_sfNameText[i].setCharacterSize(36);
+		m_sfNameText[i].setFillColor(sf::Color::Red);
+		m_sfNameText[i].setStyle(sf::Text::Bold);
+		m_sfNameText[i].setPosition(m_sfPlayer[i].getPosition().x + 15, 150);
 
 	}
 	m_sfReadyText[0].setPosition(m_sfReadyText[0].getPosition().x - 20, m_sfReadyText[0].getPosition().y);
@@ -63,6 +64,8 @@ CLobby::CLobby(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PL
 	m_sfPlayerText[0].setPosition(m_sfReadyText[0].getPosition().x - 20, m_sfPlayerText[0].getPosition().y);
 	m_sfPlayerText[1].setPosition(m_sfReadyText[1].getPosition().x - 20, m_sfPlayerText[1].getPosition().y);
 	m_sfPlayerText[2].setPosition(m_sfReadyText[2].getPosition().x - 20, m_sfPlayerText[2].getPosition().y);
+	m_sfNameText[1].setPosition(m_sfNameText[1].getPosition().x + 10, m_sfNameText[1].getPosition().y);
+	m_sfNameText[2].setPosition(m_sfNameText[2].getPosition().x + 20, m_sfNameText[2].getPosition().y);
 	m_sfPlayerText[0].setString("Player1");
 	m_sfPlayerText[1].setString("Player2");
 	m_sfPlayerText[2].setString("Player3");
@@ -115,7 +118,7 @@ void CLobby::Render(sf::RenderWindow& RW)
 		{
 			RW.draw(m_sfPlayer[i]);
 			RW.draw(m_sfPlayerText[i]);
-			RW.draw(m_sfPlayerInfoText[i][0]);
+			RW.draw(m_sfNameText[i]);
 		}
 		if (m_ppPlayers[i]->GetReady())
 			RW.draw(m_sfReadyText[i]);
