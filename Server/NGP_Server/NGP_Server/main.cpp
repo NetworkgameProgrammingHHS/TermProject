@@ -167,6 +167,7 @@ int main()
 	if (NULL == hThread) { cout << "failed to create Thread" << endl; }
 	else { CloseHandle(hThread); }
 
+	// Login
 	int index = 0;
 	UploadMap();
 	while (!g_InGame) {
@@ -203,6 +204,7 @@ int main()
 		}
 	}
 
+	//Lobby
 	int cnt = 0;
 	while (true) {
 		for (int i = 0; i < 3; ++i) {
@@ -230,6 +232,7 @@ int main()
 		}
 	}
 
+	// Main Loop
 	auto endTime = chrono::steady_clock::now();
 	auto StartT = endTime;
 	float GunCoolTime = chrono::duration_cast<chrono::milliseconds>(endTime - StartT).count();
@@ -488,6 +491,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 						g_Clients[sock_info->id].SetSubDirection(RIGHT);
 						break;
 					case KEY_DIR_UP:
+						cout << g_Clients[sock_info->id].GetJump();
 						if (!g_Clients[sock_info->id].GetJump())
 						{
 							g_Clients[sock_info->id].SetJumpCount(0);
@@ -575,6 +579,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				//send rank all player
 				SC_RANK_PACKET* packet = new SC_RANK_PACKET;
 				packet->type = SC_RANK;
+				packet->winner_name = sock_info->id;
 				memcpy(packet->winner_name, g_Clients[sock_info->id].GetName(), NAME_SIZE);
 				len = sizeof(SC_RANK_PACKET);
 				for (int i = 0; i < PLAYER_NUM; ++i) {

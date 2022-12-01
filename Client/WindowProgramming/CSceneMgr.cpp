@@ -50,10 +50,34 @@ void CSceneMgr::Update(const float ElpasedTime)
 void CSceneMgr::Render(sf::RenderWindow& RW)
 {
 	m_pScene->Render(RW);
+
+	if (static_cast<int>(m_pScene->GetSceneNum()) >= static_cast<int>(SCENE_NUM::STAGE1)) {
+		for (int i = 0; i < 3; ++i) {
+			if (!m_pNetworkMgr->GetPlayerInfo().empty()) {
+				RW.draw(m_pNetworkMgr->GetPlayerInfo()[i]);
+			}
+
+			for (int j = 0; j < 2; ++j) {
+				if (!m_pNetworkMgr->GetPlayerInfoText().empty()) {
+					if (!m_pNetworkMgr->GetPlayerInfoText().empty()) {
+						RW.draw(m_pNetworkMgr->GetPlayerInfoText()[i][j]);
+					}
+				}
+			}
+		}
+	}
 }
 
 void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 {
+	if (key == sf::Keyboard::F1 && m_eCurScene != SCENE_NUM::STAGE5) {
+		Next_Stage();
+		//Send Reset Packet to Server
+		CS_NEXT_STAGE_PACKET* packet = new CS_NEXT_STAGE_PACKET;
+		packet->type = CS_NEXTSTAGE;
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_NEXT_STAGE_PACKET));
+
+	}
 	if (m_eCurScene == SCENE_NUM::TITLE || m_eCurScene == SCENE_NUM::LOBBY)
 		m_pScene->KeyBoardInput(key);
 	else {

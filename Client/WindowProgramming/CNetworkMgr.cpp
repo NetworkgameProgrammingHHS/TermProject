@@ -6,6 +6,34 @@
 CNetworkMgr::CNetworkMgr()
 {
 	InitializeCriticalSection(&g_CS);
+
+	m_sfFont.loadFromFile("Resource\\Font\\cour.ttf");
+	m_sfPlayerColor[0].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 0, 32, 32)); // Normal
+	m_sfPlayerColor[1].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(32, 0, 32, 32)); // Red
+	m_sfPlayerColor[2].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 32, 32, 32)); // Green
+	m_sfPlayerColor[3].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(32, 32, 32, 32)); // Blue
+	m_sfPlayerColor[4].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 64, 32, 32)); // GB
+	m_sfPlayerColor[5].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(32, 64, 32, 32)); // Yellow
+	m_sfPlayerColor[6].loadFromFile("Resource\\Character\\Player_Info.png", sf::IntRect(0, 96, 32, 32)); // Cyan
+
+	m_sfPlayerInfoText[0][1].setString("Stage1");
+	m_sfPlayerInfoText[1][1].setString("Stage1");
+	m_sfPlayerInfoText[2][1].setString("Stage1");
+
+	for (int i = 0; i < 3; ++i) {
+		m_sfPlayerInfo[i].setTexture(m_sfPlayerColor[0]);
+		m_sfPlayerInfo[i].setScale(2, 2);
+		m_sfPlayerInfo[i].setPosition(WINDOW_WIDTH - (m_sfPlayerInfo[0].getScale().x * TILE_SIZE * (3 - i)), 0);
+
+		for (int j = 0; j < 2; ++j) {
+			m_sfPlayerInfoText[i][j].setOutlineThickness(1.0f);
+			m_sfPlayerInfoText[i][j].setCharacterSize(12);
+			m_sfPlayerInfoText[i][j].setFont(m_sfFont);
+			m_sfPlayerInfoText[i][j].setFillColor(sf::Color::White);
+			auto size = m_sfPlayerInfoText[i][j].getGlobalBounds();
+			m_sfPlayerInfoText[i][j].setPosition(WINDOW_WIDTH - (m_sfPlayerInfo[0].getScale().x * TILE_SIZE * (3 - i)) + 5, TILE_SIZE * 2 + j * 14 + 5 * (j + 1));
+		}
+	}
 }
 
 CNetworkMgr::~CNetworkMgr()
@@ -49,9 +77,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	char buf[BUF_SIZE];
 
 	recv(m_sock, reinterpret_cast<char*>(&len), sizeof(int), MSG_WAITALL);
-	//cout << "받아온 패킷의 크기 - " << len << endl;
-	if (len > BUF_SIZE)
-		len = BUF_SIZE;
 	recv(m_sock, buf, len, MSG_WAITALL);
 
 	switch (buf[0]) {
@@ -63,22 +88,25 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		{
 			// 플레이어 1 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[0]->SetOnline(true);
-			scene->SetPlayerName(packet->name_p1, 0);
+			SetPlayerName(packet->name_p1, 0);
+			//scene->SetPlayerName(packet->name_p1, 0);
 			players[0]->SetReady(packet->ready_p1);
 		}
 		if (packet->online_p2 == CLIENT_ONLINE)
 		{
 			// 플레이어 2 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[1]->SetOnline(true);
-			scene->SetPlayerName(packet->name_p2, 1);
+			SetPlayerName(packet->name_p2, 1);
+			//scene->SetPlayerName(packet->name_p2, 1);
 			players[1]->SetReady(packet->ready_p2);
 		}
 		if (packet->online_p3 == CLIENT_ONLINE)
 		{
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[2]->SetOnline(true);
-			scene->SetPlayerName(packet->name_p3, 2);
+			//scene->SetPlayerName(packet->name_p3, 2);
 			players[2]->SetReady(packet->ready_p3);
+			SetPlayerName(packet->name_p3, 2);
 		}
 		EnterCriticalSection(&g_CS);
 		if (m_nPlayerIndex == -1 && packet->id != -1) {
@@ -112,25 +140,40 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_WORLD_UPDATE: {
-		//EnterCriticalSection(&g_CS);
 		SC_WORLD_UPDATE_PACKET* packet = reinterpret_cast<SC_WORLD_UPDATE_PACKET*>(buf);
-		//int curPlayerIndex = m_nPlayerIndex;
 
-		players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
-		if (packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) {
+		if (players[0]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p1 + 1)) {
+			players[0]->SetStage(static_cast<SCENE_NUM>(packet->stage_p1 + 1));
+			SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p1 + 1), 0);
+		}
+		if (players[1]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p2 + 1)) {
+			players[1]->SetStage(static_cast<SCENE_NUM>(packet->stage_p2 + 1));
+			SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p2 + 1), 1);
+		}
+		if (players[2]->GetStageNum() != static_cast<SCENE_NUM>(packet->stage_p3 + 1)) {
+			players[2]->SetStage(static_cast<SCENE_NUM>(packet->stage_p3 + 1));
+			SetPlayerInfo(static_cast<SCENE_NUM>(packet->stage_p3 + 1), 2);
+		}
+
+		if (scene->GetSceneNum() == players[0]->GetStageNum())
+			players[0]->SetPosition(sf::Vector2f((float)packet->x_p1, (float)packet->y_p1));
+		if (scene->GetSceneNum() == players[1]->GetStageNum())
+			players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
+		if (scene->GetSceneNum() == players[2]->GetStageNum())
+			players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
+
+		if ((packet->dir_p1 == LEFT || packet->dir_p1 == RIGHT) && scene->GetSceneNum() == players[0]->GetStageNum()) {
 			players[0]->SetDir((int)packet->dir_p1);
 		}
 		
-		players[1]->SetPosition(sf::Vector2f((float)packet->x_p2, (float)packet->y_p2));
-		if (packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) {
+		if ((packet->dir_p2 == LEFT || packet->dir_p2 == RIGHT) && scene->GetSceneNum() == players[1]->GetStageNum()) {
 			players[1]->SetDir((int)packet->dir_p2);
 		}
-
-
-		players[2]->SetPosition(sf::Vector2f((float)packet->x_p3, (float)packet->y_p3));
-		if (packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) {
+		
+		if ((packet->dir_p3 == LEFT || packet->dir_p3 == RIGHT) && scene->GetSceneNum() == players[2]->GetStageNum()) {
 			players[2]->SetDir((int)packet->dir_p3);
 		}
+
 		SCENE_NUM packetSceneNum = SCENE_NUM::NONE;
 		switch (packet->stage_bullet)
 		{
@@ -165,7 +208,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	case SC_RANK: {
 		cout << "SC_RANK" << endl;
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
-		// Show Ranking Scene
+		
 		break;
 	}
 	case SC_REMOVE: {
@@ -180,7 +223,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	{
 		SC_COLOR_PACKET* packet = reinterpret_cast<SC_COLOR_PACKET*>(buf);
 		players[packet->id]->SetColor(static_cast<PLAYER_COLOR>(packet->color));
-		scene->SetPlayerInfo(static_cast<PLAYER_COLOR>(packet->color), packet->id);
+		SetPlayerInfo(static_cast<PLAYER_COLOR>(packet->color), packet->id);
 		break;
 	}
 	case SC_RESET: {
@@ -189,8 +232,66 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		players[packet->id]->Reset();
 		if(packet->id == m_nPlayerIndex)
 			scene->TileRest();
-		scene->SetPlayerInfo(PLAYER_COLOR::NORMAL, packet->id);
+		SetPlayerInfo(PLAYER_COLOR::NORMAL, packet->id);
 		break;
 	}
 	}
+}
+
+void CNetworkMgr::SetPlayerInfo(const PLAYER_COLOR pc, const int index)
+{
+	switch (pc) {
+	case PLAYER_COLOR::NORMAL:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[0]);
+		break;
+	case PLAYER_COLOR::RED:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[1]);
+		break;
+	case PLAYER_COLOR::GREEN:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[2]);
+		break;
+	case PLAYER_COLOR::BLUE:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[3]);
+		break;
+	case PLAYER_COLOR::GB:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[4]);
+		break;
+	case PLAYER_COLOR::YELLOW:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[5]);
+		break;
+	case PLAYER_COLOR::PURPLE:
+		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[6]);
+		break;
+	default:
+		break;
+	}
+
+}
+
+void CNetworkMgr::SetPlayerInfo(const SCENE_NUM sn, const int index)
+{
+	switch (sn) {
+	case SCENE_NUM::STAGE1:
+		m_sfPlayerInfoText[index][1].setString("Stage 1");
+		break;
+	case SCENE_NUM::STAGE2:
+		m_sfPlayerInfoText[index][1].setString("Stage 2");
+		break;
+	case SCENE_NUM::STAGE3:
+		m_sfPlayerInfoText[index][1].setString("Stage 3");
+		break;
+	case SCENE_NUM::STAGE4:
+		m_sfPlayerInfoText[index][1].setString("Stage 4");
+		break;
+	case SCENE_NUM::STAGE5:
+		m_sfPlayerInfoText[index][1].setString("Stage 5");
+		break;
+	default:
+		break;
+	}
+}
+
+void CNetworkMgr::SetPlayerName(const char* name, const int index)
+{
+	m_sfPlayerInfoText[index][0].setString(name);
 }
