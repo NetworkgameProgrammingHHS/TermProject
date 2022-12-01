@@ -64,24 +64,27 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			// 플레이어 1 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[0]->SetOnline(true);
 			scene->SetPlayerName(packet->name_p1, 0);
+			players[0]->SetReady(packet->ready_p1);
 		}
 		if (packet->online_p2 == CLIENT_ONLINE)
 		{
 			// 플레이어 2 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[1]->SetOnline(true);
 			scene->SetPlayerName(packet->name_p2, 1);
+			players[1]->SetReady(packet->ready_p2);
 		}
 		if (packet->online_p3 == CLIENT_ONLINE)
 		{
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[2]->SetOnline(true);
 			scene->SetPlayerName(packet->name_p3, 2);
+			players[2]->SetReady(packet->ready_p3);
 		}
-
 		EnterCriticalSection(&g_CS);
 		if (m_nPlayerIndex == -1 && packet->id != -1) {
 			std::cout << packet->id << "접속" << std::endl;
 			m_nPlayerIndex = packet->id;
+			scene->SetNext(true);
 		}
 		LeaveCriticalSection(&g_CS);
 		break;
@@ -90,8 +93,16 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		cout << "SC_READY" << endl;
 		SC_READY_PACKET* packet = reinterpret_cast<SC_READY_PACKET*>(buf);
 		// 로그인 인포 패킷을 받아 로그인 한 플레이어의 순서에 따라 준비 상태를 출력한다.
-		if (packet->ready == READY_OFF) { std::cout << "준비 안함" << std::endl; }
-		if (packet->ready == READY_ON) { std::cout << "준비" << std::endl; }
+		if (packet->ready == READY_OFF) 
+		{ 
+			std::cout << "준비 안함" << std::endl; 
+			players[packet->id]->SetReady(false);
+		}
+		if (packet->ready == READY_ON)
+		{ 
+			std::cout << "준비" << std::endl; 
+			players[packet->id]->SetReady(true);
+		}
 		break;
 	}
 	case SC_GAMESTART: {
@@ -125,7 +136,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		{
 		case STAGE_1:
 			packetSceneNum = SCENE_NUM::STAGE1;
-			cout << "Stage1" << endl;
 			break;
 		case STAGE_2:
 			packetSceneNum = SCENE_NUM::STAGE2;
@@ -149,7 +159,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		{
 			scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
 		}
-		//scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
 		//LeaveCriticalSection(&g_CS);
 		break;
 	}

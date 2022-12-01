@@ -10,6 +10,7 @@
 #include "CStage5.h"
 #include "CRanking.h"
 #include "CPlayer.h"
+#include "CLobby.h"
 
 CSceneMgr::CSceneMgr(shared_ptr<CNetworkMgr> networkmgr)
 {
@@ -53,7 +54,7 @@ void CSceneMgr::Render(sf::RenderWindow& RW)
 
 void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 {
-	if (m_eCurScene == SCENE_NUM::TITLE)
+	if (m_eCurScene == SCENE_NUM::TITLE || m_eCurScene == SCENE_NUM::LOBBY)
 		m_pScene->KeyBoardInput(key);
 	else {
 		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->KeyBoardInput(key);
@@ -62,7 +63,7 @@ void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 
 void CSceneMgr::KeyBoardRelease(const sf::Keyboard::Key& key)
 {
-	if (m_eCurScene != SCENE_NUM::TITLE)
+	if (m_eCurScene != SCENE_NUM::TITLE || m_eCurScene == SCENE_NUM::LOBBY)
 		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->KeyBoardRelease(key);
 }
 
@@ -78,7 +79,14 @@ void CSceneMgr::Next_Stage()
 	case SCENE_NUM::TITLE: 
 	{
 		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));		
+		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CLobby>(m_pNetworkMgr, m_ppPlayers));
+		m_eCurScene = SCENE_NUM::LOBBY;
+		break;
+	}
+	case SCENE_NUM::LOBBY:
+	{
+		m_pScene.reset();
+		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));
 		m_eCurScene = SCENE_NUM::STAGE1;
 		break;
 	}
