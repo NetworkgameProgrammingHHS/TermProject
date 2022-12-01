@@ -91,7 +91,6 @@ void TileMap::Collide_Wall(Player* in)
 			}
 			in->SetPos(updatePos);
 			isCollide = true;
-			break;
 		}
 	}
 	

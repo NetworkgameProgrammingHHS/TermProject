@@ -53,6 +53,14 @@ void CSceneMgr::Render(sf::RenderWindow& RW)
 
 void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 {
+	if (key == sf::Keyboard::F1 && m_eCurScene != SCENE_NUM::STAGE5) {
+		Next_Stage();
+		//Send Reset Packet to Server
+		CS_NEXT_STAGE_PACKET* packet = new CS_NEXT_STAGE_PACKET;
+		packet->type = CS_NEXTSTAGE;
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_NEXT_STAGE_PACKET));
+
+	}
 	if (m_eCurScene == SCENE_NUM::TITLE)
 		m_pScene->KeyBoardInput(key);
 	else {

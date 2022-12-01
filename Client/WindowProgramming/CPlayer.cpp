@@ -205,6 +205,9 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		input = true;
 		dir = KEY_FIREGUN;
 		break;
+	case sf::Keyboard::F1:
+		Reset();
+		break;
 	default:
 		break;
 	}

@@ -577,6 +577,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				//send rank all player
 				SC_RANK_PACKET* packet = new SC_RANK_PACKET;
 				packet->type = SC_RANK;
+				packet->winner_name = sock_info->id;
 				memcpy(packet->winner_name, g_Clients[sock_info->id].GetName(), NAME_SIZE);
 				len = sizeof(SC_RANK_PACKET);
 				for (int i = 0; i < PLAYER_NUM; ++i) {

@@ -167,7 +167,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	case SC_RANK: {
 		cout << "SC_RANK" << endl;
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
-		// Show Ranking Scene
+		
 		break;
 	}
 	case SC_REMOVE: {
