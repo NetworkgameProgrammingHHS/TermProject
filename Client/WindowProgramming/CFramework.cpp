@@ -12,13 +12,11 @@ CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT)
 
 	m_pSceneMgr = make_shared<CSceneMgr>(m_pNetworkMgr);
 	m_pSceneMgr->Initialize();
-	
 
 	m_pRTParameter = new RecVThreadParameter;
 	m_pRTParameter->p = this;
 	m_pRTParameter->pNetMgr = m_pNetworkMgr;
 	m_pRTParameter->pSceneMgr = m_pSceneMgr;
-	
 
 	m_sfWindow.setFramerateLimit(60);
 }
