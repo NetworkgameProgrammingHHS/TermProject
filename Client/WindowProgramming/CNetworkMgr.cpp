@@ -160,6 +160,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			players[2]->SetDir((int)packet->dir_p3);
 		}
 
+
 		SCENE_NUM packetSceneNum = SCENE_NUM::NONE;
 		switch (packet->stage_bullet)
 		{
@@ -195,7 +196,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 	case SC_RANK: {
 		cout << "SC_RANK" << endl;
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
-		
+		m_WinnerPlayer.setString(packet->winner_name);
 		break;
 	}
 	case SC_REMOVE: {
@@ -203,7 +204,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
 		std::cout << packet->id << "·Î±×¾Æ¿ô" << std::endl;
 		//scene->Logout((int)packet->id);
-		
 		break;
 	}
 	case SC_COLOR:
@@ -281,4 +281,9 @@ void CNetworkMgr::SetPlayerInfo(const SCENE_NUM sn, const int index)
 void CNetworkMgr::SetPlayerName(const char* name, const int index)
 {
 	m_sfPlayerInfoText[index][0].setString(name);
+}
+
+void CNetworkMgr::SetWinnerName(const sf::String name)
+{
+	m_WinnerPlayer.setString(name);
 }

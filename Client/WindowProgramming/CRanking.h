@@ -12,4 +12,9 @@ public:
 
 	virtual void Update(const float ElpasedTime);
 	virtual void Render(sf::RenderWindow& RW);
+
+private:
+
+	sf::Text m_Text;
+	sf::Font m_Font;
 };

@@ -199,6 +199,10 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		if (m_bSpoid) {
 			m_bSpoid = false;
 			SetColor(m_eSavedColor);
+			CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
+			packet->type = CS_COLOR;
+			packet->color = static_cast<short>(m_eSavedColor);
+			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
 		}
 		break;
 	case sf::Keyboard::C:
@@ -223,6 +227,7 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
 		packet->type = CS_COLOR;
 		packet->color = static_cast<short>(m_eSavedColor);
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
 	}
 }
 

@@ -48,9 +48,17 @@ void CSceneMgr::Update(const float ElpasedTime)
 
 void CSceneMgr::Render(sf::RenderWindow& RW)
 {
+	if (m_pNetworkMgr->GetWinnerName().getString().getSize() && m_eCurScene != SCENE_NUM::RANKING)
+	{
+		m_pScene.reset();
+		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CRanking>(m_pNetworkMgr, m_ppPlayers));
+		m_eCurScene = SCENE_NUM::RANKING;
+	}
+
 	m_pScene->Render(RW);
 
-	if (static_cast<int>(m_pScene->GetSceneNum()) >= static_cast<int>(SCENE_NUM::STAGE1)) {
+	if (static_cast<int>(m_pScene->GetSceneNum()) >= static_cast<int>(SCENE_NUM::STAGE1) && 
+		static_cast<int>(m_pScene->GetSceneNum()) != static_cast<int>(SCENE_NUM::RANKING)) {
 		for (int i = 0; i < 3; ++i) {
 			if (!m_pNetworkMgr->GetPlayerInfo().empty()) {
 				RW.draw(m_pNetworkMgr->GetPlayerInfo()[i]);
@@ -69,12 +77,18 @@ void CSceneMgr::Render(sf::RenderWindow& RW)
 
 void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 {
-	if (key == sf::Keyboard::F1 && m_eCurScene != SCENE_NUM::STAGE5) {
+	if (key == sf::Keyboard::F1 && m_eCurScene < SCENE_NUM::RANKING) {
+		if(m_eCurScene == SCENE_NUM::STAGE5)
+			m_pNetworkMgr->SetWinnerName(m_pNetworkMgr->GetPlayerInfoText()[m_pNetworkMgr->GetPlayerIndex()][0].getString());
 		Next_Stage();
 		//Send Reset Packet to Server
+		
+	
 		CS_NEXT_STAGE_PACKET* packet = new CS_NEXT_STAGE_PACKET;
 		packet->type = CS_NEXTSTAGE;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_NEXT_STAGE_PACKET));
+		
+		
 
 	}
 	if (m_eCurScene == SCENE_NUM::TITLE)
