@@ -273,7 +273,7 @@ int main()
 			}
 
 			for (int i = 0; i < PLAYER_NUM; ++i) 
-				if (g_TileMap[g_Clients[i].GetStageNum() - 1])
+				if (g_TileMap[g_Clients[i].GetStageNum() - 1] && g_Clients[i].GetStageNum() < STAGE_END)
 				{
 					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gate(&g_Clients[i]);
 					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Jump(&g_Clients[i]);
@@ -579,18 +579,21 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				break;
 			case STAGE_5:
 			{
-				g_Clients[sock_info->id].SetStageNum(STAGE_END);
+				for(int i = 0; i < PLAYER_NUM; ++i)
+					g_Clients[i].SetStageNum(STAGE_END);
 				//send rank all player
 				SC_RANK_PACKET* packet = new SC_RANK_PACKET;
 				packet->type = SC_RANK;
-				//packet->winner_name = sock_info->id;
 				memcpy(packet->winner_name, g_Clients[sock_info->id].GetName(), NAME_SIZE);
 				len = sizeof(SC_RANK_PACKET);
 				for (int i = 0; i < PLAYER_NUM; ++i) {
-					EnterCriticalSection(&g_CS);
-					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
-					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
-					LeaveCriticalSection(&g_CS);
+					if (i != sock_info->id)
+					{
+						EnterCriticalSection(&g_CS);
+						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+						LeaveCriticalSection(&g_CS);
+					}
 				}
 				delete packet;
 			}

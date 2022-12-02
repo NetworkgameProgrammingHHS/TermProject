@@ -227,6 +227,7 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 		CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
 		packet->type = CS_COLOR;
 		packet->color = static_cast<short>(m_eSavedColor);
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
 	}
 }
 
