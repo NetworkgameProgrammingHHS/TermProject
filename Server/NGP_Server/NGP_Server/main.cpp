@@ -677,6 +677,15 @@ void Collide_Bullet(Player* in, Bullet* Bullet)
 
 		}
 	}
+	if (Bullet->GetPos().x<0 - TILE_SIZE || Bullet->GetPos().x > WINDOW_WIDTH + TILE_SIZE)
+	{
+		g_Bullet->SetbShow(false);
+		g_bCollideGun = false;
+		for (int i = 0; i < PLAYER_NUM; ++i)
+		{
+			g_Clients[i].SetGun(false);
+		}
+	}
 	
 }
 
