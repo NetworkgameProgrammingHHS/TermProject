@@ -72,6 +72,9 @@ struct SC_LOGIN_INFO_PACKET {
 	char name_p1[NAME_SIZE];
 	char name_p2[NAME_SIZE];
 	char name_p3[NAME_SIZE];
+	bool ready_p1;
+	bool ready_p2;
+	bool ready_p3;
 };
 
 struct SC_RESET_PACKET {

@@ -32,7 +32,7 @@ public:
 	void SetGunState(int enable, int bulletx, int bullety);
 	void Logout(int index);
 
-	void TileRest();
+	void TileReset();
 
 protected:
 	void ShowPlayerInfo();

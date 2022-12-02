@@ -39,6 +39,7 @@ public:
 	const bool GetGun() const { return m_bGun; }
 	const PLAYER_COLOR& GetSavedColor() const { return m_eSavedColor; }
 	const bool GetOnline() const { return m_bOnline; }
+	const bool GetReady() const { return m_bReady; }
 	const SCENE_NUM GetStageNum() const { return m_eStageNum; }
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
@@ -53,6 +54,7 @@ public:
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 	void SetDir(const int dir) { m_iDir = dir; }
 	void SetOnline(const bool online) { m_bOnline = online; }
+	void SetReady(const bool ready) { m_bReady = ready; }
 	void SetStage(const SCENE_NUM sn) { m_eStageNum = sn; }
 
 private:
@@ -76,6 +78,7 @@ private:
 	float m_fSpriteLeft = 0;
 	int m_iSpriteTop = 32;
 	bool m_bOnline = false;
+	bool m_bReady = false;
 	PLAYER_STATE m_eState = PLAYER_STATE::IDLE;
 	PLAYER_COLOR m_eColor = PLAYER_COLOR::NORMAL;
 	PLAYER_COLOR m_eSavedColor = PLAYER_COLOR::NORMAL;

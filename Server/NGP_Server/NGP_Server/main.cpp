@@ -24,7 +24,7 @@ CRITICAL_SECTION g_CS1;
 
 void UploadMap();
 void CreateGun();
-void Collide_Bullet(Player* in, Vec2 BulletPos);
+void Collide_Bullet(Player* in, Bullet* Bullet);
 
 
 //Client Update Thread
@@ -35,6 +35,7 @@ void err_display(int errcode);
 chrono::time_point<chrono::system_clock> startTime;
 
 // Packet Send Thread
+
 DWORD WINAPI SendPacket(LPVOID)
 {	
 	SC_WORLD_UPDATE_PACKET* packet = new SC_WORLD_UPDATE_PACKET;
@@ -80,7 +81,6 @@ DWORD WINAPI SendPacket(LPVOID)
 					{
 						packet->bullet_enable = GUN_OBJECT;
 						packet->dir_bullet = 0;
-						g_iWhichStage = 2;
 						switch (g_iWhichStage)
 						{
 						case 0:
@@ -191,7 +191,6 @@ int main()
 		//set client id
 		g_Clients[index].SetID(index);
 		g_Clients[index].SetOnline(true);
-		//g_Clients[2].SetGun(true);
 		g_iCntClientNum++;
 
 		DWORD ThreadId;
@@ -246,18 +245,10 @@ int main()
 			//InGame
 			// Bullet, Move, Collide
 			if (g_Bullet->GetbShow()) {
-				/*int dir = 0;
-				if (g_Bullet->GetDirection() == LEFT)
-					dir = -1;
-				else if (g_Bullet->GetDirection() == RIGHT)
-					dir = 1;
-
-				g_Bullet->SetPos({ g_Bullet->GetPos().x + dir * ElapsedTime * 300.f, g_Bullet->GetPos().y });*/
-
 				g_Bullet->Update(ElapsedTime);
 				for (int i = 0; i < PLAYER_NUM; ++i)
 				{
-					Collide_Bullet(&g_Clients[i], g_Bullet->GetPos());
+					Collide_Bullet(&g_Clients[i], g_Bullet.get());
 				}
 			}
 
@@ -330,16 +321,24 @@ void UploadMap()
 	// A: Gun			S: Gun possible space
 }
 
+int median(int a, int b, int c)
+{
+	int maxium = max(max(a, b), c);
+	int mininum = min(min(a, b), c);
+	return a ^ b ^ c ^ maxium ^ mininum;
+}
+
 void CreateGun()
 {
 	g_iWhichStage = 0;
+	array<int, 3> PlayerStage;
 	for (int i = 0; i < PLAYER_NUM; ++i)
 	{
-		g_iWhichStage += g_Clients[i].GetStageNum();
+		PlayerStage[i] = g_Clients[i].GetStageNum();
 	}
-	g_iWhichStage /= PLAYER_NUM;
+	g_iWhichStage = median(PlayerStage[0], PlayerStage[1], PlayerStage[2]);
 	g_iWhichStage -= 1;
-	cout << "CreatGun" << endl;
+	cout << "CreatGun stage: "<< g_iWhichStage << endl;
 	g_TileMap[g_iWhichStage]->CreateGun();
 	g_bGun = true;
 	//After CreateGun, SendPacket
@@ -380,7 +379,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 
 		switch (buf[0])
 		{
-		case CS_LOGIN://
+		case CS_LOGIN://¿©±â¼­ ready??
 		{
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[sock_info->id].SetName(packet->name);
@@ -393,6 +392,9 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			scp->online_p1 = g_Clients[0].GetOnline();
 			scp->online_p2 = g_Clients[1].GetOnline();
 			scp->online_p3 = g_Clients[2].GetOnline();
+			scp->ready_p1 = g_Clients[0].GetReady();
+			scp->ready_p2 = g_Clients[1].GetReady();
+			scp->ready_p3 = g_Clients[2].GetReady();
 			memcpy(scp->name_p1, g_Clients[0].GetName(), NAME_SIZE);
 			memcpy(scp->name_p2, g_Clients[1].GetName(), NAME_SIZE);
 			memcpy(scp->name_p3, g_Clients[2].GetName(), NAME_SIZE);
@@ -552,24 +554,24 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			switch (g_Clients[sock_info->id].GetStageNum())
 			{
 			case STAGE_1:
-				EnterCriticalSection(&g_CS1);
 				g_Clients[sock_info->id].SetStageNum(STAGE_2);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-				LeaveCriticalSection(&g_CS1);
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_2:
-				EnterCriticalSection(&g_CS1);
 				g_Clients[sock_info->id].SetStageNum(STAGE_3);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-				LeaveCriticalSection(&g_CS1);
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_3:
 				g_Clients[sock_info->id].SetStageNum(STAGE_4);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_4:
 				g_Clients[sock_info->id].SetStageNum(STAGE_5);
 				g_Clients[sock_info->id].SetPos(Vec2{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
+				g_Clients[sock_info->id].SetFall(false);
 				break;
 			case STAGE_5:
 			{
@@ -603,45 +605,75 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 	return 0;
 }
 
-void Collide_Bullet(Player* in, Vec2 BulletPos)
+void Collide_Bullet(Player* in, Bullet* Bullet)
 {
-	Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
-	Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
+	//int bulletStage = 0;
+	//switch (Bullet->GetStage())
+	//{
+	//case STAGE_1:
+	//	bulletStage = 1;
+	//	break;
+	//case STAGE_2:
+	//	bulletStage = 2;
+	//	break;
+	//case STAGE_3:
+	//	bulletStage = 3;
+	//	break;
+	//case STAGE_4:
+	//	bulletStage = 4;
+	//	break;
+	//case STAGE_5:
+	//	bulletStage = 5;
+	//	break;
+	//case STAGE_END:
+	//	break;
+	//default:
+	//	break;
+	//}
 
-	bool bCollide = false;
+	//if (in->GetStageNum() == bulletStage)
+	if (in->GetStageNum() == Bullet->GetStage())
+	{
+		Vec2 BulletPos = Bullet->GetPos();
+		Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
+		Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
 
-	Vec2 bulletLT = { BulletPos.x + TILE_SIZE / 4 + 3, BulletPos.y + TILE_SIZE / 4 + 3 };
-	Vec2 bulletRB = { BulletPos.x + TILE_SIZE * 0.75f - 3, BulletPos.y + TILE_SIZE * 0.75f - 3 };
+		bool bCollide = false;
 
-	if (inLT.x > bulletRB.x);
-	else if (inRB.x < bulletLT.x);
-	else if (inLT.y > bulletRB.y);
-	else if (inRB.y < bulletLT.y);
-	else {
-		g_Bullet->SetbShow(false);
-		g_bCollideGun = false;
-		in->SetPos(Vec2{ TILE_SIZE, WINDOW_HEIGHT - 2 * TILE_SIZE });
-		in->SetColor(PLAYER_COLOR::NORMAL);
-		in->SetDirection(0);
+		Vec2 bulletLT = { BulletPos.x + TILE_SIZE / 4 + 3, BulletPos.y + TILE_SIZE / 4 + 3 };
+		Vec2 bulletRB = { BulletPos.x + TILE_SIZE * 0.75f - 3, BulletPos.y + TILE_SIZE * 0.75f - 3 };
 
-		SC_RESET_PACKET* packet = new SC_RESET_PACKET;
-		packet->type = SC_RESET;
-		packet->id = in->GetID();
-		int len = sizeof(SC_RESET_PACKET);
-		for (int i = 0; i < 3; ++i) {
-			EnterCriticalSection(&g_CS);
-			send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
-			send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
-			LeaveCriticalSection(&g_CS);
+		if (inLT.x > bulletRB.x);
+		else if (inRB.x < bulletLT.x);
+		else if (inLT.y > bulletRB.y);
+		else if (inRB.y < bulletLT.y);
+		else {
+			g_Bullet->SetbShow(false);
+			g_bCollideGun = false;
+			in->SetPos(Vec2{ TILE_SIZE, WINDOW_HEIGHT - 2 * TILE_SIZE });
+			in->SetColor(PLAYER_COLOR::NORMAL);
+			in->SetDirection(0);
+
+			SC_RESET_PACKET* packet = new SC_RESET_PACKET;
+			packet->type = SC_RESET;
+			packet->id = in->GetID();
+			int len = sizeof(SC_RESET_PACKET);
+			for (int i = 0; i < 3; ++i) {
+				EnterCriticalSection(&g_CS);
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+				LeaveCriticalSection(&g_CS);
+			}
+			delete packet;
+
+			for (int i = 0; i < PLAYER_NUM; ++i)
+			{
+				g_Clients[i].SetGun(false);
+			}
+
 		}
-		delete packet;
-
-		for (int i = 0; i < PLAYER_NUM; ++i)
-		{
-			g_Clients[i].SetGun(false);
-		}
-
 	}
+	
 }
 
 

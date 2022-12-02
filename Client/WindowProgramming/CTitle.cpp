@@ -2,7 +2,7 @@
 #include "CScene.h"
 #include "CTitle.h"
 #include "CNetworkMgr.h"
-#include "CStage1.h"
+//#include "CStage1.h"
 
 CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr)
 {
@@ -65,14 +65,14 @@ void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 		case sf::Keyboard::Escape:
 			exit(1);
 			break;
-		case sf::Keyboard::R:
-		{
-			CS_PLAYER_READY_PACKET* packet = new CS_PLAYER_READY_PACKET;
-			packet->ready = READY_ON;
-			packet->type = CS_PLAYER_READY;
-			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_READY_PACKET));
-			break;
-		}
+		//case sf::Keyboard::R:
+		//{
+		//	CS_PLAYER_READY_PACKET* packet = new CS_PLAYER_READY_PACKET;
+		//	packet->ready = READY_ON;
+		//	packet->type = CS_PLAYER_READY;
+		//	m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_READY_PACKET));
+		//	break;
+		//}
 
 		default:
 		{

@@ -19,7 +19,7 @@ Player::~Player()
 
 void Player::Update(const float ElapsedTime)
 {
-	m_Pos.x += PLAYER_SPEED * m_Direction * ElapsedTime;
+	m_Pos.x += PLAYER_SPEED * m_Direction * ElapsedTime;	
 
 	if (m_Jump) {
 		if (m_JumpCnt < m_JumpChange) {

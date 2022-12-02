@@ -201,7 +201,7 @@ void CPlayer::KeyBoardInput(const sf::Keyboard::Key& key)
 			SetColor(m_eSavedColor);
 			CS_PLAYER_COLOR_PACKET* packet = new CS_PLAYER_COLOR_PACKET;
 			packet->type = CS_COLOR;
-			packet->color = static_cast<short>(m_eSavedColor);
+			packet->color = static_cast<short>(m_eColor);
 			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_COLOR_PACKET));
 		}
 		break;

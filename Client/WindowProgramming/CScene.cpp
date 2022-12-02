@@ -46,7 +46,7 @@ void CScene::Logout(int index)
 
 }
 
-void CScene::TileRest()
+void CScene::TileReset()
 {
 	m_pTileMap->TileReset();
 
