@@ -18,6 +18,7 @@ public:
 	const short GetSubDirection() const { return m_SubDirection; }
 	const PLAYER_COLOR& GetColor() const { return m_Color; }
 	const bool GetOnline() const { return m_bOnline; }
+	const bool GetAccessUser() const { return m_bAccessUser; }
 	const bool GetGun() const { return m_bGun; }
 	const char* GetName() const { return m_Client_Name; };
 	const bool GetReady() const { return m_bReady; }
@@ -36,6 +37,7 @@ public:
 	void SetSubDirection(const short dir) { m_SubDirection = dir; }
 	void SetColor(const PLAYER_COLOR& color) { m_Color = color; }
 	void SetOnline(const bool online) { m_bOnline = online; }
+	void SetAccessUser(const bool access) { m_bAccessUser = access; }
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetName(const char* name) { memcpy(m_Client_Name, name, sizeof(name)); };
 	void SetReady(const bool ready) { m_bReady = ready; }
@@ -61,6 +63,7 @@ private:
 	short m_SubDirection;
 	PLAYER_COLOR m_Color;
 	bool m_bOnline;
+	bool m_bAccessUser = false;
 	bool m_bGun;
 	char m_Client_Name[NAME_SIZE] = {'\0'};
 	bool m_bReady;

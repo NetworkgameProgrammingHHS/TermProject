@@ -52,7 +52,6 @@ CLobby::CLobby(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PL
 		m_sfPlayerText[i].setPosition(m_sfPlayer[i].getPosition().x, 50);
 
 		m_sfNameText[i].setFont(m_sfFont);
-		m_sfNameText[i].setString(m_pNetworkMgr->GetPlayerInfoText()[i][0].getString());
 		m_sfNameText[i].setCharacterSize(36);
 		m_sfNameText[i].setFillColor(sf::Color::Red);
 		m_sfNameText[i].setStyle(sf::Text::Bold);
@@ -106,7 +105,10 @@ void CLobby::KeyBoardInput(const sf::Keyboard::Key& key)
 
 void CLobby::Update(const float ElapsedTime)
 {
-	
+	for (int i = 0; i < 3; ++i)
+	{
+		m_sfNameText[i].setString(m_pNetworkMgr->GetPlayerInfoText()[i][0].getString());
+	}
 }
 
 void CLobby::Render(sf::RenderWindow& RW)

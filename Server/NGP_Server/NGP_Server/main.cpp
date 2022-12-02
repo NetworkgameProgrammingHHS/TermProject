@@ -175,7 +175,7 @@ int main()
 			continue;
 		else {
 			for (int i = 0; i < PLAYER_NUM; ++i) {
-				if (!g_Clients[i].GetOnline()) {
+				if (!g_Clients[i].GetAccessUser()) {
 					index = i;
 					break;
 				}
@@ -190,7 +190,7 @@ int main()
 		}
 		//set client id
 		g_Clients[index].SetID(index);
-		g_Clients[index].SetOnline(true);
+		g_Clients[index].SetAccessUser(true);
 		g_iCntClientNum++;
 
 		DWORD ThreadId;
@@ -257,8 +257,12 @@ int main()
 			if (GunCoolTime >= 10.f)
 			{
 				//into zero, collision zero
-				GunCoolTime = 0.f;
-				CreateGun();
+				g_bGun = false;
+				if (GunCoolTime >= 11.f)
+				{
+					GunCoolTime = 0.f;
+					CreateGun();
+				}
 			}
 
 
