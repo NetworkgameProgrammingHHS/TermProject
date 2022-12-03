@@ -75,9 +75,11 @@ void TileMap::Collide_Wall(Player* in)
 			if (figure.x > figure.y) {
 				if (inLT.y - 3 > wallLT.y) {
 					updatePos.y += figure.y + 3;
+					in->SetFall(false);
 				}
 				else
 				{
+					in->SetFall(false);
 					updatePos.y = wallLT.y - TILE_SIZE;
 					in->SetJump(false);
 					if (in->GetSuperJump())
@@ -98,8 +100,8 @@ void TileMap::Collide_Wall(Player* in)
 	
 	if (!isCollide && !in->GetJump()) {
 		bool FallCollide = false;
-		Vec2 FallLT = { in->GetPos().x + TILE_SIZE / 4, in->GetPos().y + TILE_SIZE};
-		Vec2 FallRB = { in->GetPos().x + TILE_SIZE * 0.75f, in->GetPos().y + TILE_SIZE * 2};
+		Vec2 FallLT = { in->GetPos().x + TILE_SIZE * 0.25f, in->GetPos().y + TILE_SIZE};
+		Vec2 FallRB = { in->GetPos().x + TILE_SIZE * 0.75f, in->GetPos().y + TILE_SIZE + 16};
 		for (auto i = range.first; i != range.second; ++i) {
 			Vec2 wallLT = { i->second.x - 1, i->second.y };
 			Vec2 wallRB = { i->second.x + TILE_SIZE + 1, i->second.y + TILE_SIZE };
