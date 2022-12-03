@@ -17,7 +17,7 @@ CRanking::CRanking(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>
 
 	m_Text = networkmgr->GetWinnerName();
 	m_Text.setFont(m_Font);
-	m_Text.setCharacterSize(24);
+	m_Text.setCharacterSize(50);
 	m_Text.setFillColor(sf::Color::White);
 	m_Text.setStyle(sf::Text::Bold);
 	m_Text.setPosition(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT - 100);
@@ -39,16 +39,28 @@ void CRanking::Update(const float ElpasedTime)
 void CRanking::Render(sf::RenderWindow& RW)
 {
 	RW.draw(m_sfBackground);
+	
+	m_Text.setFillColor(sf::Color::Black);
+	m_Text.setCharacterSize(45);
+	m_Text.setPosition(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT - 150);
+	RW.draw(m_Text);
+	m_Text.setFillColor(sf::Color::White);
+	m_Text.setCharacterSize(40);
+	m_Text.setPosition(WINDOW_WIDTH / 2 - 47.5, WINDOW_HEIGHT - 147.5);
 	RW.draw(m_Text);
 
 	sf::Text win;
 	win.setFont(m_Font);
 	win.setString("Win!!!");
-	win.setCharacterSize(24);
-	win.setFillColor(sf::Color::White);
+	win.setCharacterSize(45);
+	win.setFillColor(sf::Color::Black);
 	win.setStyle(sf::Text::Bold);
-	win.setPosition(WINDOW_WIDTH / 2 + 50, WINDOW_HEIGHT - 100);
+	win.setPosition(WINDOW_WIDTH / 2 + 50, WINDOW_HEIGHT - 150);
 
+	RW.draw(win);
+	win.setFillColor(sf::Color::White);
+	win.setCharacterSize(40);
+	win.setPosition(WINDOW_WIDTH / 2 + 52.5, WINDOW_HEIGHT - 147.5);
 	RW.draw(win);
 
 	sf::Sprite WinnerPlayer;
