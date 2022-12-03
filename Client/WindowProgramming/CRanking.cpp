@@ -69,7 +69,7 @@ void CRanking::Render(sf::RenderWindow& RW)
 	{
 		if (m_Text.getString() == m_pNetworkMgr->GetPlayerInfoText()[i][0].getString())
 		{
-			WinnerPlayer = m_ppPlayers[i]->GetSprite();
+			WinnerPlayer = m_pNetworkMgr->GetPlayerInfo()[i];
 			break;
 		}
 	}

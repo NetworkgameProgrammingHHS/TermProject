@@ -663,13 +663,10 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				memcpy(packet->winner_name, g_Clients[sock_info->id].GetName(), NAME_SIZE);
 				len = sizeof(SC_RANK_PACKET);
 				for (int i = 0; i < PLAYER_NUM; ++i) {
-					if (i != sock_info->id)
-					{
-						EnterCriticalSection(&g_CS);
-						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
-						send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
-						LeaveCriticalSection(&g_CS);
-					}
+					EnterCriticalSection(&g_CS);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(len), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+					LeaveCriticalSection(&g_CS);
 				}
 				delete packet;
 			}
