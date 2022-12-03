@@ -316,8 +316,6 @@ void TileMap::Collide_Jump(Player* in)
 		Vec2 inLT = { in->GetPos().x + TILE_SIZE / 4 + 3, in->GetPos().y + 3 };
 		Vec2 inRB = { in->GetPos().x + TILE_SIZE * 0.75f - 3, in->GetPos().y + TILE_SIZE - 3 };
 
-		bool isCollide = false;
-
 		// Red Jump
 		auto range = m_mmObjPos.equal_range(static_cast<int>('Z'));
 		for (auto i = range.first; i != range.second; ++i) {
@@ -328,11 +326,9 @@ void TileMap::Collide_Jump(Player* in)
 			else if (inRB.x < wallLT.x) continue;
 			else if (inLT.y > wallRB.y) continue;
 			else if (inRB.y < wallLT.y) continue;
-			else if (in->GetColor() == PLAYER_COLOR::RED) {
-				in->SetJumpChange(15);
+			else if (in->GetColor() == PLAYER_COLOR::RED) {				
+				in->SetJumpChange(30);
 				in->SetSuperJump(true);
-				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
-				isCollide = true;
 				break;
 			}
 		}
@@ -348,10 +344,8 @@ void TileMap::Collide_Jump(Player* in)
 			else if (inLT.y > wallRB.y) continue;
 			else if (inRB.y < wallLT.y) continue;
 			else if (in->GetColor() == PLAYER_COLOR::GREEN) {
-				in->SetJumpChange(15);
-				in->SetSuperJump(true);
-				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
-				isCollide = true;
+				in->SetJumpChange(30);
+				in->SetSuperJump(true);				
 				break;
 			}
 		}
@@ -367,10 +361,8 @@ void TileMap::Collide_Jump(Player* in)
 			else if (inLT.y > wallRB.y) continue;
 			else if (inRB.y < wallLT.y) continue;
 			else if (in->GetColor() == PLAYER_COLOR::BLUE) {
-				in->SetJumpChange(15);
+				in->SetJumpChange(30);
 				in->SetSuperJump(true);
-				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
-				isCollide = true;
 				break;
 			}
 		}
@@ -386,10 +378,8 @@ void TileMap::Collide_Jump(Player* in)
 			else if (inLT.y > wallRB.y) continue;
 			else if (inRB.y < wallLT.y) continue;
 			else if (in->GetColor() == PLAYER_COLOR::YELLOW) {
-				in->SetJumpChange(15);
+				in->SetJumpChange(30);
 				in->SetSuperJump(true);
-				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
-				isCollide = true;
 				break;
 			}
 		}
@@ -405,10 +395,8 @@ void TileMap::Collide_Jump(Player* in)
 			else if (inLT.y > wallRB.y) continue;
 			else if (inRB.y < wallLT.y) continue;
 			else if (in->GetColor() == PLAYER_COLOR::PURPLE) {
-				in->SetJumpChange(15);
+				in->SetJumpChange(30);
 				in->SetSuperJump(true);
-				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
-				isCollide = true;
 				break;
 			}
 		}
@@ -424,19 +412,10 @@ void TileMap::Collide_Jump(Player* in)
 			else if (inLT.y > wallRB.y) continue;
 			else if (inRB.y < wallLT.y) continue;
 			else if (in->GetColor() == PLAYER_COLOR::GB) {
-				in->SetJumpChange(15);
-				in->SetSuperJump(true);
-				in->SetVelocity({ in->GetVelocity().x, SUPERJUMP_SPEED });
-				isCollide = true;
+				in->SetJumpChange(30);
+				in->SetSuperJump(true);			
 				break;
 			}
-		}
-
-		if (!isCollide)
-		{
-			in->SetJumpChange(10);
-			in->SetSuperJump(false);
-			in->SetVelocity({in->GetVelocity().x, JUMP_SPEED});
 		}
 	}
 }

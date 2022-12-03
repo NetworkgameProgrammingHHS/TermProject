@@ -88,6 +88,13 @@ void CSceneMgr::KeyBoardInput(const sf::Keyboard::Key& key)
 		CS_NEXT_STAGE_PACKET* packet = new CS_NEXT_STAGE_PACKET;
 		packet->type = CS_NEXTSTAGE;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_NEXT_STAGE_PACKET));
+
+		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetColor(PLAYER_COLOR::NORMAL);
+		CS_PLAYER_COLOR_PACKET* cp = new CS_PLAYER_COLOR_PACKET;
+		cp->type = CS_COLOR;
+		cp->color = static_cast<short>(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor());
+		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(cp), sizeof(CS_PLAYER_COLOR_PACKET));
+		m_pNetworkMgr->SetPlayerInfo(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor(), m_pNetworkMgr->GetPlayerIndex());
 	}
 	if (key == sf::Keyboard::R && m_eCurScene > SCENE_NUM::LOBBY && m_eCurScene < SCENE_NUM::RANKING) {
 		m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->Reset();

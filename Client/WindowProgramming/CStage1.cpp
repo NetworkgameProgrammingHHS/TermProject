@@ -16,8 +16,7 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	m_sfBackground.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
 	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage1.txt");
-	m_pTileMap->Initialize();
-
+	m_pTileMap->Initialize();	
 	m_ppPlayers = players;
 	//while (m_pNetworkMgr->GetPlayerIndex() == -1) {
 	//	m_pNetworkMgr->SetPlayerIndex(2);

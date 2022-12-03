@@ -220,8 +220,12 @@ void CTileMap::TileReset()
 			if (!j->GetEnable()) {
 				j->SetEnable(true);
 			}
-			if (j->GetType() == TILE_TYPE::RED_P || j->GetType() == TILE_TYPE::GREEN_P || j->GetType() == TILE_TYPE::BLUE_P || j->GetType() == TILE_TYPE::BLACK_P) {
-				m_iPotionNum++;
+		}
+	}
+	for (int i = 0; i < TILE_NUM_H; ++i) {
+		for (int j = 0; j < TILE_NUM_W; ++j) {
+			if (m_vMap[i * TILE_NUM_W + j] == 'R' || m_vMap[i * TILE_NUM_W + j] == 'G' || m_vMap[i * TILE_NUM_W + j] == 'B' || m_vMap[i * TILE_NUM_W + j] == 'N') {
+				++m_iPotionNum;
 			}
 		}
 	}
