@@ -316,7 +316,8 @@ int main()
 
 					}
 				}
-					
+			if(!g_Clients[0].GetGun() && !g_Clients[1].GetGun() && !g_Clients[2].GetGun())
+				g_bCollideGun = false;
 			if (g_bCollideGun)
 			{
 				GunCoolTime = 0.f;
@@ -686,31 +687,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 
 void Collide_Bullet(Player* in, Bullet* Bullet)
 {
-	//int bulletStage = 0;
-	//switch (Bullet->GetStage())
-	//{
-	//case STAGE_1:
-	//	bulletStage = 1;
-	//	break;
-	//case STAGE_2:
-	//	bulletStage = 2;
-	//	break;
-	//case STAGE_3:
-	//	bulletStage = 3;
-	//	break;
-	//case STAGE_4:
-	//	bulletStage = 4;
-	//	break;
-	//case STAGE_5:
-	//	bulletStage = 5;
-	//	break;
-	//case STAGE_END:
-	//	break;
-	//default:
-	//	break;
-	//}
-
-	//if (in->GetStageNum() == bulletStage)
 	if (in->GetStageNum() == Bullet->GetStage())
 	{
 		Vec2 BulletPos = Bullet->GetPos();

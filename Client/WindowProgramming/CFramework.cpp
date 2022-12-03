@@ -73,11 +73,8 @@ void CFramework::Process()
 					{
 						titleID += static_cast<char>(event.text.unicode);
 					}
-						
 				}
-				
 			}
-				
 		}
 		Update();
 
