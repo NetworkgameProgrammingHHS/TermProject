@@ -273,21 +273,24 @@ int main()
 			}
 
 			for (int i = 0; i < PLAYER_NUM; ++i) 
-				if (g_TileMap[g_Clients[i].GetStageNum() - 1] && g_Clients[i].GetStageNum() < STAGE_END)
+				if (g_Clients[i].GetStageNum() < STAGE_END)
 				{
-					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gate(&g_Clients[i]);
-					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Jump(&g_Clients[i]);
-					g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Wall(&g_Clients[i]);
-					if (!g_Clients[i].GetGun())
+					if (g_TileMap[g_Clients[i].GetStageNum() - 1])
 					{
-						g_Clients[i].SetGun(g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gun(&g_Clients[i]));
+						g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gate(&g_Clients[i]);
+						g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Jump(&g_Clients[i]);
+						g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Wall(&g_Clients[i]);
+						if (!g_Clients[i].GetGun())
+						{
+							g_Clients[i].SetGun(g_TileMap[g_Clients[i].GetStageNum() - 1]->Collide_Gun(&g_Clients[i]));
+						}
+						else
+						{
+							g_bGun = false;
+							g_bCollideGun = true;
+						}
+
 					}
-					else
-					{
-						g_bGun = false;
-						g_bCollideGun = true;
-					}
-						
 				}
 					
 			if (g_bCollideGun)
@@ -342,9 +345,12 @@ void CreateGun()
 	}
 	g_iWhichStage = median(PlayerStage[0], PlayerStage[1], PlayerStage[2]);
 	g_iWhichStage -= 1;
-	cout << "CreatGun stage: "<< g_iWhichStage << endl;
-	g_TileMap[g_iWhichStage]->CreateGun();
-	g_bGun = true;
+	if (g_iWhichStage < STAGE_END - 1)
+	{
+		cout << "CreatGun stage: " << g_iWhichStage << endl;
+		g_TileMap[g_iWhichStage]->CreateGun();
+		g_bGun = true;
+	}
 	//After CreateGun, SendPacket
 
 }
