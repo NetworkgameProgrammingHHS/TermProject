@@ -216,7 +216,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		cout << "SC_REMOVE" << endl;
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
 		std::cout << packet->id << "·Î±×¾Æ¿ô" << std::endl;
-		//scene->Logout((int)packet->id);
+		scene->Logout(packet->id);
 		break;
 	}
 	case SC_COLOR:

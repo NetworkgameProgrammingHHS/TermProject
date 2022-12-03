@@ -46,10 +46,11 @@ void CStage4::Next_Stage()
 
 void CStage4::Reset()
 {
+	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->Reset();
+	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
 	m_pTileMap->Reset();
 	m_pTileMap->Initialize();
-	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->Reset();
+	m_pNetworkMgr->SetPlayerInfo(PLAYER_COLOR::NORMAL, m_pNetworkMgr->GetPlayerIndex());
 
 	//Send Reset Packet to Server
 	CS_PLAYER_RESET_PACKET* packet = new CS_PLAYER_RESET_PACKET;

@@ -42,8 +42,8 @@ void CScene::Logout(int index)
 {
 	m_ppPlayers[index]->Reset();
 	m_ppPlayers[index]->SetPosition(sf::Vector2f(-1000.0f, -1000.0f));
-	
-
+	m_ppPlayers[index]->SetOnline(false);
+	m_ppPlayers[index]->SetReady(false);
 }
 
 void CScene::TileReset()

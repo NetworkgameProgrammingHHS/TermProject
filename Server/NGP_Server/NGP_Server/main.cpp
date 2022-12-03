@@ -230,6 +230,30 @@ int main()
 			cout << "InGame" << endl;
 			break;
 		}
+		if (g_iCntClientNum < 3) {
+			for (int i = 0; i < PLAYER_NUM; ++i) {
+				if (!g_Clients[i].GetAccessUser()) {
+					index = i;
+					break;
+				}
+			}
+			addrlen = sizeof(clientaddr);
+			g_Clients[index].SetSocket(accept(listen_sock, reinterpret_cast<struct sockaddr*>(&clientaddr), &addrlen));
+			if (g_Clients[index].GetSocket() == INVALID_SOCKET) {
+				cout << "accept error" << endl;
+				exit(1);
+			}
+			//set client id
+			g_Clients[index].SetID(index);
+			g_Clients[index].SetAccessUser(true);
+			g_iCntClientNum++;
+
+			DWORD ThreadId;
+			hThread = CreateThread(NULL, 0, ProcessPacket, reinterpret_cast<LPVOID>(g_Clients[index].GetSockInfo()), 0, &ThreadId);
+
+			if (NULL == hThread) { closesocket(g_Clients[index].GetSocket()); }
+			else { CloseHandle(hThread); }
+		}
 	}
 
 	// Main Loop
@@ -372,6 +396,23 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		retval = recv(client_sock, (char*)(&len), sizeof(int), MSG_WAITALL);
 		if (retval == SOCKET_ERROR)
 		{
+			g_iCntClientNum--;
+			g_Clients[sock_info->id].SetAccessUser(false);
+			g_Clients[sock_info->id].SetOnline(false);
+			g_Clients[sock_info->id].SetReady(false);
+			SC_REMOVE_PACKET* packet = new SC_REMOVE_PACKET;
+			packet->id = sock_info->id;
+			packet->type = SC_REMOVE;
+			len = sizeof(SC_REMOVE_PACKET);
+			EnterCriticalSection(&g_CS);
+			for (int i = 0; i < PLAYER_NUM; ++i) {
+				if (i == sock_info->id)
+					continue;
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
+				send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(packet), len, 0);
+			}
+			LeaveCriticalSection(&g_CS);
+			delete packet;
 			err_display("recv()");
 			break;
 		}
@@ -381,6 +422,19 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 		retval = recv(client_sock, buf, len, MSG_WAITALL);
 		if (retval == SOCKET_ERROR)
 		{
+			g_iCntClientNum--;
+			g_Clients[sock_info->id].SetAccessUser(false);
+			g_Clients[sock_info->id].SetOnline(false);
+			g_Clients[sock_info->id].SetReady(false);
+			SC_REMOVE_PACKET* packet = new SC_REMOVE_PACKET;
+			packet->id = sock_info->id;
+			packet->type = SC_REMOVE;
+			len = sizeof(SC_REMOVE_PACKET);
+			EnterCriticalSection(&g_CS);
+			send(client_sock, reinterpret_cast<char*>(&len), sizeof(int), 0);
+			send(client_sock, reinterpret_cast<char*>(packet), len, 0);
+			LeaveCriticalSection(&g_CS);
+			delete packet;
 			err_display("recv()");
 			break;
 		}
@@ -557,6 +611,20 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				g_Clients[sock_info->id].SetColor(PLAYER_COLOR::NORMAL);
 				g_Clients[sock_info->id].SetDirection(0);
 				g_Clients[sock_info->id].SetGun(false);
+
+				SC_RESET_PACKET* scp = new SC_RESET_PACKET;
+				scp->id = sock_info->id;
+				scp->type = SC_RESET;
+				int len = sizeof(SC_RESET_PACKET);
+				for (int i = 0; i < PLAYER_NUM; ++i) {
+					if (i == sock_info->id)
+						continue;
+					EnterCriticalSection(&g_CS);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(&len), sizeof(int), 0);
+					send(g_Clients[i].GetSocket(), reinterpret_cast<char*>(scp), len, 0);
+					LeaveCriticalSection(&g_CS);
+				}
+				delete scp;
 			}
 			break;
 		}

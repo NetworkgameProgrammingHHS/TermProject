@@ -75,10 +75,11 @@ void CPlayer::Animation(const float ElapsedTime)
 
 void CPlayer::Reset()
 {
-	m_vec2fPrevPos = {};
+	m_vec2fPos = { 0, 0 };
 	m_iDir = 0;
 	m_bFall = false;
 	m_bJump = false;
+	m_bSpoid = false;
 	m_bSuperJump = false;
 	m_iJumpCnt = 0;
 	m_iJumpChange = 0;
@@ -87,6 +88,7 @@ void CPlayer::Reset()
 	m_fSpriteLeft = 0;
 	m_iSpriteTop = 32;
 	m_eState = PLAYER_STATE::IDLE;
+	m_eSavedColor = PLAYER_COLOR::NORMAL;
 	SetColor(PLAYER_COLOR::NORMAL);
 }
 
@@ -260,7 +262,5 @@ void CPlayer::KeyBoardRelease(const sf::Keyboard::Key& key)
 		packet->key = dir;
 		packet->state = KEY_RELEASE;
 		m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_INPUT_PACKET));
-		cout << "Å° ¶À" << endl;
-		cout << "Dir : " << m_nKeyDir << endl;
 	}
 }
