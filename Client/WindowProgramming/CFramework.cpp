@@ -69,7 +69,7 @@ void CFramework::Process()
 				if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE && 
 					dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->GetRectangle().getFillColor() == sf::Color::Blue && titleID.size() < NAME_SIZE - 1)
 				{
-					if (event.text.unicode < 128 && event.text.unicode != 8)
+					if (event.text.unicode < 128 && event.text.unicode != 8 && event.text.unicode != 13)
 					{
 						titleID += static_cast<char>(event.text.unicode);
 					}

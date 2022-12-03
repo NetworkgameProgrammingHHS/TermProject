@@ -550,6 +550,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 				//set original color
 				g_Clients[sock_info->id].SetColor(PLAYER_COLOR::NORMAL);
 				g_Clients[sock_info->id].SetDirection(0);
+				g_Clients[sock_info->id].SetGun(false);
 			}
 			break;
 		}

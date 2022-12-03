@@ -28,6 +28,6 @@ private:
 	sf::Text m_TextID;
 	sf::Font m_sfTitleFont;
 	sf::Vertex lines[2];
-	string m_strPlayerID;
+	string m_strPlayerID = "";
 	float m_fTime = 0.f;
 };

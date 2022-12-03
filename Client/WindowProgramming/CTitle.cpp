@@ -61,29 +61,25 @@ void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 {
 	if (m_OuRectangle.getFillColor() != sf::Color::Blue)
 	{
-		switch (key) {
-		case sf::Keyboard::Escape:
-			exit(1);
-			break;
-		//case sf::Keyboard::R:
-		//{
-		//	CS_PLAYER_READY_PACKET* packet = new CS_PLAYER_READY_PACKET;
-		//	packet->ready = READY_ON;
-		//	packet->type = CS_PLAYER_READY;
-		//	m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_PLAYER_READY_PACKET));
-		//	break;
-		//}
-
-		default:
+	}
+	switch (key) {
+	case sf::Keyboard::Escape:
+		exit(1);
+		break;
+	case sf::Keyboard::Enter:
+	{
+		if (m_strPlayerID != "")
 		{
 			CS_LOGIN_PACKET* packet = new CS_LOGIN_PACKET;
 			m_strPlayerID += '\0';
 			memcpy(packet->name, m_strPlayerID.c_str(), m_strPlayerID.size());
 			packet->type = CS_LOGIN;
 			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_LOGIN_PACKET));
-			break;
 		}
-		}
+		break;
+	}
+	default:
+		break;
 	}
 }
 
