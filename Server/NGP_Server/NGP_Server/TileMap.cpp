@@ -40,14 +40,9 @@ void TileMap::CreateGun()
 	}
 	int indexX = iRand / TILE_NUM_W;
 	int indexY = iRand % TILE_NUM_W;
-	// testing
-	//int indexX = 17;
-	//int indexY = 11;
+
 	m_GunPos.x = indexY * TILE_SIZE;
 	m_GunPos.y = indexX * TILE_SIZE;
-	//cout << iRand / TILE_NUM_W << endl;
-	//cout << iRand % TILE_NUM_W << endl;
-	//Is it need?
 
 	m_Tiles[indexX][indexY] = 'A';
 	m_mmObjPos.emplace(static_cast<int>(m_Tiles[indexX][indexY]), Vec2{ (float)indexY * TILE_SIZE, (float)indexX * TILE_SIZE });
@@ -144,15 +139,7 @@ void TileMap::Collide_Gate(Player* in)
 		else if(in->GetColor() != PLAYER_COLOR::RED) {
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (figure.x > figure.y) {
-				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
-				else
-				{
-					updatePos.y -= figure.y + 3;
-					in->SetJump(false);
-				}*/
-			}
-			else {
+			if (figure.x <= figure.y) {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
 				else updatePos.x -= figure.x;
 			}
@@ -174,15 +161,7 @@ void TileMap::Collide_Gate(Player* in)
 		else if (in->GetColor() != PLAYER_COLOR::GREEN) {
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (figure.x > figure.y) {
-				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
-				else
-				{
-					updatePos.y -= figure.y + 3;
-					in->SetJump(false);
-				}*/
-			}
-			else {
+			if (figure.x <= figure.y) {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
 				else updatePos.x -= figure.x;
 			}
@@ -204,15 +183,7 @@ void TileMap::Collide_Gate(Player* in)
 		else if (in->GetColor() != PLAYER_COLOR::BLUE) {
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (figure.x > figure.y) {
-				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
-				else
-				{
-					updatePos.y -= figure.y + 3;
-					in->SetJump(false);
-				}*/
-			}
-			else {
+			if (figure.x <= figure.y) {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
 				else updatePos.x -= figure.x;
 			}
@@ -234,15 +205,7 @@ void TileMap::Collide_Gate(Player* in)
 		else if (in->GetColor() != PLAYER_COLOR::YELLOW) {
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (figure.x > figure.y) {
-				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
-				else
-				{
-					updatePos.y -= figure.y + 3;
-					in->SetJump(false);
-				}*/
-			}
-			else {
+			if (figure.x <= figure.y) {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
 				else updatePos.x -= figure.x;
 			}
@@ -264,15 +227,7 @@ void TileMap::Collide_Gate(Player* in)
 		else if (in->GetColor() != PLAYER_COLOR::PURPLE) {
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (figure.x > figure.y) {
-				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
-				else
-				{
-					updatePos.y -= figure.y + 3;
-					in->SetJump(false);
-				}*/
-			}
-			else {
+			if (figure.x <= figure.y) {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
 				else updatePos.x -= figure.x;
 			}
@@ -294,15 +249,7 @@ void TileMap::Collide_Gate(Player* in)
 		else if (in->GetColor() != PLAYER_COLOR::GB) {
 			Vec2 figure = { min(fabs(inRB.x - wallLT.x), fabs(wallRB.x - inLT.x)), min(fabs(inRB.y - wallLT.y), fabs(wallRB.y - inLT.y)) };
 			Vec2 updatePos = in->GetPos();
-			if (figure.x > figure.y) {
-				/*if (inLT.y - 3 > wallLT.y) updatePos.y += figure.y + 3;
-				else
-				{
-					updatePos.y -= figure.y + 3;
-					in->SetJump(false);
-				}*/
-			}
-			else {
+			if (figure.x <= figure.y) {
 				if (inLT.x > wallLT.x) updatePos.x += figure.x;
 				else updatePos.x -= figure.x;
 			}
@@ -440,16 +387,6 @@ bool TileMap::Collide_Gun(Player* in)
 		else if (inRB.y < wallLT.y) continue;
 		else {
 			bCollide = true;
-			//for (auto it = range.first; it != range.second;)
-			//{
-			//	if (it->first == (int)'A')
-			//	{
-			//		it = m_mmObjPos.erase(it);
-			//		break;
-			//	}
-			//	else
-			//		++it;
-			//}
 			i = m_mmObjPos.erase(i);
 			break;
 		}

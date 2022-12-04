@@ -33,7 +33,6 @@ struct CS_PLAYER_READY_PACKET {
 struct CS_PLAYER_COLOR_PACKET {
 	char type;
 	short color;
-	//char collide;
 };
 
 struct CS_PLAYER_RESET_PACKET {
@@ -45,11 +44,6 @@ struct CS_NEXT_STAGE_PACKET
 {
 	char type;
 };
-
-//struct CS_GAMECLEAR_PACKET
-//{
-//	char type;
-//};
 
 //Server to Client packet
 struct SC_READY_PACKET {
@@ -127,7 +121,6 @@ constexpr char CS_PLAYER_READY = 2;
 constexpr char CS_INPUT = 3;
 constexpr char CS_COLOR = 4;
 constexpr char CS_PLAYER_RESET = 5;
-//constexpr char CS_GAMECLEAR = 6;
 constexpr char CS_NEXTSTAGE = 6;
 
 constexpr char SC_LOGIN_INFO = 1;

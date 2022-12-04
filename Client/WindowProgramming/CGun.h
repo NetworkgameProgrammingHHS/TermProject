@@ -9,7 +9,6 @@ public:
 	virtual ~CGun();
 
 	void Render(sf::RenderWindow& RW);
-	void Update(const float ElapsedTime);
 	void SetEnable(int enable);
 	void SetBulletPos(int x, int y);
 	const bool GetEnable() const { return m_bEnable; }

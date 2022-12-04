@@ -2,28 +2,22 @@
 #include "CScene.h"
 #include "CTitle.h"
 #include "CNetworkMgr.h"
-//#include "CStage1.h"
 
 CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr)
 {
 	if (!m_sfTexture.loadFromFile("Resource\\BackGround\\Title_1.png"))
 		exit(1);
-	if (!m_sfTexture2.loadFromFile("Resource\\BackGround\\Title_2.png"))
-		exit(1);
 	m_sfBackground.setTexture(m_sfTexture);
 	m_sfBackground.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-	m_sfBackground2.setTexture(m_sfTexture2);
-	m_sfBackground2.setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
 	m_Rectangle.setSize(sf::Vector2f(400, 30));
-	//m_Rectangle.setOutlineColor(sf::Color::Green);
 	m_Rectangle.setOutlineThickness(0);
 	m_Rectangle.setPosition(WINDOW_WIDTH/2-170, WINDOW_HEIGHT - 100);
 
-	m_OuRectangle.setSize(sf::Vector2f(480, 60));
-	m_OuRectangle.setFillColor(sf::Color::Green);
-	m_OuRectangle.setOutlineThickness(0);
-	m_OuRectangle.setPosition(WINDOW_WIDTH / 2 - 230, WINDOW_HEIGHT - 115);
+	m_OutRectangle.setSize(sf::Vector2f(480, 60));
+	m_OutRectangle.setFillColor(sf::Color::Green);
+	m_OutRectangle.setOutlineThickness(0);
+	m_OutRectangle.setPosition(WINDOW_WIDTH / 2 - 230, WINDOW_HEIGHT - 115);
 
 	m_sfTitleFont.loadFromFile("Resource\\Font\\koverwatch.ttf");
 
@@ -33,7 +27,6 @@ CTitle::CTitle(shared_ptr<CNetworkMgr> networkmgr)
 	m_Text.setFillColor(sf::Color::Blue);
 	m_Text.setStyle(sf::Text::Bold);
 	m_Text.setPosition(WINDOW_WIDTH / 2 - 170 + 5, WINDOW_HEIGHT - 100);
-
 
 	m_TextID.setFont(m_sfTitleFont);
 	m_TextID.setString("ID:");
@@ -59,9 +52,6 @@ CTitle::~CTitle()
 
 void CTitle::KeyBoardInput(const sf::Keyboard::Key& key)
 {
-	if (m_OuRectangle.getFillColor() != sf::Color::Blue)
-	{
-	}
 	switch (key) {
 	case sf::Keyboard::Escape:
 		exit(1);
@@ -99,17 +89,11 @@ void CTitle::Update(const float ElapsedTime)
 void CTitle::Render(sf::RenderWindow& RW)
 {
 	RW.draw(m_sfBackground);
-	//if (m_fTime < 0.5f) {
-	//	RW.draw(m_sfBackground);
-	//}
-	//else {
-	//	RW.draw(m_sfBackground2);
-	//}
-	RW.draw(m_OuRectangle);
+	RW.draw(m_OutRectangle);
 	RW.draw(m_Rectangle);
 	RW.draw(m_TextID);
 	RW.draw(m_Text);
-	if (m_fTime < 0.5f && m_OuRectangle.getFillColor() == sf::Color::Blue)
+	if (m_fTime < 0.5f && m_OutRectangle.getFillColor() == sf::Color::Blue)
 		RW.draw(lines, 2, sf::Lines);
 }
 
@@ -120,19 +104,18 @@ void CTitle::MouseClickInput(const sf::Mouse::Button& btn, sf::RenderWindow& sfW
 	case sf::Mouse::Left:
 	{
 		sf::Vector2i temp = sf::Mouse::getPosition(sfWindow);
-		sf::Vector2f tempRect = m_OuRectangle.getPosition();
-		if ((temp.x >= tempRect.x && temp.x <= tempRect.x + m_OuRectangle.getSize().x) &&
-			(temp.y >= tempRect.y && temp.y <= tempRect.y + m_OuRectangle.getSize().y))
+		sf::Vector2f tempRect = m_OutRectangle.getPosition();
+		if ((temp.x >= tempRect.x && temp.x <= tempRect.x + m_OutRectangle.getSize().x) &&
+			(temp.y >= tempRect.y && temp.y <= tempRect.y + m_OutRectangle.getSize().y))
 		{
-			m_OuRectangle.setFillColor(sf::Color::Blue);
+			m_OutRectangle.setFillColor(sf::Color::Blue);
 		}
 		else
-			m_OuRectangle.setFillColor(sf::Color::Green);
-		//cout << m_strPlayerID << endl;
+			m_OutRectangle.setFillColor(sf::Color::Green);
 		break;
 	}
 	default:
-		m_OuRectangle.setFillColor(sf::Color::Green);
+		m_OutRectangle.setFillColor(sf::Color::Green);
 		break;
 	}
 }

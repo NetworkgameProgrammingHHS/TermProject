@@ -14,13 +14,11 @@
 
 CSceneMgr::CSceneMgr(shared_ptr<CNetworkMgr> networkmgr)
 {
-	InitializeCriticalSection(&g_CS);
 	m_pNetworkMgr = networkmgr;
 }
 
 CSceneMgr::~CSceneMgr()
 {
-	DeleteCriticalSection(&g_CS);
 }
 
 void CSceneMgr::Initialize()
@@ -161,11 +159,6 @@ void CSceneMgr::Next_Stage()
 		m_pScene.reset();
 		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage5>(m_pNetworkMgr, m_ppPlayers));
 		m_eCurScene = SCENE_NUM::STAGE5;
-		break;
-	case SCENE_NUM::STAGE5:
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CRanking>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::RANKING;
 		break;
 
 	default:

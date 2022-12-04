@@ -28,7 +28,6 @@ using namespace std;
 #define BULLET_SPEED 300.f
 #define PLAYER_SPEED 150.0f
 #define JUMP_SPEED 300.0f
-#define SUPERJUMP_SPEED 600.0f
 
 struct Vec2 {
 	float x = 0.f;

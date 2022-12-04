@@ -67,7 +67,6 @@ void CStage3::Update(const float ElapsedTime)
 		if (m_ppPlayers[i] && m_ppPlayers[i]->GetStageNum() == SCENE_NUM::STAGE3)
 			m_ppPlayers[i]->Update(ElapsedTime);
 	}
-	if (m_pGun)m_pGun->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
 

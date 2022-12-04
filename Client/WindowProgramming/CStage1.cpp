@@ -18,9 +18,6 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage1.txt");
 	m_pTileMap->Initialize();	
 	m_ppPlayers = players;
-	//while (m_pNetworkMgr->GetPlayerIndex() == -1) {
-	//	m_pNetworkMgr->SetPlayerIndex(2);
-	//}
 	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE)});
 
 	for (int i = 0; i < PLAYERNUM; ++i)
@@ -79,7 +76,6 @@ void CStage1::Update(const float ElapsedTime)
 		if(m_ppPlayers[i] && m_ppPlayers[i]->GetStageNum() == SCENE_NUM::STAGE1)
 			m_ppPlayers[i]->Update(ElapsedTime);
 	}
-	if (m_pGun)m_pGun->Update(ElapsedTime);
 
 	CScene::Collide_OBJ();
 

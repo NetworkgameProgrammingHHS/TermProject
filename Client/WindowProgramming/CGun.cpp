@@ -25,11 +25,6 @@ void CGun::Render(sf::RenderWindow& RW)
 	}
 }
 
-void CGun::Update(const float ElapsedTime)
-{
-	m_pBullet->Update(ElapsedTime);
-}
-
 void CGun::SetEnable(int enable)
 {
 	switch (enable)

@@ -52,53 +52,14 @@ void CScene::TileReset()
 
 }
 
-/*void CScene::Collide_Wall()
-{
-	if (m_pTileMap) {
-		for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
-			if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(wall->GetAABB())) {
-				if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetJump()) {
-					m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos().x, m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPos().y));
-					if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetJumpDir()) { // 머리 충돌 시 플레이어 점프 방향 변경
-						m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetJumpCnt(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetJumpChange());
-					}
-					else {
-						m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetJump(false);
-						// 문제가 되는 부분1 : 통과하여 충돌하면 좌표가 블록위로 순간이동
-						m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x, wall->GetSprite().getPosition().y - m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getGlobalBounds().height));
-					}
-				}
-				else {
-					m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-				}
-				break;				
-			}
-		}
-
-		if (!m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetJump()) {
-			for (const auto& wall : m_pTileMap->m_umTiles.find(TILE_TYPE::WALL)->second) {
-				if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetFallBB().intersects(wall->GetAABB())) {
-					m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetFall(false);	// 문제가 되는 부분2 : Fall값이 false가 되면서 공중에서 멈춘다
-					m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x, wall->GetSprite().getPosition().y - m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getGlobalBounds().height));
-					return;
-				}
-			}
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetFall(true);
-		}
-	}
-}*/
-
 void CScene::ShowPlayerInfo()
 {
 }
 
 void CScene::Collide_OBJ()
 {
-	//Collide_Wall();
 	Collide_Potion();
-	//Collide_Gate();
 	Collide_Turret();
-	//Collide_Jump();
 	Collide_Spoid();
 }
 
@@ -174,57 +135,6 @@ void CScene::Collide_Potion()
 		m_pNetworkMgr->SetPlayerInfo(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor(), m_pNetworkMgr->GetPlayerIndex());
 	}
 }
-
-/*void CScene::Collide_Gate()
-{
-	// Red Gate
-	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_G)->second) {
-		if (PLAYER_COLOR::RED != m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(gate->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-			break;
-		}
-	}
-
-	// Green Gate
-	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::GREEN_G)->second) {
-		if (PLAYER_COLOR::GREEN != m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(gate->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-			break;
-		}
-	}
-
-	// Blue Gate
-	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::BLUE_G)->second) {
-		if (PLAYER_COLOR::BLUE != m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(gate->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-			break;
-		}
-	}
-
-	// Yellow Gate
-	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::YELLOW_G)->second) {
-		if (PLAYER_COLOR::YELLOW != m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(gate->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-			break;
-		}
-	}
-
-	// Purple Gate
-	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::PURPLE_G)->second) {
-		if (PLAYER_COLOR::PURPLE != m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(gate->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-			break;
-		}
-	}
-
-	// GB Gate
-	for (auto& gate : m_pTileMap->m_umTiles.find(TILE_TYPE::GB_G)->second) {
-		if (PLAYER_COLOR::GB != m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(gate->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetPrevPos());
-			break;
-		}
-	}
-}*/
 
 void CScene::Collide_Turret()
 {
@@ -400,59 +310,6 @@ void CScene::Collide_Turret()
 	if(collide)
 		m_pNetworkMgr->SetPlayerInfo(m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor(), m_pNetworkMgr->GetPlayerIndex());
 }
-
-/*void CScene::Collide_Jump()
-{
-	//Red Jump
-	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::RED_J)->second) {
-		if (PLAYER_COLOR::RED == m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(jump->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(true);
-			return;
-		}
-	}
-	
-	//Green Jump
-	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::GREEN_J)->second) {
-		if (PLAYER_COLOR::GREEN == m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(jump->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(true);
-			return;
-		}
-	}
-
-	//Blue Jump
-	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::BLUE_J)->second) {
-		if (PLAYER_COLOR::BLUE == m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(jump->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(true);
-			return;
-		}
-	}
-
-	//Yellow Jump
-	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::YELLOW_J)->second) {
-		if (PLAYER_COLOR::YELLOW == m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(jump->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(true);
-			return;
-		}
-	}
-
-	//Purple Jump
-	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::PURPLE_J)->second) {
-		if (PLAYER_COLOR::PURPLE == m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(jump->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(true);
-			return;
-		}
-	}
-
-	//GB Jump
-	for (const auto& jump : m_pTileMap->m_umTiles.find(TILE_TYPE::GB_J)->second) {
-		if (PLAYER_COLOR::GB == m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetColor() && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetAABB().intersects(jump->GetSprite().getGlobalBounds())) {
-			m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(true);
-			return;
-		}
-	}
-
-	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetSuperJump(false);
-}*/
 
 void CScene::Collide_Spoid() {
 	for (auto& spoid : m_pTileMap->m_umTiles.find(TILE_TYPE::SPOID)->second) {

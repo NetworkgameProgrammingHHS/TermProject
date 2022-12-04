@@ -13,7 +13,6 @@ public:
 	virtual ~Player();
 
 	const Vec2& GetPos() const { return m_Pos; }
-	const Vec2& GetVelocity() const { return m_Velocity; }
 	const short GetDirection() const { return m_Direction; }
 	const short GetSubDirection() const { return m_SubDirection; }
 	const PLAYER_COLOR& GetColor() const { return m_Color; }
@@ -23,16 +22,13 @@ public:
 	const char* GetName() const { return m_Client_Name; };
 	const bool GetReady() const { return m_bReady; }
 	const int GetStageNum() const { return m_iStageNum; }
-	const bool GetKeyState() const { return m_bKeyState; }
 	SOCK_INFO* GetSockInfo() const { return m_SockInfo; }
 	SOCKET GetSocket() const { return m_SockInfo->client_sock; }
 	const int GetID() const { return m_SockInfo->id; }
 	const bool GetJump() const { return m_Jump; }
 	const bool GetSuperJump() const { return m_SuperJump; }
-	const bool GetFall() const { return m_Fall; }
 
 	void SetPos(const Vec2& pos) { m_Pos = pos; }
-	void SetVelocity(const Vec2& velocity) { m_Velocity = velocity; }
 	void SetDirection(const short dir) { m_Direction = dir; }
 	void SetSubDirection(const short dir) { m_SubDirection = dir; }
 	void SetColor(const PLAYER_COLOR& color) { m_Color = color; }
@@ -52,7 +48,6 @@ public:
 	void SetJumpChange(const int jumpchange) { m_JumpChange = jumpchange; }
 
 	void Update(const float ElapsedTime);
-	void CollideCheck(int x, int y, Vec2 bulletPos);
 
 private:
 	SOCK_INFO* m_SockInfo;

@@ -38,6 +38,7 @@ CNetworkMgr::CNetworkMgr()
 
 CNetworkMgr::~CNetworkMgr()
 {
+	WSACleanup();
 	DeleteCriticalSection(&g_CS);
 }
 
@@ -81,7 +82,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 
 	switch (buf[0]) {
 	case SC_LOGIN_INFO: {
-		cout << "SC_LOGIN_INFO" << endl;
 		SC_LOGIN_INFO_PACKET* packet = reinterpret_cast<SC_LOGIN_INFO_PACKET*>(buf);
 		// 로그인 이후 게임 대기 방에서 플레이어가 들어온 순서대로 캐릭터를 렌더한다.
 		if (packet->online_p1 == CLIENT_ONLINE)
@@ -89,7 +89,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			// 플레이어 1 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[0]->SetOnline(true);
 			SetPlayerName(packet->name_p1, 0);
-			//scene->SetPlayerName(packet->name_p1, 0);
 			players[0]->SetReady(packet->ready_p1);
 		}
 		if (packet->online_p2 == CLIENT_ONLINE)
@@ -97,20 +96,17 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			// 플레이어 2 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[1]->SetOnline(true);
 			SetPlayerName(packet->name_p2, 1);
-			//scene->SetPlayerName(packet->name_p2, 1);
 			players[1]->SetReady(packet->ready_p2);
 		}
 		if (packet->online_p3 == CLIENT_ONLINE)
 		{
 			// 플레이어 3 클라이언트 화면에 로그인 하였다고 표시, 렌더
 			players[2]->SetOnline(true);
-			//scene->SetPlayerName(packet->name_p3, 2);
 			players[2]->SetReady(packet->ready_p3);
 			SetPlayerName(packet->name_p3, 2);
 		}
 		EnterCriticalSection(&g_CS);
 		if (m_nPlayerIndex == -1 && packet->id != -1) {
-			std::cout << packet->id << "접속" << std::endl;
 			m_nPlayerIndex = packet->id;
 			scene->SetNext(true);
 		}
@@ -118,23 +114,19 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_READY: {
-		cout << "SC_READY" << endl;
 		SC_READY_PACKET* packet = reinterpret_cast<SC_READY_PACKET*>(buf);
 		// 로그인 인포 패킷을 받아 로그인 한 플레이어의 순서에 따라 준비 상태를 출력한다.
 		if (packet->ready == READY_OFF) 
 		{ 
-			std::cout << "준비 안함" << std::endl; 
 			players[packet->id]->SetReady(false);
 		}
 		if (packet->ready == READY_ON)
 		{ 
-			std::cout << "준비" << std::endl; 
 			players[packet->id]->SetReady(true);
 		}
 		break;
 	}
 	case SC_GAMESTART: {
-		cout << "SC_GAMESTART" << endl;
 		SC_GAMESTART_PACKET* packet = reinterpret_cast<SC_GAMESTART_PACKET*>(buf);
 		scene->SetNext(true);
 		break;
@@ -203,19 +195,15 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		{
 			scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
 		}
-		//LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SC_RANK: {
-		cout << "SC_RANK" << endl;
 		SC_RANK_PACKET* packet = reinterpret_cast<SC_RANK_PACKET*>(buf);
 		m_WinnerPlayer.setString(packet->winner_name);
 		break;
 	}
 	case SC_REMOVE: {
-		cout << "SC_REMOVE" << endl;
 		SC_REMOVE_PACKET* packet = reinterpret_cast<SC_REMOVE_PACKET*>(buf);
-		std::cout << packet->id << "로그아웃" << std::endl;
 		scene->Logout(packet->id);
 		break;
 	}
@@ -227,7 +215,6 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_RESET: {
-		cout << "SC_RESET" << endl;
 		SC_RESET_PACKET* packet = reinterpret_cast<SC_RESET_PACKET*>(buf);
 		players[packet->id]->Reset();
 		if(packet->id == m_nPlayerIndex)

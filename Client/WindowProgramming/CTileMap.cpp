@@ -112,7 +112,6 @@ CTileMap::CTileMap(const string& Filename)
 	m_umTileInfo.try_emplace('^', CTile("Resource\\Object\\Gate_Green+Blue.png", TILE_TYPE::GB_G));
 
 	m_umTileInfo.try_emplace('P', CTile("Resource\\Object\\Pipette.png", TILE_TYPE::SPOID));
-	//m_umTileInfo.try_emplace('A', CTile("Resource\\Object\\GUN.png", TILE_TYPE::GUN));
 }
 
 CTileMap::~CTileMap()
@@ -165,7 +164,6 @@ void CTileMap::Initialize()
 		for (auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
 			sprite->SetSpriteTex();
 			if (i == static_cast<int>(TILE_TYPE::WALL)) {
-				//sprite->SetAABB(sprite->GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 1.2f, static_cast<float>(TILE_SIZE) / 1.2f));
 				sprite->SetAABB(sprite->GetSprite().getPosition(), sf::Vector2f(static_cast<float>(TILE_SIZE) / 1.0f, static_cast<float>(TILE_SIZE) / 1.0f));
 			}
 			else {

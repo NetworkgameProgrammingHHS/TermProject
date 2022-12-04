@@ -13,11 +13,6 @@ CBullet::~CBullet()
 {
 }
 
-void CBullet::Update(const float ElapsedTime)
-{
-	m_vec2fPos.x += m_Dir * BULLET_SPEED * ElapsedTime;
-}
-
 void CBullet::Render(sf::RenderWindow& RW)
 {
 	if (m_bEnable)

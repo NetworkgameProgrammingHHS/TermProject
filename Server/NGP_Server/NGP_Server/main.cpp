@@ -20,7 +20,6 @@ bool g_bCollideGun = false;
 int g_iWhichStage = 0;
 char g_chGStagePacket;
 CRITICAL_SECTION g_CS;
-CRITICAL_SECTION g_CS1;
 
 void UploadMap();
 void CreateGun();
@@ -30,8 +29,6 @@ void Collide_Bullet(Player* in, Bullet* Bullet);
 //Client Update Thread
 DWORD WINAPI ProcessPacket(LPVOID socket);
 //if complete, delete
-void err_display(const char* msg);
-void err_display(int errcode);
 chrono::time_point<chrono::system_clock> startTime;
 
 // Packet Send Thread
@@ -130,7 +127,6 @@ DWORD WINAPI SendPacket(LPVOID)
 int main()
 {
 	InitializeCriticalSection(&g_CS);
-	InitializeCriticalSection(&g_CS1);
 	float MilliTime = 0.f;
 	float ElapsedTime = 0.f;
 	WSADATA wsa;
@@ -335,7 +331,6 @@ int main()
 	WSACleanup();
 
 	DeleteCriticalSection(&g_CS);
-	DeleteCriticalSection(&g_CS1);
 
 	return 0;
 }
@@ -414,7 +409,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			}
 			LeaveCriticalSection(&g_CS);
 			delete packet;
-			err_display("recv()");
 			break;
 		}
 		else if (retval == 0)
@@ -436,7 +430,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			send(client_sock, reinterpret_cast<char*>(packet), len, 0);
 			LeaveCriticalSection(&g_CS);
 			delete packet;
-			err_display("recv()");
 			break;
 		}
 		else if (retval == 0)
@@ -449,7 +442,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[sock_info->id].SetName(packet->name);
 			g_Clients[sock_info->id].SetOnline(true);
-			cout << "이름: " << g_Clients[sock_info->id].GetName() << endl;
 			// Send Login Info packet to Client which logined
 			SC_LOGIN_INFO_PACKET* scp = new SC_LOGIN_INFO_PACKET;
 			scp->type = SC_LOGIN_INFO;
@@ -527,7 +519,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			//input key
 			if (packet->state == KEY_PRESS)
 			{
-				//std::cout << sock_info->id << "-" << (int)packet->key << "키를 누름" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(true);
 				if (packet->key == KEY_FIREGUN)
 				{
@@ -556,7 +547,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 						g_Clients[sock_info->id].SetSubDirection(RIGHT);
 						break;
 					case KEY_DIR_UP:
-						cout << g_Clients[sock_info->id].GetJump();
 						if (!g_Clients[sock_info->id].GetJump())
 						{
 							g_Clients[sock_info->id].SetJumpCount(0);
@@ -570,7 +560,6 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 			}
 			else if (packet->state == KEY_RELEASE)
 			{
-				//std::cout << sock_info->id << "-" << (int)packet->key << "키를 뗌" << std::endl;
 				g_Clients[sock_info->id].SetKeyState(false);
 				if (packet->type == KEY_FIREGUN);
 				else
@@ -735,31 +724,4 @@ void Collide_Bullet(Player* in, Bullet* Bullet)
 		}
 	}
 	
-}
-
-
-// 소켓 함수 오류 출력
-void err_display(const char* msg)
-{
-	LPVOID lpMsgBuf;
-	FormatMessageA(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL, WSAGetLastError(),
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(char*)&lpMsgBuf, 0, NULL);
-	printf("[%s] %s\n", msg, (char*)lpMsgBuf);
-	LocalFree(lpMsgBuf);
-}
-
-// 소켓 함수 오류 출력
-void err_display(int errcode)
-{
-	LPVOID lpMsgBuf;
-	FormatMessageA(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL, errcode,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(char*)&lpMsgBuf, 0, NULL);
-	printf("[오류] %s\n", (char*)lpMsgBuf);
-	LocalFree(lpMsgBuf);
 }

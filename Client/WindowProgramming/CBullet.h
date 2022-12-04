@@ -9,7 +9,6 @@ public:
 	CBullet();
 	virtual ~CBullet();
 
-	void Update(const float ElapsedTime);
 	void Render(sf::RenderWindow& RW);
 	void SetEnable(bool enable) { m_bEnable = enable; }
 	void SetDir(int dir) { m_Dir = dir; }
