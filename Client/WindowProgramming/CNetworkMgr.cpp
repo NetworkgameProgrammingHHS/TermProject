@@ -118,17 +118,23 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		// 로그인 인포 패킷을 받아 로그인 한 플레이어의 순서에 따라 준비 상태를 출력한다.
 		if (packet->ready == READY_OFF) 
 		{ 
+			EnterCriticalSection(&g_CS);
 			players[packet->id]->SetReady(false);
+			LeaveCriticalSection(&g_CS);
 		}
 		if (packet->ready == READY_ON)
 		{ 
+			EnterCriticalSection(&g_CS);
 			players[packet->id]->SetReady(true);
+			LeaveCriticalSection(&g_CS);
 		}
 		break;
 	}
 	case SC_GAMESTART: {
 		SC_GAMESTART_PACKET* packet = reinterpret_cast<SC_GAMESTART_PACKET*>(buf);
+		EnterCriticalSection(&g_CS);
 		scene->SetNext(true);
+		LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SC_WORLD_UPDATE: {
