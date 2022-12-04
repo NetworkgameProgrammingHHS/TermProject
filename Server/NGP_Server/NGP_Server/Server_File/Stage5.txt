@@ -2,9 +2,9 @@
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 D D D D D D D D D D D D D D D D D D D D D D D D D
+D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 D 0 0 0 0 0 0 0 D
+D 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 D 0 0 0 0 0 0 0 D
 D 0 S S S S S S S S S S S S S S D S S S S R B S D
 D S S P S S S S S S S S S S S S 1 S S S S S S S D
 D 0 S D D D D D D D D S S D D D D D D D D S S D D
