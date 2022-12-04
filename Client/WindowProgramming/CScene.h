@@ -47,8 +47,6 @@ protected:
 	
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
 
-	unique_ptr<CGun> m_pGun = nullptr;
-
 	sf::Texture m_sfTexture;
 	sf::Sprite m_sfBackground;
 

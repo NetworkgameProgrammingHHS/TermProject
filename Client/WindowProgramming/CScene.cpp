@@ -9,7 +9,6 @@
 
 CScene::CScene()
 {
-	m_pGun = make_unique<CGun>();
 }
 
 CScene::~CScene()
@@ -31,11 +30,6 @@ void CScene::Render(sf::RenderWindow& RW)
 
 void CScene::SetGunState(int enable, int bulletx, int bullety)
 {
-	if (m_pGun) 
-	{
-		m_pGun->SetEnable(enable);
-		m_pGun->SetBulletPos(bulletx, bullety);
-	}
 }
 
 void CScene::Logout(int index)
