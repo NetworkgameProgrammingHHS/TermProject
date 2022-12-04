@@ -2,6 +2,7 @@
 #include "CNetworkMgr.h"
 #include "CScene.h"
 #include "CPlayer.h"
+#include "CGun.h"
 
 CNetworkMgr::CNetworkMgr()
 {
@@ -34,6 +35,8 @@ CNetworkMgr::CNetworkMgr()
 			m_sfPlayerInfoText[i][j].setPosition(WINDOW_WIDTH - (m_sfPlayerInfo[0].getScale().x * TILE_SIZE * (3 - i)) + 5, TILE_SIZE * 2 + j * 14 + 5 * (j + 1));
 		}
 	}
+
+	m_pGun = make_shared<CGun>();
 }
 
 CNetworkMgr::~CNetworkMgr()
@@ -191,10 +194,8 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		default:
 			break;
 		}
-		if (scene->GetSceneNum() == packetSceneNum)
-		{
-			scene->SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
-		}
+		SetGunState((int)packet->bullet_enable, (int)packet->x_bullet, (int)packet->y_bullet);
+		m_pGun->SetGunStage(packetSceneNum);
 		break;
 	}
 	case SC_RANK: {
@@ -286,4 +287,13 @@ void CNetworkMgr::SetPlayerName(const char* name, const int index)
 void CNetworkMgr::SetWinnerName(const sf::String name)
 {
 	m_WinnerPlayer.setString(name);
+}
+
+void CNetworkMgr::SetGunState(int enable, int bulletx, int bullety)
+{
+	if (m_pGun)
+	{
+		m_pGun->SetEnable(enable);
+		m_pGun->SetBulletPos(bulletx, bullety);
+	}
 }

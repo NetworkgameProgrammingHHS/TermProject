@@ -89,7 +89,7 @@ void CStage3::Render(sf::RenderWindow& RW)
 	}
 
 	// Gun, Bullet Render
-	if (m_pGun)m_pGun->Render(RW);
+	if (m_pNetworkMgr->GetGun())if (m_pNetworkMgr->GetGun()->GetGunStage() == m_eCurScene) m_pNetworkMgr->GetGun()->Render(RW);
 
 	CScene::Render(RW);
 }
