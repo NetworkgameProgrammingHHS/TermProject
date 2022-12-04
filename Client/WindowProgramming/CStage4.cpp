@@ -30,7 +30,7 @@ CStage4::~CStage4()
 
 void CStage4::Next_Stage()
 {
-	if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+	if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().y >= (4) * 32) {
 		if (m_pTileMap->GetPotionNum() == 0) {
 			m_bNext = true;
 			//Send Reset Packet to Server
