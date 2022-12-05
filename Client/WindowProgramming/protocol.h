@@ -108,7 +108,7 @@ struct SC_WORLD_UPDATE_PACKET {
 
 struct SC_COLOR_PACKET {
 	char type;
-	int id;
+	short id;
 	short color;
 };
 #pragma pack(pop)
@@ -148,9 +148,6 @@ constexpr char RESET_OFF = 2;
 constexpr char BULLET_ON = 1;
 constexpr char BULLET_OFF = 2;
 constexpr char GUN_OBJECT = 3;
-
-constexpr char POTION_COLLIDE_ON = 1;
-constexpr char POTION_COLLIDE_OFF = 2;
 
 constexpr bool CLIENT_ONLINE = true;
 constexpr bool CLIENT_OFFLINE = false;

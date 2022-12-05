@@ -437,7 +437,7 @@ DWORD WINAPI ProcessPacket(LPVOID socket)
 
 		switch (buf[0])
 		{
-		case CS_LOGIN://¿©±â¼­ ready??
+		case CS_LOGIN:
 		{
 			CS_LOGIN_PACKET* packet = reinterpret_cast<CS_LOGIN_PACKET*>(buf);
 			g_Clients[sock_info->id].SetName(packet->name);
