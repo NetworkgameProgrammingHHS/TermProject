@@ -78,17 +78,20 @@ void CStage2::Render(sf::RenderWindow& RW)
 	RW.draw(m_sfBackground);
 
 	// Map Render
-	m_pTileMap->Render(RW);
-
-	// Player Render
-	for (int i = 0; i < PLAYERNUM; ++i)
+	if (m_pTileMap)
 	{
-		if (m_ppPlayers[i] && m_ppPlayers[i]->GetStageNum() == SCENE_NUM::STAGE2)
-			m_ppPlayers[i]->Render(RW);
-	}
-	
-	// Gun, Bullet Render
-	if (m_pNetworkMgr->GetGun())if (m_pNetworkMgr->GetGun()->GetGunStage() == m_eCurScene) m_pNetworkMgr->GetGun()->Render(RW);
+		m_pTileMap->Render(RW);
 
-	CScene::Render(RW);
+		// Player Render
+		for (int i = 0; i < PLAYERNUM; ++i)
+		{
+			if (m_ppPlayers[i] && m_ppPlayers[i]->GetStageNum() == SCENE_NUM::STAGE2)
+				m_ppPlayers[i]->Render(RW);
+		}
+
+		// Gun, Bullet Render
+		if (m_pNetworkMgr->GetGun())if (m_pNetworkMgr->GetGun()->GetGunStage() == m_eCurScene) m_pNetworkMgr->GetGun()->Render(RW);
+
+		CScene::Render(RW);
+	}
 }

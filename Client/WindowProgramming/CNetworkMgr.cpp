@@ -55,6 +55,9 @@ void CNetworkMgr::InitializeSocket(string ip)
 	if (m_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
 
+	/*int opt = TRUE;
+	setsockopt(m_sock, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(opt));*/
+
 	memset(&m_serveraddr, 0, sizeof(m_serveraddr));
 	m_serveraddr.sin_family = AF_INET;
 	inet_pton(AF_INET, ip.c_str(), &m_serveraddr.sin_addr);

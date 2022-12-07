@@ -137,8 +137,8 @@ int main()
 	if (listen_sock == INVALID_SOCKET)
 		cout << "socket error" << endl;
 
-	int opt = 1;
-	setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(int));
+	int opt = TRUE;
+	setsockopt(listen_sock, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(opt));
 
 	struct sockaddr_in serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
