@@ -39,11 +39,13 @@ void CSceneMgr::Initialize()
 
 void CSceneMgr::Update(const float ElpasedTime)
 {
-	m_pScene->Update(ElpasedTime);
+	if (m_pScene) {
+		m_pScene->Update(ElpasedTime);
 
-	if (m_pScene->GetNext()) {
-		m_pScene->SetNext(false);
-		Next_Stage();
+		if (m_pScene->GetNext()) {
+			m_pScene->SetNext(false);
+			Next_Stage();
+		}
 	}
 }
 
@@ -129,55 +131,57 @@ void CSceneMgr::MouseClick(const sf::Mouse::Button& btn, sf::RenderWindow& sfWin
 
 void CSceneMgr::Next_Stage()
 {
-	switch (m_pScene->GetSceneNum()) {
-	case SCENE_NUM::TITLE: 
-	{
-		EnterCriticalSection(&m_CS);
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CLobby>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::LOBBY;
-		LeaveCriticalSection(&m_CS);
-		break;
-	}
-	case SCENE_NUM::LOBBY:
-	{
-		EnterCriticalSection(&m_CS);
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::STAGE1;
-		LeaveCriticalSection(&m_CS);
-		break;
-	}
-	case SCENE_NUM::STAGE1:
-		EnterCriticalSection(&m_CS);
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::STAGE2;
-		LeaveCriticalSection(&m_CS);
-		break;
-	case SCENE_NUM::STAGE2:
-		EnterCriticalSection(&m_CS);
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage3>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::STAGE3;
-		LeaveCriticalSection(&m_CS);
-		break;
-	case SCENE_NUM::STAGE3:
-		EnterCriticalSection(&m_CS);
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage4>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::STAGE4;
-		LeaveCriticalSection(&m_CS);
-		break;
-	case SCENE_NUM::STAGE4:
-		EnterCriticalSection(&m_CS);
-		m_pScene.reset();
-		m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage5>(m_pNetworkMgr, m_ppPlayers));
-		m_eCurScene = SCENE_NUM::STAGE5;
-		LeaveCriticalSection(&m_CS);
-		break;
+	if (m_pScene) {
+		switch (m_pScene->GetSceneNum()) {
+		case SCENE_NUM::TITLE:
+		{
+			EnterCriticalSection(&m_CS);
+			m_pScene.reset();
+			m_pScene = dynamic_pointer_cast<CScene>(make_shared<CLobby>(m_pNetworkMgr, m_ppPlayers));
+			m_eCurScene = SCENE_NUM::LOBBY;
+			LeaveCriticalSection(&m_CS);
+			break;
+		}
+		case SCENE_NUM::LOBBY:
+		{
+			EnterCriticalSection(&m_CS);
+			m_pScene.reset();
+			m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage1>(m_pNetworkMgr, m_ppPlayers));
+			m_eCurScene = SCENE_NUM::STAGE1;
+			LeaveCriticalSection(&m_CS);
+			break;
+		}
+		case SCENE_NUM::STAGE1:
+			EnterCriticalSection(&m_CS);
+			m_pScene.reset();
+			m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage2>(m_pNetworkMgr, m_ppPlayers));
+			m_eCurScene = SCENE_NUM::STAGE2;
+			LeaveCriticalSection(&m_CS);
+			break;
+		case SCENE_NUM::STAGE2:
+			EnterCriticalSection(&m_CS);
+			m_pScene.reset();
+			m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage3>(m_pNetworkMgr, m_ppPlayers));
+			m_eCurScene = SCENE_NUM::STAGE3;
+			LeaveCriticalSection(&m_CS);
+			break;
+		case SCENE_NUM::STAGE3:
+			EnterCriticalSection(&m_CS);
+			m_pScene.reset();
+			m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage4>(m_pNetworkMgr, m_ppPlayers));
+			m_eCurScene = SCENE_NUM::STAGE4;
+			LeaveCriticalSection(&m_CS);
+			break;
+		case SCENE_NUM::STAGE4:
+			EnterCriticalSection(&m_CS);
+			m_pScene.reset();
+			m_pScene = dynamic_pointer_cast<CScene>(make_shared<CStage5>(m_pNetworkMgr, m_ppPlayers));
+			m_eCurScene = SCENE_NUM::STAGE5;
+			LeaveCriticalSection(&m_CS);
+			break;
 
-	default:
-		break;
+		default:
+			break;
+		}
 	}
 }

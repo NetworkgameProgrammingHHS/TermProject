@@ -104,10 +104,13 @@ void CFramework::MouseClick(const sf::Mouse::Button& btn, sf::RenderWindow& sfWi
 void CFramework::Update()
 {
 	float ElapsedTime = m_sfFrame.getElapsedTime().asSeconds();
-	m_pSceneMgr->Update(ElapsedTime);
-	if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE)
-	{
-		dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->SetPlayerID(titleID);
+	if (m_pSceneMgr) {
+		m_pSceneMgr->Update(ElapsedTime);
+
+		if (m_pSceneMgr->GetpScene()->GetSceneNum() == SCENE_NUM::TITLE)
+		{
+			dynamic_cast<CTitle*>(m_pSceneMgr->GetpScene().get())->SetPlayerID(titleID);
+		}
 	}
 	// FPS
 	m_fTime += m_sfFrame.getElapsedTime().asMilliseconds();
