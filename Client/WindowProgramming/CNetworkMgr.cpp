@@ -112,10 +112,12 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 			SetPlayerName(packet->name_p3, 2);
 		}
 
+		EnterCriticalSection(&g_CS);
 		if (m_nPlayerIndex == -1 && packet->id != -1) {
 			m_nPlayerIndex = packet->id;
 			scene->SetNext(true);
 		}
+		LeaveCriticalSection(&g_CS);
 		break;
 	}
 	case SC_READY: {

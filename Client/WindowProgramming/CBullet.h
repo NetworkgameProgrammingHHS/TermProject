@@ -17,6 +17,6 @@ public:
 
 private:
 	bool		m_bEnable = false;
-	int			m_Dir;
+	int			m_Dir = 0;
 };
 

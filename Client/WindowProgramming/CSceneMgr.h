@@ -28,9 +28,9 @@ private:
 private:
 	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
 	shared_ptr<CScene> m_pScene = nullptr;
-	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers;
-	SCENE_NUM m_eCurScene;
+	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers = {};
+	SCENE_NUM m_eCurScene = {};
 	
-	CRITICAL_SECTION m_CS;
+	CRITICAL_SECTION m_CS = {};
 };
 

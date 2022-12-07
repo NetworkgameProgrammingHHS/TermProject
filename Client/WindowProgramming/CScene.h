@@ -20,7 +20,7 @@ public:
 	virtual void Update(const float ElpasedTime);
 	virtual void Render(sf::RenderWindow& RW);
 	virtual void Next_Stage();
-	
+
 
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
 	const bool GetNext() const { return m_bNext; }
@@ -46,16 +46,16 @@ protected:
 
 protected:
 	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
-	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers;
+	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers = {};
 	
 	unique_ptr<CTileMap> m_pTileMap = nullptr;
 
-	sf::Texture m_sfTexture;
-	sf::Sprite m_sfBackground;
+	sf::Texture m_sfTexture = {};
+	sf::Sprite m_sfBackground = {};
 
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
 	bool m_bNext = false;	// 다음 스테이지 확인
 
-	CRITICAL_SECTION m_CS;
+	CRITICAL_SECTION m_CS = {};
 };
 

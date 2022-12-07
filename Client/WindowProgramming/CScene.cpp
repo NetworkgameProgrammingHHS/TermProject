@@ -9,10 +9,12 @@
 
 CScene::CScene()
 {
+	InitializeCriticalSection(&m_CS);
 }
 
 CScene::~CScene()
 {
+	DeleteCriticalSection(&m_CS);
 }
 
 void CScene::KeyBoardInput(const sf::Keyboard::Key& key)

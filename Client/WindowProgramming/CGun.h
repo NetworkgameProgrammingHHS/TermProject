@@ -19,7 +19,7 @@ public:
 
 private:
 	CBullet*		m_pBullet = NULL;
-	bool			m_bEnable;
+	bool			m_bEnable = false;
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
 };
 

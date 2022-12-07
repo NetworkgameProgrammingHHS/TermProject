@@ -15,6 +15,6 @@ public:
 
 private:
 
-	sf::Text m_Text;
-	sf::Font m_Font;
+	sf::Text m_Text = {};
+	sf::Font m_Font = {};
 };

@@ -31,19 +31,19 @@ public:
 	const sf::Text GetWinnerName()const { return m_WinnerPlayer; }
 
 private:
-	WSADATA m_wsa;
-	SOCKET m_sock;
-	SOCKADDR_IN m_serveraddr;
+	WSADATA m_wsa = {};
+	SOCKET m_sock = {};
+	SOCKADDR_IN m_serveraddr = {};
 
-	CRITICAL_SECTION g_CS;
+	CRITICAL_SECTION g_CS = {};
 
-	sf::Font m_sfFont;
-	array<sf::Texture, 7> m_sfPlayerColor;
-	array<sf::Sprite, 3> m_sfPlayerInfo;
-	array<array<sf::Text, 2>, 3> m_sfPlayerInfoText;
+	sf::Font m_sfFont = {};
+	array<sf::Texture, 7> m_sfPlayerColor = {};
+	array<sf::Sprite, 3> m_sfPlayerInfo = {};
+	array<array<sf::Text, 2>, 3> m_sfPlayerInfoText = {};
 
 	int m_nPlayerIndex = -1;
-	sf::Text m_WinnerPlayer;
+	sf::Text m_WinnerPlayer = {};
 	shared_ptr<CGun> m_pGun = nullptr;
 };
 

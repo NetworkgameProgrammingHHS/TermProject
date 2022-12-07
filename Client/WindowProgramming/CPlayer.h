@@ -71,6 +71,6 @@ private:
 	// Gun
 	bool m_bGun = false;
 
-	CRITICAL_SECTION m_CS;
+	CRITICAL_SECTION m_CS = {};
 };
 
