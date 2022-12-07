@@ -45,7 +45,7 @@ CNetworkMgr::~CNetworkMgr()
 	DeleteCriticalSection(&g_CS);
 }
 
-void CNetworkMgr::InitializeSocket()
+void CNetworkMgr::InitializeSocket(string ip)
 {
 	
 	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
@@ -57,7 +57,7 @@ void CNetworkMgr::InitializeSocket()
 
 	memset(&m_serveraddr, 0, sizeof(m_serveraddr));
 	m_serveraddr.sin_family = AF_INET;
-	inet_pton(AF_INET, "127.0.0.1", &m_serveraddr.sin_addr);
+	inet_pton(AF_INET, ip.c_str(), &m_serveraddr.sin_addr);
 	m_serveraddr.sin_port = htons(SERVER_PORT);
 	int ret = connect(m_sock, (sockaddr*)&m_serveraddr, sizeof(m_serveraddr));
 	if (ret == SOCKET_ERROR)

@@ -10,7 +10,7 @@ public:
 	CNetworkMgr();
 	virtual ~CNetworkMgr();
 
-	void InitializeSocket();
+	void InitializeSocket(string ip);
 	void SendPacket(char* packet, int size);
 	void RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM> players);
 	

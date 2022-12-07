@@ -7,7 +7,7 @@ struct RecVThreadParameter;
 class CFramework
 {
 public:
-	CFramework();
+	CFramework(string ip);
 	virtual ~CFramework();
 
 	void Process();

@@ -16,6 +16,8 @@
 
 #include "protocol.h"
 
+#include <windows.h>
+
 using namespace std;
 
 #ifdef _DEBUG

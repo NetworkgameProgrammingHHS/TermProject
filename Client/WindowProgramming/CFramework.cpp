@@ -5,10 +5,10 @@
 #include "CNetworkMgr.h"
 #include "CTitle.h"
 
-CFramework::CFramework() : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
+CFramework::CFramework(string ip) : m_sfWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Client")
 {
 	m_pNetworkMgr = make_shared<CNetworkMgr>();
-	m_pNetworkMgr->InitializeSocket();
+	m_pNetworkMgr->InitializeSocket(ip);
 
 	m_pSceneMgr = make_shared<CSceneMgr>(m_pNetworkMgr);
 	m_pSceneMgr->Initialize();
