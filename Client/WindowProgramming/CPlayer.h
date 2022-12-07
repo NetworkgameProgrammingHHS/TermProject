@@ -32,19 +32,20 @@ public:
 	const SCENE_NUM GetStageNum() const { return m_eStageNum; }
 
 	virtual void SetPosition(const sf::Vector2f& vec) { m_vec2fPos = vec; }
-	void SetColor(const PLAYER_COLOR color) { m_eColor = color; m_sfSprite.setTexture(m_umTextures.find(color)->second); }
+	void SetColor(const PLAYER_COLOR color) { Lock(); m_eColor = color; m_sfSprite.setTexture(m_umTextures.find(color)->second); Unlock(); }
 	void SetJump(const bool jump) { m_bJump = jump;}
 	void SetSpoid(const bool spoid) { m_bSpoid = spoid; }
 	void SetGun(const bool gun) { m_bGun = gun; }
 	void SetSavedColor(PLAYER_COLOR color) { m_eSavedColor = color; }
 	void SetDir(const int dir) { m_iDir = dir; }
-	void SetOnline(const bool online) { m_bOnline = online; }
-	void SetReady(const bool ready) { m_bReady = ready; }
-	void SetStage(const SCENE_NUM sn) { m_eStageNum = sn; }
+	void SetOnline(const bool online) { Lock();  m_bOnline = online; Unlock(); }
+	void SetReady(const bool ready) { Lock(); m_bReady = ready; Unlock(); }
+	void SetStage(const SCENE_NUM sn) { Lock(); m_eStageNum = sn; Unlock(); }
 
 private:
 	void Animation(const float ElapsedTime);
-
+	void Lock() { EnterCriticalSection(&m_CS); }
+	void Unlock() { LeaveCriticalSection(&m_CS); }
 private:
 	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
 
@@ -69,5 +70,7 @@ private:
 
 	// Gun
 	bool m_bGun = false;
+
+	CRITICAL_SECTION m_CS;
 };
 

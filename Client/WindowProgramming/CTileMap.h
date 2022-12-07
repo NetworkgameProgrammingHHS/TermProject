@@ -50,7 +50,7 @@ private:
 class CTileMap
 {
 public:
-	CTileMap() {};
+	CTileMap() { InitializeCriticalSection(&m_CS); };
 	CTileMap(const string& Filename);
 	virtual ~CTileMap();
 
@@ -67,7 +67,12 @@ public:
 	unordered_map<TILE_TYPE, vector<CTile*>> m_umTiles; // Tile Obj
 
 private:
+	void Lock() { EnterCriticalSection(&m_CS); }
+	void Unlock() { LeaveCriticalSection(&m_CS); }
+
+private:
 	int m_iPotionNum = 0;
+	CRITICAL_SECTION m_CS;
 };
 
 // 0: Nothing,      D: wall

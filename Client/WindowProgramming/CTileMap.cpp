@@ -70,6 +70,7 @@ void CTurret::SetTurretAABB(sf::Vector2f pos)
 
 CTileMap::CTileMap(const string& Filename)
 {
+	InitializeCriticalSection(&m_CS);
 	// Upload data from file
 	m_vMap.reserve(TILE_NUM_H * TILE_NUM_W);
 	ifstream in(Filename);
@@ -123,6 +124,7 @@ CTileMap::~CTileMap()
 			}
 		}
 	}
+	DeleteCriticalSection(&m_CS);
 }
 
 void CTileMap::Initialize()
@@ -218,6 +220,7 @@ void CTileMap::Reset()
 
 void CTileMap::TileReset()
 {
+	Lock();
 	m_iPotionNum = 0;
 	for (int i = 0; i < static_cast<int>(TILE_TYPE::END); ++i) {
 		for (const auto& j : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
@@ -233,4 +236,5 @@ void CTileMap::TileReset()
 			}
 		}
 	}
+	Unlock();
 }

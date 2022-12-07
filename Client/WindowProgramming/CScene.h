@@ -25,7 +25,7 @@ public:
 	const SCENE_NUM GetSceneNum() const { return m_eCurScene; }
 	const bool GetNext() const { return m_bNext; }
 
-	void SetNext(bool next) { m_bNext = next; }
+	void SetNext(bool next) { Lock(); m_bNext = next; Unlock(); }
 
 	void SetGunState(int enable, int bulletx, int bullety);
 	void Logout(int index);
@@ -41,6 +41,9 @@ protected:
 
 	virtual void Reset();
 
+	void Lock() { EnterCriticalSection(&m_CS); };
+	void Unlock() { LeaveCriticalSection(&m_CS); };
+
 protected:
 	shared_ptr<CNetworkMgr> m_pNetworkMgr = nullptr;
 	array<shared_ptr<CPlayer>, PLAYERNUM> m_ppPlayers;
@@ -52,5 +55,7 @@ protected:
 
 	SCENE_NUM m_eCurScene = SCENE_NUM::NONE;
 	bool m_bNext = false;	// 다음 스테이지 확인
+
+	CRITICAL_SECTION m_CS;
 };
 

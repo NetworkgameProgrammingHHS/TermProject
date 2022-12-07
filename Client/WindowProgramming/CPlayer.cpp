@@ -4,6 +4,7 @@
 
 CPlayer::CPlayer(shared_ptr<CNetworkMgr> networkmgr)
 {
+	InitializeCriticalSection(&m_CS);
 	m_pNetworkMgr = networkmgr;
 
 	m_umTextures.reserve(static_cast<size_t>(PLAYER_COLOR::END));
@@ -38,6 +39,7 @@ CPlayer::CPlayer(shared_ptr<CNetworkMgr> networkmgr)
 
 CPlayer::~CPlayer()
 {
+	DeleteCriticalSection(&m_CS);
 }
 
 void CPlayer::Animation(const float ElapsedTime)
@@ -69,6 +71,7 @@ void CPlayer::Animation(const float ElapsedTime)
 
 void CPlayer::Reset()
 {
+	Lock();
 	m_vec2fPos = { 0, 0 };
 	m_iDir = 0;
 	m_bJump = false;
@@ -79,6 +82,7 @@ void CPlayer::Reset()
 	m_eState = PLAYER_STATE::IDLE;
 	m_eSavedColor = PLAYER_COLOR::NORMAL;
 	SetColor(PLAYER_COLOR::NORMAL);
+	Unlock();
 }
 
 void CPlayer::Update(const float ElapsedTime)
