@@ -66,7 +66,7 @@ int main()
 							lines[i].position.x = m_Text.getPosition().x + m_Text.getGlobalBounds().width + 2;
 						}
 					}
-					else if (event.text.unicode == 8) {
+					else if (event.text.unicode == 8 && titleID.size() > 0) {
 						titleID.erase(titleID.size() - 1);
 						m_Text.setString(titleID);
 						for (int i = 0; i < 2; ++i)

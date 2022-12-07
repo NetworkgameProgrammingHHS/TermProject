@@ -134,6 +134,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		break;
 	}
 	case SC_GAMESTART: {		
+		Sleep(200);
 		SC_GAMESTART_PACKET* packet = reinterpret_cast<SC_GAMESTART_PACKET*>(buf);
 		scene->SetNext(true);
 		Sleep(500);
