@@ -117,8 +117,10 @@ CTileMap::CTileMap(const string& Filename)
 CTileMap::~CTileMap()
 {
 	for (int i = 0; i < static_cast<int>(TILE_TYPE::END); ++i) {
-		for (auto& tile : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-			delete tile;
+		if (m_umTiles.find(static_cast<TILE_TYPE>(i))->second.size() > 0) {
+			for (auto& tile : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+				delete tile;
+			}
 		}
 	}
 }
@@ -188,18 +190,22 @@ void CTileMap::Render(sf::RenderWindow& RW)
 	for (int i = static_cast<int>(TILE_TYPE::WALL); i < static_cast<int>(TILE_TYPE::END); ++i) {
 		// Render for Turret
 		if (i >= static_cast<int>(TILE_TYPE::RED_T) && i <= static_cast<int>(TILE_TYPE::GB_T)) {
-			for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-				if (sprite->GetEnable())
-					RW.draw(sprite->GetSprite());
-				else
-					RW.draw(m_umTiles.find(TILE_TYPE::IDLE_T)->second[0]->GetSprite());
+			if (m_umTiles.find(static_cast<TILE_TYPE>(i))->second.size() > 0) {
+				for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+					if (sprite->GetEnable())
+						RW.draw(sprite->GetSprite());
+					else
+						RW.draw(m_umTiles.find(TILE_TYPE::IDLE_T)->second[0]->GetSprite());
+				}
 			}
 		}
 		else {
 		// Render for other tiles
-			for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
-				if (sprite->GetEnable())
-					RW.draw(sprite->GetSprite());
+			if (m_umTiles.find(static_cast<TILE_TYPE>(i))->second.size() > 0) {
+				for (const auto& sprite : m_umTiles.find(static_cast<TILE_TYPE>(i))->second) {
+					if (sprite->GetEnable())
+						RW.draw(sprite->GetSprite());
+				}
 			}
 		}
 	}

@@ -43,6 +43,7 @@ struct CS_PLAYER_RESET_PACKET {
 struct CS_NEXT_STAGE_PACKET
 {
 	char type;
+	int n;
 };
 
 //Server to Client packet
@@ -83,6 +84,7 @@ struct SC_REMOVE_PACKET {
 
 struct SC_GAMESTART_PACKET {
 	char type;
+	int n;
 };
 
 struct SC_WORLD_UPDATE_PACKET {

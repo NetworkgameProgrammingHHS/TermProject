@@ -50,6 +50,7 @@ private:
 class CTileMap
 {
 public:
+	CTileMap() {};
 	CTileMap(const string& Filename);
 	virtual ~CTileMap();
 
