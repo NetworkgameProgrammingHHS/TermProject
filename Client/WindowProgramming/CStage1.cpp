@@ -8,6 +8,7 @@
 
 CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM>  players)
 {
+	Lock();
 	m_pNetworkMgr = networkmgr;
 
 	if(!m_sfTexture.loadFromFile("Resource\\BackGround\\Information_Room.png"))
@@ -20,16 +21,9 @@ CStage1::CStage1(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, 
 	m_ppPlayers = players;
 	m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->SetPosition(sf::Vector2f{static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE)});
 
-	for (int i = 0; i < PLAYERNUM; ++i)
-	{
-		if (m_ppPlayers[i])
-		{
-			m_ppPlayers[i]->SetPosition(sf::Vector2f{ static_cast<float>(TILE_SIZE), static_cast<float>(WINDOW_HEIGHT - 2 * TILE_SIZE) });
-		}
-	}
-
-	
+		
 	m_eCurScene = SCENE_NUM::STAGE1;
+	Unlock();
 }
 
 CStage1::~CStage1()

@@ -133,9 +133,10 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 		}
 		break;
 	}
-	case SC_GAMESTART: {
+	case SC_GAMESTART: {		
 		SC_GAMESTART_PACKET* packet = reinterpret_cast<SC_GAMESTART_PACKET*>(buf);
 		scene->SetNext(true);
+		Sleep(500);
 		break;
 	}
 	case SC_WORLD_UPDATE: {
@@ -232,6 +233,7 @@ void CNetworkMgr::RecvPacket(CScene* scene, array<shared_ptr<CPlayer>, PLAYERNUM
 
 void CNetworkMgr::SetPlayerInfo(const PLAYER_COLOR pc, const int index)
 {
+	EnterCriticalSection(&g_CS);
 	switch (pc) {
 	case PLAYER_COLOR::NORMAL:
 		m_sfPlayerInfo[index].setTexture(m_sfPlayerColor[0]);
@@ -257,11 +259,12 @@ void CNetworkMgr::SetPlayerInfo(const PLAYER_COLOR pc, const int index)
 	default:
 		break;
 	}
-
+	LeaveCriticalSection(&g_CS);
 }
 
 void CNetworkMgr::SetPlayerInfo(const SCENE_NUM sn, const int index)
 {
+	EnterCriticalSection(&g_CS);
 	switch (sn) {
 	case SCENE_NUM::STAGE1:
 		m_sfPlayerInfoText[index][1].setString("Stage 1");
@@ -281,16 +284,21 @@ void CNetworkMgr::SetPlayerInfo(const SCENE_NUM sn, const int index)
 	default:
 		break;
 	}
+	LeaveCriticalSection(&g_CS);
 }
 
 void CNetworkMgr::SetPlayerName(const char* name, const int index)
 {
+	EnterCriticalSection(&g_CS);
 	m_sfPlayerInfoText[index][0].setString(name);
+	LeaveCriticalSection(&g_CS);
 }
 
 void CNetworkMgr::SetWinnerName(const sf::String name)
 {
+	EnterCriticalSection(&g_CS);
 	m_WinnerPlayer.setString(name);
+	LeaveCriticalSection(&g_CS);
 }
 
 void CNetworkMgr::SetGunState(int enable, int bulletx, int bullety)

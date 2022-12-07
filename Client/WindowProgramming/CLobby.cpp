@@ -3,6 +3,7 @@
 #include "CLobby.h"
 #include "CNetworkMgr.h"
 #include "CStage1.h"
+#include "CTileMap.h"
 
 CLobby::CLobby(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PLAYERNUM>  players)
 {
@@ -69,7 +70,8 @@ CLobby::CLobby(shared_ptr<CNetworkMgr> networkmgr, array<shared_ptr<CPlayer>, PL
 	m_sfPlayerText[1].setString("Player2");
 	m_sfPlayerText[2].setString("Player3");
 
-
+	m_pTileMap = make_unique<CTileMap>("Resource\\File\\Stage1.txt");
+	m_pTileMap->Initialize();
 }
 
 CLobby::~CLobby()
