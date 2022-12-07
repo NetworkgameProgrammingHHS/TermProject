@@ -30,16 +30,20 @@ CStage3::~CStage3()
 
 void CStage3::Next_Stage()
 {
-	if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
-		if (m_pTileMap->GetPotionNum() == 0) {
-			m_bNext = true;
-			//Send Reset Packet to Server
-			CS_NEXT_STAGE_PACKET* packet = new CS_NEXT_STAGE_PACKET;
-			packet->type = CS_NEXTSTAGE;
-			m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_NEXT_STAGE_PACKET));
-		}
-		else {
-			Reset();
+	if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]) {
+		if (m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().x >= TILE_NUM_W * 32 && m_ppPlayers[m_pNetworkMgr->GetPlayerIndex()]->GetSprite().getPosition().y >= (TILE_NUM_H - 3) * 32) {
+			if (m_pTileMap) {
+				if (m_pTileMap->GetPotionNum() == 0) {
+					m_bNext = true;
+					//Send Reset Packet to Server
+					CS_NEXT_STAGE_PACKET* packet = new CS_NEXT_STAGE_PACKET;
+					packet->type = CS_NEXTSTAGE;
+					m_pNetworkMgr->SendPacket(reinterpret_cast<char*>(packet), sizeof(CS_NEXT_STAGE_PACKET));
+				}
+				else {
+					Reset();
+				}
+			}
 		}
 	}
 }
