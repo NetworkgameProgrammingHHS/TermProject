@@ -132,6 +132,7 @@ CTileMap::~CTileMap()
 
 void CTileMap::Initialize()
 {
+	Lock();
 	m_iPotionNum = 0;
 	m_umTiles.reserve(TILE_CNT);
 
@@ -185,6 +186,7 @@ void CTileMap::Initialize()
 			dynamic_cast<CTurret*>(turret)->SetTurretAABB(turret->GetSprite().getPosition());
 		}
 	}
+	Unlock();
 }
 
 void CTileMap::Render(sf::RenderWindow& RW)
